@@ -10,6 +10,10 @@ public class Trie<E> {
 		this.root = new TrieNode<E>(null);
 	}
 	
+	public TrieNode<E> getRoot() {
+		return this.root;
+	}
+	
 	/**
 	 * Find the best match for the given key path through this trie.
 	 * 

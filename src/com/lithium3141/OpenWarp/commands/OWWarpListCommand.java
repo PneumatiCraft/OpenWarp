@@ -17,7 +17,7 @@ public class OWWarpListCommand extends OWCommand {
 		sender.sendMessage("DEBUG");
 		
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

@@ -106,8 +106,35 @@ public class OpenWarp extends JavaPlugin {
 	
 	private void loadCommands() {
 		this.commandTrie = new Trie<OWCommand>();
-		this.commandTrie.root.addChild("warp", new OWWarpListCommand(this));
-		this.commandTrie.root.getChild("warp").addChild("list", new OWWarpListCommand(this));
+		this.registerCommand(new OWWarpListCommand(this), "warp");
+		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
+	}
+	
+	/**
+	 * Recursively add nodes to the command trie to insert the given
+	 * OWCommand at the given key path. Overwrites any commands already
+	 * in the trie at the given key path.
+	 *  
+	 * @param command The command to add to the trie
+	 * @param keys The key path to use for the new command
+	 */
+	private void registerCommand(OWCommand command, String... keys) {
+		// Require a non-empty key path
+		if(keys.length == 0) {
+			return;
+		}
+		
+		// Navigate trie, creating empty command nodes as needed
+		TrieNode<OWCommand> current = this.commandTrie.getRoot();
+		for(int i = 0; i < keys.length; i++) {
+			if(current.getChild(keys[i]) == null) {
+				current.setChild(keys[i], (OWCommand)null);
+			}
+			current = current.getChild(keys[i]);
+		}
+		
+		// Store given command
+		current.setValue(command);
 	}
 	
 	/**

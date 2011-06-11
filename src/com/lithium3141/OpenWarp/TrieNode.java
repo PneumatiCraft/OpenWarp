@@ -13,7 +13,7 @@ public class TrieNode<E> {
 	}
 	
 	/**
-	 * Get the command associated with this node.
+	 * Get the value associated with this node.
 	 * 
 	 * @return The OWCommand for this node 
 	 */
@@ -22,12 +22,21 @@ public class TrieNode<E> {
 	}
 	
 	/**
+	 * Set a new value for this node.
+	 * 
+	 * @param value The new value
+	 */
+	public void setValue(E value) {
+		this.value = value;
+	}
+	
+	/**
 	 * Add a new child node to this node for the given key.
 	 * 
 	 * @param key The key for the new child
 	 * @param child The new OWCommandTrieNode to add as a child
 	 */
-	public void addChild(String key, TrieNode<E> child) {
+	public void setChild(String key, TrieNode<E> child) {
 		this.children.put(key, child);
 	}
 	
@@ -38,7 +47,7 @@ public class TrieNode<E> {
 	 * @param command The new OWCommand to add as a child. Autoboxed
 	 *                in an OWCommandTrieNode before adding
 	 */
-	public void addChild(String key, E value) {
+	public void setChild(String key, E value) {
 		this.children.put(key, new TrieNode<E>(value));
 	}
 	
