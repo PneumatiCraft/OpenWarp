@@ -82,7 +82,6 @@ public class OWPlayerConfiguration {
 	 *         false otherwise.
 	 */
 	public boolean save() {
-		// TODO empty method
-		return true;
+		return this.generalConfig.save() && this.warpConfig.save() && this.quotaConfig.save();
 	}
 }

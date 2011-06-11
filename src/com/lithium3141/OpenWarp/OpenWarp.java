@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,9 +64,7 @@ public class OpenWarp extends JavaPlugin {
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
 		for(String playerName : playerNames) {
-			OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this, playerName);
-			playerConfig.load();
-			this.playerConfigs.put(playerName, playerConfig);
+			this.registerPlayerName(playerName);
 		}
 		
 		// Start listening for events
@@ -82,13 +79,11 @@ public class OpenWarp extends JavaPlugin {
 	 * OWPlayerConfiguration instance for the given Player if no such 
 	 * configuration exists yet.
 	 * 
-	 * @param player The player to register
+	 * @param playerName The player to register
 	 * @see OWPlayerConfiguration
 	 */
-	public void registerPlayer(Player player) {
-		String playerName = player.getName();
+	public void registerPlayerName(String playerName) {
 		if(this.playerConfigs.get(playerName) == null) {
-			LOG.info(LOG_PREFIX + "No configuration for player " + playerName + "; creating...");
 			OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this, playerName);
 			playerConfig.load();
 			this.playerConfigs.put(playerName, playerConfig);

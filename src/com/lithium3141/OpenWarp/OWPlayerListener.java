@@ -14,6 +14,6 @@ public class OWPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		this.plugin.registerPlayer(player);
+		this.plugin.registerPlayerName(player.getName());
 	}
 }
