@@ -26,22 +26,35 @@ public class OpenWarp extends JavaPlugin {
 	
 	// Global config filenames
 	public static final String MASTER_CONFIG_FILENAME = "config.yml";
+	public static final String GLOBAL_WARP_CONFIG_FILENAME = "warps.yml";
 	
 	// Config key names
 	public static final String PLAYER_NAMES_LIST_KEY = "players";
+	public static final String WARPS_LIST_KEY = "warps";
 	
 	// Global configuration variables
 	public Configuration configuration;
 	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
+	
+	public Configuration globalWarpsConfig;
+	private List<String> globalWarpNames;
 
 	@Override
 	public void onDisable() {
 		if(this.configuration != null) {
+			// Save overall configuration
 			this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
 			if(!this.configuration.save()) {
 				LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
 			}
 			
+			// Save global warps
+			this.globalWarpsConfig.setProperty(WARPS_LIST_KEY, this.globalWarpNames);
+			if(!this.globalWarpsConfig.save()) {
+				LOG.warning(LOG_PREFIX + "Couldn't save global warp list; continuing...");
+			}
+			
+			// Save player-specific data
 			for(OWPlayerConfiguration config : this.playerConfigs.values()) {
 				if(!config.save()) {
 					LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
@@ -61,11 +74,17 @@ public class OpenWarp extends JavaPlugin {
 		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
 		this.configuration.load();
 		
+		this.globalWarpsConfig = new Configuration(new File(this.getDataFolder(), GLOBAL_WARP_CONFIG_FILENAME));
+		this.globalWarpsConfig.load();
+		
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
 		for(String playerName : playerNames) {
 			this.registerPlayerName(playerName);
 		}
+		
+		// Read warp names
+		this.globalWarpNames = this.globalWarpsConfig.getStringList(WARPS_LIST_KEY, new ArrayList<String>());
 		
 		// Start listening for events
 		OWPlayerListener playerListener = new OWPlayerListener(this);
