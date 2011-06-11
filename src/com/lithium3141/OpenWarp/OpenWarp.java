@@ -62,6 +62,9 @@ public class OpenWarp extends JavaPlugin {
 			this.playerConfigs.put(playerName, new OWPlayerConfiguration(this, playerName));
 		}
 		
+		// Start listening for events
+		// TODO continue here
+		
 		LOG.info(LOG_PREFIX + "Enabled!");
 	}
 
