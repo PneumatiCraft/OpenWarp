@@ -13,14 +13,16 @@ import org.bukkit.util.config.Configuration;
  */
 public class OWPlayerConfiguration {
 	
+	// Configuration filenames
 	public static final String GENERAL_CONFIG_FILENAME = "general.yml";
 	public static final String WARP_CONFIG_FILENAME = "warp.yml";
 	public static final String QUOTA_CONFIG_FILENAME = "quota.yml";
 	
+	// Instance variables
 	private OpenWarp plugin;
-	
 	private String playerName;
 	
+	// Active configuration information
 	private File configFolder;
 	private Configuration generalConfig;
 	private Configuration warpConfig;

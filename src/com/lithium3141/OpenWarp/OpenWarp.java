@@ -65,7 +65,9 @@ public class OpenWarp extends JavaPlugin {
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
 		for(String playerName : playerNames) {
-			this.playerConfigs.put(playerName, new OWPlayerConfiguration(this, playerName));
+			OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this, playerName);
+			playerConfig.load();
+			this.playerConfigs.put(playerName, playerConfig);
 		}
 		
 		// Start listening for events
@@ -75,11 +77,21 @@ public class OpenWarp extends JavaPlugin {
 		LOG.info(LOG_PREFIX + "Enabled!");
 	}
 	
+	/**
+	 * Register a player with the OpenWarp plugin. Create a new
+	 * OWPlayerConfiguration instance for the given Player if no such 
+	 * configuration exists yet.
+	 * 
+	 * @param player The player to register
+	 * @see OWPlayerConfiguration
+	 */
 	public void registerPlayer(Player player) {
 		String playerName = player.getName();
 		if(this.playerConfigs.get(playerName) == null) {
 			LOG.info(LOG_PREFIX + "No configuration for player " + playerName + "; creating...");
-			this.playerConfigs.put(playerName, new OWPlayerConfiguration(this, playerName));
+			OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this, playerName);
+			playerConfig.load();
+			this.playerConfigs.put(playerName, playerConfig);
 		}
 	}
 
