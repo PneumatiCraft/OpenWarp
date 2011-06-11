@@ -15,6 +15,8 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
+import com.lithium3141.OpenWarp.commands.*;
+
 /**
  * Main plugin class. Responsible for setting up plugin and handling
  * overall configs and player info.
@@ -93,13 +95,19 @@ public class OpenWarp extends JavaPlugin {
 		this.globalWarpNames = this.globalWarpsConfig.getStringList(WARPS_LIST_KEY, new ArrayList<String>());
 		
 		// Set up supported commands
-		this.commandTrie = new Trie<OWCommand>();
+		this.loadCommands();
 		
 		// Start listening for events
 		OWPlayerListener playerListener = new OWPlayerListener(this);
 		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
 		
 		LOG.info(LOG_PREFIX + "Enabled!");
+	}
+	
+	private void loadCommands() {
+		this.commandTrie = new Trie<OWCommand>();
+		this.commandTrie.root.addChild("warp", new OWWarpListCommand(this));
+		this.commandTrie.root.getChild("warp").addChild("list", new OWWarpListCommand(this));
 	}
 	
 	/**
@@ -120,15 +128,17 @@ public class OpenWarp extends JavaPlugin {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+		// Construct a trie key path from the command label and args
 		String[] keyPath = new String[args.length + 1];
 		keyPath[0] = commandLabel.toLowerCase();
 		for(int i = 0; i < args.length; i++) {
 			keyPath[i + 1] = args[i].toLowerCase();
 		}
 		
+		// Locate and run the best matching command from the key path
 		OWCommand owCommand = this.commandTrie.getDeepestMatch(keyPath);
 		if(owCommand != null) {
-			return true;
+			return owCommand.execute(sender, command, commandLabel, args);
 		} else {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
 			return false;
