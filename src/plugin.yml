@@ -1,0 +1,9 @@
+name: OpenWarp
+main: com.lithium3141.OpenWarp.OpenWarp
+author: lithium3141
+version: 0.1-alpha
+database: false
+commands:
+    warp:
+        description: Manipulate warp points
+        usage: /<command>
