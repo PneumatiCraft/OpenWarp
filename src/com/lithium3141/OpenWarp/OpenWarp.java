@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
@@ -22,10 +25,13 @@ public class OpenWarp extends JavaPlugin {
 	public static final Logger LOG = Logger.getLogger("Minecraft");
 	public static final String LOG_PREFIX = "[OpenWarp] ";
 	
+	// Global config filenames
 	public static final String MASTER_CONFIG_FILENAME = "config.yml";
 	
+	// Config key names
 	public static final String PLAYER_NAMES_LIST_KEY = "players";
 	
+	// Global configuration variables
 	public Configuration configuration;
 	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
 
@@ -63,9 +69,18 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Start listening for events
-		// TODO continue here
+		OWPlayerListener playerListener = new OWPlayerListener(this);
+		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
 		
 		LOG.info(LOG_PREFIX + "Enabled!");
+	}
+	
+	public void registerPlayer(Player player) {
+		String playerName = player.getName();
+		if(this.playerConfigs.get(playerName) == null) {
+			LOG.info(LOG_PREFIX + "No configuration for player " + playerName + "; creating...");
+			this.playerConfigs.put(playerName, new OWPlayerConfiguration(this, playerName));
+		}
 	}
 
 }

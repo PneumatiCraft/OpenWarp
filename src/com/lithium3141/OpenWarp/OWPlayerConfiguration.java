@@ -2,6 +2,7 @@ package com.lithium3141.OpenWarp;
 
 import java.io.File;
 
+import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
 /**
@@ -28,12 +29,23 @@ public class OWPlayerConfiguration {
 	/**
 	 * Construct a new player configuration for the given player name.
 	 * 
-	 * @param plugin The OpenWarp instance handling this player configuration.
-	 * @param playerName The player to handle configuration for.
+	 * @param plugin The OpenWarp instance handling this player configuration
+	 * @param playerName The player to handle configuration for
 	 */
 	public OWPlayerConfiguration(OpenWarp plugin, String playerName) {
 		this.plugin = plugin;
 		this.playerName = playerName;
+	}
+	
+	/**
+	 * Construct a new player configuration for the given player.
+	 * 
+	 * @param plugin The OpenWarp instance handling this player configuration
+	 * @param player The player to handle configuration for
+	 */
+	public OWPlayerConfiguration(OpenWarp plugin, Player player) {
+		this.plugin = plugin;
+		this.playerName = player.getName();
 	}
 	
 	/**
@@ -50,6 +62,7 @@ public class OWPlayerConfiguration {
 	 */
 	public void load() {
 		this.configFolder = new File(this.plugin.getDataFolder(), playerName);
+		this.configFolder.mkdirs();
 		
 		this.generalConfig = new Configuration(new File(this.configFolder, GENERAL_CONFIG_FILENAME));
 		this.warpConfig = new Configuration(new File(this.configFolder, WARP_CONFIG_FILENAME));
