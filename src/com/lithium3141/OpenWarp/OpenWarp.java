@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +41,9 @@ public class OpenWarp extends JavaPlugin {
 	
 	public Configuration globalWarpsConfig;
 	private List<String> globalWarpNames;
+	
+	// Supported commands
+	private OWCommandTrie commandTrie;
 
 	@Override
 	public void onDisable() {
@@ -86,6 +92,9 @@ public class OpenWarp extends JavaPlugin {
 		// Read warp names
 		this.globalWarpNames = this.globalWarpsConfig.getStringList(WARPS_LIST_KEY, new ArrayList<String>());
 		
+		// Set up supported commands
+		this.commandTrie = new OWCommandTrie();
+		
 		// Start listening for events
 		OWPlayerListener playerListener = new OWPlayerListener(this);
 		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
@@ -106,6 +115,23 @@ public class OpenWarp extends JavaPlugin {
 			OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this, playerName);
 			playerConfig.load();
 			this.playerConfigs.put(playerName, playerConfig);
+		}
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+		String[] keyPath = new String[args.length + 1];
+		keyPath[0] = commandLabel.toLowerCase();
+		for(int i = 0; i < args.length; i++) {
+			keyPath[i + 1] = args[i].toLowerCase();
+		}
+		
+		OWCommand owCommand = this.commandTrie.getDeepestMatch(keyPath);
+		if(owCommand != null) {
+			return true;
+		} else {
+			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
+			return false;
 		}
 	}
 
