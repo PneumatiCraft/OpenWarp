@@ -1,4 +1,9 @@
+# Eclipse
 bin
 .classpath
 .project
 .settings
+
+# Testing
+minecraft
+OpenWarp.jar
