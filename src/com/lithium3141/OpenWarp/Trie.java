@@ -1,10 +1,13 @@
 package com.lithium3141.OpenWarp;
 
-public class OWCommandTrie {
-	protected OWCommandTrieNode root;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Trie<E> {
+	protected TrieNode<E> root;
 	
-	public OWCommandTrie() {
-		this.root = new OWCommandTrieNode(null);
+	public Trie() {
+		this.root = new TrieNode<E>(null);
 	}
 	
 	/**
@@ -16,22 +19,22 @@ public class OWCommandTrie {
 	 *         of the given key path, or null if no valid OWCommand
 	 *         for the given path was found
 	 */
-	public OWCommand getDeepestMatch(String[] keys) {
-		OWCommandTrieNode current = this.root;
-		OWCommand[] commands = new OWCommand[keys.length];
+	public E getDeepestMatch(String[] keys) {
+		TrieNode<E> current = this.root;
+		List<E> values = new ArrayList<E>();
 		
 		for(int i = 0; i < keys.length; i++) {
 			current = current.getChild(keys[i]);
 			if(current == null) {
 				break;
 			}
-			commands[i] = current.getCommand();
+			values.add(current.getValue());
 		}
 		
 		// Return last located command
-		for(int i = keys.length - 1; i >= 0; i--) {
-			if(commands[i] != null) {
-				return commands[i];
+		for(int i = values.size() - 1; i >= 0; i--) {
+			if(values.get(i) != null) {
+				return values.get(i);
 			}
 		}
 		return null;

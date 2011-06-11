@@ -3,13 +3,13 @@ package com.lithium3141.OpenWarp;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OWCommandTrieNode {
-	protected Map<String, OWCommandTrieNode> children;
-	protected OWCommand command;
+public class TrieNode<E> {
+	protected Map<String, TrieNode<E>> children;
+	protected E value;
 	
-	public OWCommandTrieNode(OWCommand command) {
-		this.children = new HashMap<String, OWCommandTrieNode>();
-		this.command = command;
+	public TrieNode(E value) {
+		this.children = new HashMap<String, TrieNode<E>>();
+		this.value = value;
 	}
 	
 	/**
@@ -17,8 +17,8 @@ public class OWCommandTrieNode {
 	 * 
 	 * @return The OWCommand for this node 
 	 */
-	public OWCommand getCommand() {
-		return this.command;
+	public E getValue() {
+		return this.value;
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class OWCommandTrieNode {
 	 * @param key The key for the new child
 	 * @param child The new OWCommandTrieNode to add as a child
 	 */
-	public void addChild(String key, OWCommandTrieNode child) {
+	public void addChild(String key, TrieNode<E> child) {
 		this.children.put(key, child);
 	}
 	
@@ -38,8 +38,8 @@ public class OWCommandTrieNode {
 	 * @param command The new OWCommand to add as a child. Autoboxed
 	 *                in an OWCommandTrieNode before adding
 	 */
-	public void addChild(String key, OWCommand command) {
-		this.children.put(key, new OWCommandTrieNode(command));
+	public void addChild(String key, E value) {
+		this.children.put(key, new TrieNode<E>(value));
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class OWCommandTrieNode {
 	 * @return The matching OWCommandTrieNode for the given key, or
 	 *         null if no such key exists
 	 */
-	public OWCommandTrieNode getChild(String key) {
+	public TrieNode<E> getChild(String key) {
 		return this.children.get(key);
 	}
 }

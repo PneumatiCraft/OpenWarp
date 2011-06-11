@@ -43,7 +43,7 @@ public class OpenWarp extends JavaPlugin {
 	private List<String> globalWarpNames;
 	
 	// Supported commands
-	private OWCommandTrie commandTrie;
+	private Trie<OWCommand> commandTrie;
 
 	@Override
 	public void onDisable() {
@@ -93,7 +93,7 @@ public class OpenWarp extends JavaPlugin {
 		this.globalWarpNames = this.globalWarpsConfig.getStringList(WARPS_LIST_KEY, new ArrayList<String>());
 		
 		// Set up supported commands
-		this.commandTrie = new OWCommandTrie();
+		this.commandTrie = new Trie<OWCommand>();
 		
 		// Start listening for events
 		OWPlayerListener playerListener = new OWPlayerListener(this);
