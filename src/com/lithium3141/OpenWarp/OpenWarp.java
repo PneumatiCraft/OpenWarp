@@ -37,7 +37,7 @@ public class OpenWarp extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		if(this.configuration != null) {
-			this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, this.playerConfigs.keySet());
+			this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
 			if(!this.configuration.save()) {
 				LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
 			}
