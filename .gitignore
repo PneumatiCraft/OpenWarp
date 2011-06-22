@@ -7,3 +7,6 @@ bin
 # Testing
 minecraft
 OpenWarp.jar
+
+# Dependencies
+lib

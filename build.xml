@@ -1,0 +1,42 @@
+<project default="jar">
+    <property name="src" location="src" />
+    <property name="build" location="bin" />
+    <property name="dist" location="." />
+    <property name="lib" location="lib" />
+
+    <path id="project.classpath">
+        <pathelement path="${classpath}" />
+        <pathelement location="${lib}/craftbukkit-0.0.1-SNAPSHOT.jar" />
+        <pathelement location="${lib}/Permissions.jar" />
+    </path>
+
+    <target name="init">
+        <tstamp />
+
+        <mkdir dir="${build}" />
+        <mkdir dir="${lib}" />
+
+        <get src="http://ci.bukkit.org/job/dev-CraftBukkit/Recommended/artifact/target/craftbukkit-0.0.1-SNAPSHOT.jar" dest="${lib}" skipexisting="true" />
+        <get src="http://www.theyeticave.net/downloads/permissions/3.1.5/Permissions.jar" dest="${lib}" skipexisting="true" />
+    </target>
+    
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
+            <classpath refid="project.classpath" />
+        </javac>
+        <copy file="${src}/plugin.yml" tofile="${build}/plugin.yml" />
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar jarfile="${dist}/OpenWarp.jar" basedir="${build}" includes="**/*.class plugin.yml">
+            <manifest>
+                <attribute name="Main-Class" value="OpenWarp" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+        <delete dir="${lib}" />
+    </target>
+</project>
