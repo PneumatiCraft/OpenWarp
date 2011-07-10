@@ -18,11 +18,6 @@ public class Warp {
 	public static final String YAW_KEY = "yaw";
 	
 	public Warp(String name, ConfigurationNode node, OpenWarp plugin) {
-	    Map<String, Object> contents = node.getAll();
-		for(Entry<String, Object> entry : contents.entrySet()) {
-		    System.out.println(entry.getKey() + ":" + entry.getValue());
-		}
-		
 		this.name = name;
 		this.location = this.parseLocation(node, plugin);
 	}

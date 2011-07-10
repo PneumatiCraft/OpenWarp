@@ -17,6 +17,9 @@ import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
+import com.lithium3141.OpenWarp.util.StringUtil;
+import com.lithium3141.OpenWarp.util.Trie;
+import com.lithium3141.OpenWarp.util.TrieNode;
 
 /**
  * Main plugin class. Responsible for setting up plugin and handling
@@ -109,9 +112,7 @@ public class OpenWarp extends JavaPlugin {
 		if(keys != null) {
 			for(String key : keys) {
 				ConfigurationNode node = this.publicWarpsConfig.getNode(WARPS_LIST_KEY + "." + key);
-				LOG.info("Found warp " + key + " at node " + node.toString());
 				Warp warp = new Warp(key, node, this);
-				LOG.info("Putting " + warp.getName() + ":" + warp);
 				this.publicWarps.put(warp.getName(), warp);
 			}
 		}
@@ -129,7 +130,9 @@ public class OpenWarp extends JavaPlugin {
 	private void loadCommands() {
 		this.commandTrie = new Trie<OWCommand>();
 		this.registerCommand(new OWWarpListCommand(this), "warp");
+		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
 		this.registerCommand(new OWWarpCreateCommand(this), "setwarp");
+		this.registerCommand(new OWWarpCreateCommand(this), "warp", "set");
 	}
 	
 	/**
@@ -185,9 +188,13 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Locate and run the best matching command from the key path
-		OWCommand owCommand = this.commandTrie.getDeepestMatch(keyPath);
+		String[] matchPath = this.commandTrie.getDeepestMatch(keyPath);
+		System.out.println("Found match path: " + StringUtil.arrayJoin(matchPath));
+		OWCommand owCommand = this.commandTrie.get(matchPath);
 		if(owCommand != null) {
-			return owCommand.execute(sender, command, commandLabel, args);
+		    String[] remainingArgs = StringUtil.trimArrayLeft(keyPath, matchPath);
+		    System.out.println("Remaining args: " + StringUtil.arrayJoin(remainingArgs));
+			return owCommand.execute(sender, command, commandLabel, remainingArgs);
 		} else {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
 			return false;
