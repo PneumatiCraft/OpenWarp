@@ -51,6 +51,6 @@ public class Warp {
 	}
 	
 	public String getDetailString() {
-	    return ""; // TODO implement
+	    return "(" + this.location.getX() + ", " + this.location.getY() + ", " + this.location.getZ() + ") in world " + this.location.getWorld().getName();
 	}
 }
