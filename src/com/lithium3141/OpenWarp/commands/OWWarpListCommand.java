@@ -25,11 +25,11 @@ public class OWWarpListCommand extends OWCommand {
 	}
 	
 	private String getGlobalWarpsList() {
-	    Map<String, Warp> globals = this.plugin.getGlobalWarps();
+	    Map<String, Warp> publics = this.plugin.getPublicWarps();
         
         String globalsList = ChatColor.GREEN + "Public:" + ChatColor.WHITE;
-        if(globals.size() > 0) {
-            for(Entry<String, Warp> entry : globals.entrySet()) {
+        if(publics.size() > 0) {
+            for(Entry<String, Warp> entry : publics.entrySet()) {
                 globalsList += " " + entry.getKey();
             }
         }

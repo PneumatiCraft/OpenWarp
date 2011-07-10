@@ -32,7 +32,7 @@ public class OpenWarp extends JavaPlugin {
 	
 	// Global config filenames
 	public static final String MASTER_CONFIG_FILENAME = "config.yml";
-	public static final String GLOBAL_WARP_CONFIG_FILENAME = "warps.yml";
+	public static final String PUBLIC_WARP_CONFIG_FILENAME = "warps.yml";
 	
 	// Config key names
 	public static final String PLAYER_NAMES_LIST_KEY = "players";
@@ -42,8 +42,8 @@ public class OpenWarp extends JavaPlugin {
 	public Configuration configuration;
 	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
 	
-	public Configuration globalWarpsConfig;
-	private Map<String, Warp> globalWarps = new HashMap<String, Warp>();
+	public Configuration publicWarpsConfig;
+	private Map<String, Warp> publicWarps = new HashMap<String, Warp>();
 	
 	// Supported commands
 	private Trie<OWCommand> commandTrie;
@@ -57,8 +57,8 @@ public class OpenWarp extends JavaPlugin {
 				LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
 			}
 			
-			// Save global warps
-			this.globalWarpsConfig.setProperty(WARPS_LIST_KEY, this.globalWarps);
+			// Save public warps
+			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, this.publicWarps);
 			// XXX DEBUGGING
 			Map<String, Object> storeWarp = new HashMap<String, Object>();
 			storeWarp.put("x", 0.0);
@@ -69,10 +69,10 @@ public class OpenWarp extends JavaPlugin {
 			storeWarp.put("world", "world");
 			Map<String, Object> warps = new HashMap<String, Object>();
 			warps.put("store", storeWarp);
-			this.globalWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
+			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
 			// XXX END DEBUGGING
-			if(!this.globalWarpsConfig.save()) {
-				LOG.warning(LOG_PREFIX + "Couldn't save global warp list; continuing...");
+			if(!this.publicWarpsConfig.save()) {
+				LOG.warning(LOG_PREFIX + "Couldn't save public warp list; continuing...");
 			}
 			
 			// Save player-specific data
@@ -95,8 +95,8 @@ public class OpenWarp extends JavaPlugin {
 		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
 		this.configuration.load();
 		
-		this.globalWarpsConfig = new Configuration(new File(this.getDataFolder(), GLOBAL_WARP_CONFIG_FILENAME));
-		this.globalWarpsConfig.load();
+		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
+		this.publicWarpsConfig.load();
 		
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
@@ -105,14 +105,14 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Read warp names
-		List<String> keys = this.globalWarpsConfig.getKeys(WARPS_LIST_KEY);
+		List<String> keys = this.publicWarpsConfig.getKeys(WARPS_LIST_KEY);
 		if(keys != null) {
 			for(String key : keys) {
-				ConfigurationNode node = this.globalWarpsConfig.getNode(WARPS_LIST_KEY + "." + key);
+				ConfigurationNode node = this.publicWarpsConfig.getNode(WARPS_LIST_KEY + "." + key);
 				LOG.info("Found warp " + key + " at node " + node.toString());
 				Warp warp = new Warp(key, node, this);
 				LOG.info("Putting " + warp.getName() + ":" + warp);
-				this.globalWarps.put(warp.getName(), warp);
+				this.publicWarps.put(warp.getName(), warp);
 			}
 		}
 		
@@ -194,8 +194,8 @@ public class OpenWarp extends JavaPlugin {
 		}
 	}
 	
-	public Map<String, Warp> getGlobalWarps() {
-	    return this.globalWarps;
+	public Map<String, Warp> getPublicWarps() {
+	    return this.publicWarps;
 	}
 
 }
