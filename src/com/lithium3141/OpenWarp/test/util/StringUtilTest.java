@@ -26,7 +26,7 @@ public class StringUtilTest {
     }
     
     @Test
-    public void testTrimArrayLeft_nonempty_nonempty() {
+    public void testTrimArrayLeft_nonempty_single() {
         Assert.assertArrayEquals(new String[] { }, StringUtil.trimArrayLeft(new String[] { "test" }, new String[] { "test" }));
         Assert.assertArrayEquals(new String[] { "trim" }, StringUtil.trimArrayLeft(new String[] { "test", "trim" }, new String[] { "test" }));
     }
