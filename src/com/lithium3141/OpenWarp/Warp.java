@@ -24,19 +24,24 @@ public class Warp {
 		}
 		
 		this.name = name;
-		
-		String worldName = node.getString(WORLD_KEY);
-		if(worldName == null) {
-		    worldName = plugin.getServer().getWorlds().get(0).getName();
-		    OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + name);
-		    OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Assuming world " + worldName + " and continuing...");
-		}
-		double x = node.getDouble(X_KEY, 0.0);
-		double y = node.getDouble(Y_KEY, 0.0);
-		double z = node.getDouble(Z_KEY, 0.0);
-		float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
-		float yaw = (float) node.getDouble(YAW_KEY, 0.0);
-		this.location = new Location(plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+		this.location = this.parseLocation(node, plugin);
+	}
+	
+	private Location parseLocation(ConfigurationNode node, OpenWarp plugin) {
+	    String worldName = node.getString(WORLD_KEY);
+        if(worldName == null) {
+            worldName = plugin.getServer().getWorlds().get(0).getName();
+            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
+            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Assuming world " + worldName + " and continuing...");
+        }
+        
+        double x = node.getDouble(X_KEY, 0.0);
+        double y = node.getDouble(Y_KEY, 0.0);
+        double z = node.getDouble(Z_KEY, 0.0);
+        float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
+        float yaw = (float) node.getDouble(YAW_KEY, 0.0);
+        
+        return new Location(plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
 	}
 	
 	public String getName() {
