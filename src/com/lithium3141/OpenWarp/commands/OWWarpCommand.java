@@ -3,7 +3,6 @@ package com.lithium3141.OpenWarp.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 
 import com.lithium3141.OpenWarp.OWCommand;
@@ -18,13 +17,7 @@ public class OWWarpCommand extends OWCommand {
 
 	@Override
 	public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
-	    if(sender instanceof ConsoleCommandSender) {
-	        sender.sendMessage(ChatColor.RED + "Can't warp the console!");
-	        return true;
-	    } else if(!(sender instanceof CraftPlayer)) {
-	        sender.sendMessage(ChatColor.RED + "Can't warp unknown command sender!");
-	        return true;
-	    }
+	    if(!this.checkPlayerSender(sender)) return true;
 	    
 		// args will have at least one argument (due to trie command mapping & adapter)
 	    String warpName = args[0];

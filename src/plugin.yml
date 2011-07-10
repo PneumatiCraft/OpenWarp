@@ -7,3 +7,6 @@ commands:
     warp:
         description: Manipulate warp points
         usage: /<command>
+    top:
+        description: Move to top block
+        usage: /<command>
