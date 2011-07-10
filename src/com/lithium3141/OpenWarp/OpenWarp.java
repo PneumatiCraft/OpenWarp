@@ -137,6 +137,9 @@ public class OpenWarp extends JavaPlugin {
 		this.registerCommand(new OWWarpDetailCommand(this), "warp", "detail");
 		
 		this.registerCommand(new OWTopCommand(this), "top");
+		
+		this.registerCommand(new OWJumpCommand(this), "jump");
+		this.registerCommand(new OWJumpCommand(this), "j");
 	}
 	
 	/**

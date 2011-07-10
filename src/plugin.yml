@@ -10,3 +10,9 @@ commands:
     top:
         description: Move to top block
         usage: /<command>
+    j:
+        description: Jump to targeted block
+        usage: /<command>
+    jump:
+        description: Jump to targeted block
+        usage: /<command>
