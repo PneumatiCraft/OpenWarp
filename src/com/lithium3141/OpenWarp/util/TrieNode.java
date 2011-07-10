@@ -1,4 +1,4 @@
-package com.lithium3141.OpenWarp;
+package com.lithium3141.OpenWarp.util;
 
 import java.util.HashMap;
 import java.util.Map;
