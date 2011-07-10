@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -65,7 +66,7 @@ public class OpenWarp extends JavaPlugin {
 			// XXX DEBUGGING
 			Map<String, Object> storeWarp = new HashMap<String, Object>();
 			storeWarp.put("x", 0.0);
-			storeWarp.put("y", 0.0);
+			storeWarp.put("y", 64.0);
 			storeWarp.put("z", 0.0);
 			storeWarp.put("pitch", 0.0f);
 			storeWarp.put("yaw", 0.0f);
@@ -112,7 +113,7 @@ public class OpenWarp extends JavaPlugin {
 		if(keys != null) {
 			for(String key : keys) {
 				ConfigurationNode node = this.publicWarpsConfig.getNode(WARPS_LIST_KEY + "." + key);
-				Warp warp = new Warp(key, node, this);
+				Warp warp = new Warp(this, key, node);
 				this.publicWarps.put(warp.getName(), warp);
 			}
 		}
@@ -129,10 +130,11 @@ public class OpenWarp extends JavaPlugin {
 	
 	private void loadCommands() {
 		this.commandTrie = new Trie<OWCommand>();
-		this.registerCommand(new OWWarpListCommand(this), "warp");
+		this.registerCommand(new OWWarpCommandAdapter(this), "warp");
 		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
-		this.registerCommand(new OWWarpCreateCommand(this), "setwarp");
-		this.registerCommand(new OWWarpCreateCommand(this), "warp", "set");
+		this.registerCommand(new OWWarpCommand(this), "setwarp");
+		this.registerCommand(new OWWarpCommand(this), "warp", "set");
+		this.registerCommand(new OWWarpDetailCommand(this), "warp", "detail");
 	}
 	
 	/**
@@ -202,5 +204,31 @@ public class OpenWarp extends JavaPlugin {
 	public Map<String, Warp> getPublicWarps() {
 	    return this.publicWarps;
 	}
+	
+
+    /**
+     * Get the Warp, if any, matching the given name for the given sender.
+     * 
+     * @param sender The sender for whom to check for warps
+     * @param warpName The name of the warp to find
+     * @return In order of precedence: (1) the public warp with the given
+     *          name, (2) the private warp belonging to the given sender,
+     *          or (3) null.
+     */
+    public Warp getWarp(CommandSender sender, String warpName) {
+        // First check public warps
+        for(Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
+            String name = entry.getKey();
+            if(name.equalsIgnoreCase(warpName)) {
+                return entry.getValue();
+            }
+        }
+        
+        // If no match, check private warps
+        //TODO
+        
+        // No match
+        return null;
+    }
 
 }

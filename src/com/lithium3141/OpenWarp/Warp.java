@@ -1,12 +1,10 @@
 package com.lithium3141.OpenWarp;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.bukkit.Location;
 import org.bukkit.util.config.ConfigurationNode;
 
 public class Warp {
+    protected OpenWarp plugin;
 	protected String name;
 	protected Location location;
 	
@@ -17,15 +15,16 @@ public class Warp {
 	public static final String PITCH_KEY = "pitch";
 	public static final String YAW_KEY = "yaw";
 	
-	public Warp(String name, ConfigurationNode node, OpenWarp plugin) {
+	public Warp(OpenWarp plugin, String name, ConfigurationNode node) {
+	    this.plugin = plugin;
 		this.name = name;
-		this.location = this.parseLocation(node, plugin);
+		this.location = this.parseLocation(node);
 	}
 	
-	private Location parseLocation(ConfigurationNode node, OpenWarp plugin) {
+	private Location parseLocation(ConfigurationNode node) {
 	    String worldName = node.getString(WORLD_KEY);
         if(worldName == null) {
-            worldName = plugin.getServer().getWorlds().get(0).getName();
+            worldName = this.plugin.getServer().getWorlds().get(0).getName();
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Assuming world " + worldName + " and continuing...");
         }
@@ -36,10 +35,22 @@ public class Warp {
         float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
         float yaw = (float) node.getDouble(YAW_KEY, 0.0);
         
-        return new Location(plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+        return new Location(this.plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
 	}
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public Location getLocation() {
+	    return this.location;
+	}
+	
+	public boolean isPublic() {
+	    return this.plugin.getPublicWarps().values().contains(this);
+	}
+	
+	public String getDetailString() {
+	    return ""; // TODO implement
 	}
 }
