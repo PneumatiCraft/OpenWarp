@@ -189,11 +189,9 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Locate and run the best matching command from the key path
 		String[] matchPath = this.commandTrie.getDeepestMatch(keyPath);
-		System.out.println("Found match path: " + StringUtil.arrayJoin(matchPath));
 		OWCommand owCommand = this.commandTrie.get(matchPath);
 		if(owCommand != null) {
 		    String[] remainingArgs = StringUtil.trimArrayLeft(keyPath, matchPath);
-		    System.out.println("Remaining args: " + StringUtil.arrayJoin(remainingArgs));
 			return owCommand.execute(sender, command, commandLabel, remainingArgs);
 		} else {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
