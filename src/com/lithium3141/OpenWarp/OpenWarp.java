@@ -14,6 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
 
@@ -42,7 +43,7 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
 	
 	public Configuration globalWarpsConfig;
-	private List<String> globalWarpNames;
+	private Map<String, Warp> globalWarps = new HashMap<String, Warp>();
 	
 	// Supported commands
 	private Trie<OWCommand> commandTrie;
@@ -57,7 +58,19 @@ public class OpenWarp extends JavaPlugin {
 			}
 			
 			// Save global warps
-			this.globalWarpsConfig.setProperty(WARPS_LIST_KEY, this.globalWarpNames);
+			this.globalWarpsConfig.setProperty(WARPS_LIST_KEY, this.globalWarps);
+			// XXX DEBUGGING
+			Map<String, Object> storeWarp = new HashMap<String, Object>();
+			storeWarp.put("x", 0.0);
+			storeWarp.put("y", 0.0);
+			storeWarp.put("z", 0.0);
+			storeWarp.put("pitch", 0.0f);
+			storeWarp.put("yaw", 0.0f);
+			storeWarp.put("world", "world");
+			Map<String, Object> warps = new HashMap<String, Object>();
+			warps.put("store", storeWarp);
+			this.globalWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
+			// XXX END DEBUGGING
 			if(!this.globalWarpsConfig.save()) {
 				LOG.warning(LOG_PREFIX + "Couldn't save global warp list; continuing...");
 			}
@@ -92,7 +105,16 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Read warp names
-		this.globalWarpNames = this.globalWarpsConfig.getStringList(WARPS_LIST_KEY, new ArrayList<String>());
+		List<String> keys = this.globalWarpsConfig.getKeys(WARPS_LIST_KEY);
+		if(keys != null) {
+			for(String key : keys) {
+				ConfigurationNode node = this.globalWarpsConfig.getNode(WARPS_LIST_KEY + "." + key);
+				LOG.info("Found warp " + key + " at node " + node.toString());
+				Warp warp = new Warp(key, node, this);
+				LOG.info("Putting " + warp.getName() + ":" + warp);
+				this.globalWarps.put(warp.getName(), warp);
+			}
+		}
 		
 		// Set up supported commands
 		this.loadCommands();
@@ -107,7 +129,7 @@ public class OpenWarp extends JavaPlugin {
 	private void loadCommands() {
 		this.commandTrie = new Trie<OWCommand>();
 		this.registerCommand(new OWWarpListCommand(this), "warp");
-		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
+		this.registerCommand(new OWWarpCreateCommand(this), "setwarp");
 	}
 	
 	/**
@@ -170,6 +192,10 @@ public class OpenWarp extends JavaPlugin {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
 			return false;
 		}
+	}
+	
+	public Map<String, Warp> getGlobalWarps() {
+	    return this.globalWarps;
 	}
 
 }

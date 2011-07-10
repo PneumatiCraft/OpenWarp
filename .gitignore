@@ -1,5 +1,4 @@
 # Eclipse
-bin
 .classpath
 .project
 .settings
@@ -8,5 +7,9 @@ bin
 minecraft
 OpenWarp.jar
 
-# Dependencies
+# Binary directories
+bin
 lib
+
+# Ant
+.externalToolBuilders

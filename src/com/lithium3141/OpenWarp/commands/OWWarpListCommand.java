@@ -1,10 +1,15 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OpenWarp;
+import com.lithium3141.OpenWarp.Warp;
 
 public class OWWarpListCommand extends OWCommand {
 
@@ -14,10 +19,22 @@ public class OWWarpListCommand extends OWCommand {
 
 	@Override
 	public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
-		sender.sendMessage("DEBUG");
+		sender.sendMessage(this.getGlobalWarpsList());
 		
-		// TODO Auto-generated method stub
 		return true;
+	}
+	
+	private String getGlobalWarpsList() {
+	    Map<String, Warp> globals = this.plugin.getGlobalWarps();
+        
+        String globalsList = ChatColor.GREEN + "Public:" + ChatColor.WHITE;
+        if(globals.size() > 0) {
+            for(Entry<String, Warp> entry : globals.entrySet()) {
+                globalsList += " " + entry.getKey();
+            }
+        }
+        
+        return globalsList;
 	}
 
 }

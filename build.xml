@@ -21,7 +21,7 @@
     </target>
     
     <target name="compile" depends="init">
-        <javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
+        <javac srcdir="${src}" destdir="${build}" includeAntRuntime="false" debug="on" debuglevel="lines,vars,source">
             <classpath refid="project.classpath" />
         </javac>
         <copy file="${src}/plugin.yml" tofile="${build}/plugin.yml" />
