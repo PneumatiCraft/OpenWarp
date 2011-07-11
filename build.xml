@@ -5,14 +5,11 @@
     <property name="dist" location="." />
     <property name="lib" location="lib" />
 
-    <property name="junit" location="/usr/share/java/junit-4.8.2/junit.jar" /> <!-- must be adjusted per-system -->
-
     <path id="project.classpath">
         <pathelement path="${classpath}" />
         <pathelement location="${lib}/craftbukkit-0.0.1-SNAPSHOT.jar" />
         <pathelement location="${lib}/Permissions.jar" />
-        <pathelement location="${junit}" />
-        <pathelement location="${antjunit}" />
+        <pathelement location="${lib}/junit.jar" />
     </path>
 
     <target name="init">
@@ -24,6 +21,7 @@
 
         <get src="http://ci.bukkit.org/job/dev-CraftBukkit/Recommended/artifact/target/craftbukkit-0.0.1-SNAPSHOT.jar" dest="${lib}" skipexisting="true" />
         <get src="http://www.theyeticave.net/downloads/permissions/3.1.5/Permissions.jar" dest="${lib}" skipexisting="true" />
+        <get src="http://cloud.github.com/downloads/KentBeck/junit/junit-4.8.2.jar" dest="${lib}/junit.jar" skipexisting="true" />
     </target>
     
     <target name="compile" depends="init">
