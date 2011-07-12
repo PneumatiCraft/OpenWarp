@@ -58,7 +58,7 @@
     <target name="clean">
         <delete dir="${build}" />
         <delete>
-            <fileset dir="${lib}" includes="*.jar">
+            <fileset dir="${lib}" includes="*.jar" />
         </delete>
     </target>
 </project>
