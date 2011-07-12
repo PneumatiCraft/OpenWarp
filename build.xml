@@ -1,9 +1,11 @@
 <project default="jar">
-    <property name="src" location="src" />
     <property name="build" location="bin" />
     <property name="build.result" location="${build}/test-result" />
     <property name="dist" location="." />
     <property name="lib" location="lib" />
+
+    <property name="src" location="src" />
+    <property name="src.commandhandler" location="${lib}/CommandHandler/src" />
 
     <path id="project.classpath">
         <pathelement path="${classpath}" />
@@ -24,7 +26,9 @@
     </target>
     
     <target name="compile" depends="init">
-        <javac srcdir="${src}" destdir="${build}" includeAntRuntime="false" debug="on" debuglevel="lines,vars,source">
+        <javac destdir="${build}" includeAntRuntime="false" debug="on" debuglevel="lines,vars,source">
+            <src path="${src}" />
+            <src path="${src.commandhandler}" />
             <classpath refid="project.classpath" />
         </javac>
         <copy file="${src}/plugin.yml" tofile="${build}/plugin.yml" />
