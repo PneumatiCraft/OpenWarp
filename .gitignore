@@ -9,7 +9,7 @@ OpenWarp.jar
 
 # Binary directories
 bin
-lib
+lib/*.jar
 
 # Ant
 .externalToolBuilders
