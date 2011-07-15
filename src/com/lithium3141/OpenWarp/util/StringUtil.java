@@ -51,6 +51,10 @@ public class StringUtil {
         
         boolean trimming = true;
         for(int i = 0; i < value.size(); i++) {
+            if(i == trim.size()) {
+                trimming = false;
+            }
+            
             if(trimming && value.get(i).equals(trim.get(i))) {
                 continue;
             } else {
