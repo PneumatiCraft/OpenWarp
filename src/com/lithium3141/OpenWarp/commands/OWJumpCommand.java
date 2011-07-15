@@ -1,11 +1,11 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 
@@ -16,11 +16,21 @@ public class OWJumpCommand extends OWCommand {
 
     public OWJumpCommand(OpenWarp plugin) {
         super(plugin);
+        
+        this.commandName = "jump";
+        this.commandDesc = "Move to reticle target";
+        this.commandUsage = "/jump";
+        this.commandExample = "/jump";
+        this.commandKeys = new ArrayList<String>() {{ add("jump"); add("j"); }};
+        this.minimumArgLength = 0;
+        this.maximumArgLength = 0;
+        this.opRequired = false;
+        this.permission = "jump";
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
-        if(!this.checkPlayerSender(sender)) return true;
+    public void runCommand(CommandSender sender, List<String> args) {
+        if(!this.checkPlayerSender(sender)) return;
         
         CraftPlayer player = (CraftPlayer)sender;
         
@@ -35,8 +45,6 @@ public class OWJumpCommand extends OWCommand {
         if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to target block!");
         }
-        
-        return true;
     }
 
 }

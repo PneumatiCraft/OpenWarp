@@ -21,6 +21,8 @@ import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.util.StringUtil;
 import com.lithium3141.OpenWarp.util.Trie;
 import com.lithium3141.OpenWarp.util.TrieNode;
+import com.pneumaticraft.commandhandler.CommandHandler;
+import com.pneumaticraft.commandhandler.PermissionsInterface;
 
 /**
  * Main plugin class. Responsible for setting up plugin and handling
@@ -51,6 +53,7 @@ public class OpenWarp extends JavaPlugin {
 	
 	// Supported commands
 	private Trie<OWCommand> commandTrie;
+	private CommandHandler commandHandler;
 
 	@Override
 	public void onDisable() {
@@ -129,7 +132,8 @@ public class OpenWarp extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
-		this.commandTrie = new Trie<OWCommand>();
+	    /*
+	    this.commandTrie = new Trie<OWCommand>();
 		this.registerCommand(new OWWarpCommandAdapter(this), "warp");
 		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
 		this.registerCommand(new OWWarpCommand(this), "setwarp");
@@ -140,6 +144,24 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.registerCommand(new OWJumpCommand(this), "jump");
 		this.registerCommand(new OWJumpCommand(this), "j");
+		*/
+		
+		// TODO so ugly. Make actual permissions happen.
+		this.commandHandler = new CommandHandler(this, new PermissionsInterface() {
+
+            @Override
+            public boolean hasPermission(CommandSender sender, String node, boolean isOpRequired) {
+                // TODO this makes me throw up a little in my mouth.
+                return true;
+            }
+		    
+		});
+		
+		this.commandHandler.registerCommand(new OWWarpListCommand(this));
+		this.commandHandler.registerCommand(new OWWarpCommand(this));
+		this.commandHandler.registerCommand(new OWWarpDetailCommand(this));
+		this.commandHandler.registerCommand(new OWTopCommand(this));
+		this.commandHandler.registerCommand(new OWJumpCommand(this));
 	}
 	
 	/**
@@ -150,6 +172,7 @@ public class OpenWarp extends JavaPlugin {
 	 * @param command The command to add to the trie
 	 * @param keys The key path to use for the new command
 	 */
+	/*
 	private void registerCommand(OWCommand command, String... keys) {
 		// Require a non-empty key path
 		if(keys.length == 0) {
@@ -168,6 +191,7 @@ public class OpenWarp extends JavaPlugin {
 		// Store given command
 		current.setValue(command);
 	}
+	*/
 	
 	/**
 	 * Register a player with the OpenWarp plugin. Create a new
@@ -187,6 +211,7 @@ public class OpenWarp extends JavaPlugin {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	    /* TODO old! remove!
 		// Construct a trie key path from the command label and args
 		String[] keyPath = new String[args.length + 1];
 		keyPath[0] = commandLabel.toLowerCase();
@@ -204,6 +229,14 @@ public class OpenWarp extends JavaPlugin {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
 			return false;
 		}
+		*/
+	    
+	    List<String> combinedArgs = new ArrayList<String>();
+	    combinedArgs.add(commandLabel);
+	    for(String arg : args) {
+	        combinedArgs.add(arg);
+	    }
+	    return this.commandHandler.locateAndRunCommand(sender, combinedArgs);
 	}
 	
 	public Map<String, Warp> getPublicWarps() {

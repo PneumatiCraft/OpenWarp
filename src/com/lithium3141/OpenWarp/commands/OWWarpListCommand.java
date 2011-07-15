@@ -1,32 +1,31 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
-import com.lithium3141.OpenWarp.util.StringUtil;
 
 public class OWWarpListCommand extends OWCommand {
 
 	public OWWarpListCommand(OpenWarp plugin) {
 		super(plugin);
-	}
-
-	@Override
-	public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
-	    boolean sendPublic = (args.length == 0 || StringUtil.arrayContains(args, "public"));
-	    boolean sendPrivate = (args.length == 0 || StringUtil.arrayContains(args, "private"));
-	    
-	    if(sendPublic) sender.sendMessage(this.getPublicWarpsList());
-	    //if(sendPrivate) sender.sendMessage(this.getPrivateWarpsList(sender)); //TODO
 		
-		return true;
+		this.commandName = "warp list";
+        this.commandDesc = "List available warps";
+        this.commandUsage = "/warp list [public] [private]";
+        this.commandExample = "/warp list public";
+        this.commandKeys = new ArrayList<String>() {{ add("warp list"); add("warp"); }};
+        this.minimumArgLength = 0;
+        this.maximumArgLength = 2;
+        this.opRequired = false;
+        this.permission = "warp.list";
 	}
 	
 	private String getPublicWarpsList() {
@@ -46,5 +45,16 @@ public class OWWarpListCommand extends OWCommand {
 	    //TODO implement
 	    return "";
 	}
+
+    @Override
+    public void runCommand(CommandSender sender, List<String> args) {
+        boolean sendPublic = (args.size() == 0 || args.contains("public"));
+        boolean sendPrivate = (args.size() == 0 || args.contains("private"));
+        
+        if(sendPublic) sender.sendMessage(this.getPublicWarpsList());
+        //if(sendPrivate) sender.sendMessage(this.getPrivateWarpsList(sender)); //TODO
+        
+        return;
+    }
 
 }
