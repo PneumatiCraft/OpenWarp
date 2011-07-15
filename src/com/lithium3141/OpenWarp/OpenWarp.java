@@ -19,8 +19,8 @@ import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.util.StringUtil;
-import com.lithium3141.OpenWarp.util.Trie;
-import com.lithium3141.OpenWarp.util.TrieNode;
+import com.lithium3141.javastructures.trie.Trie;
+import com.lithium3141.javastructures.trie.TrieNode;
 
 /**
  * Main plugin class. Responsible for setting up plugin and handling
@@ -50,7 +50,7 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>();
 	
 	// Supported commands
-	private Trie<OWCommand> commandTrie;
+	private Trie<String, OWCommand> commandTrie;
 
 	@Override
 	public void onDisable() {
@@ -129,7 +129,7 @@ public class OpenWarp extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
-		this.commandTrie = new Trie<OWCommand>();
+		this.commandTrie = new Trie<String, OWCommand>();
 		this.registerCommand(new OWWarpCommandAdapter(this), "warp");
 		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
 		this.registerCommand(new OWWarpCommand(this), "setwarp");
@@ -157,7 +157,7 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Navigate trie, creating empty command nodes as needed
-		TrieNode<OWCommand> current = this.commandTrie.getRoot();
+		TrieNode<String, OWCommand> current = this.commandTrie.getRoot();
 		for(int i = 0; i < keys.length; i++) {
 			if(current.getChild(keys[i]) == null) {
 				current.setChild(keys[i], (OWCommand)null);
@@ -188,17 +188,17 @@ public class OpenWarp extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 		// Construct a trie key path from the command label and args
-		String[] keyPath = new String[args.length + 1];
-		keyPath[0] = commandLabel.toLowerCase();
+		List<String> keyPath = new ArrayList<String>();
+		keyPath.add(commandLabel.toLowerCase());
 		for(int i = 0; i < args.length; i++) {
-			keyPath[i + 1] = args[i].toLowerCase();
+			keyPath.add(args[i].toLowerCase());
 		}
 		
 		// Locate and run the best matching command from the key path
-		String[] matchPath = this.commandTrie.getDeepestMatch(keyPath);
+		List<String> matchPath = this.commandTrie.getDeepestMatch(keyPath);
 		OWCommand owCommand = this.commandTrie.get(matchPath);
 		if(owCommand != null) {
-		    String[] remainingArgs = StringUtil.trimArrayLeft(keyPath, matchPath);
+		    List<String> remainingArgs = StringUtil.trimListLeft(keyPath, matchPath);
 			return owCommand.execute(sender, command, commandLabel, remainingArgs);
 		} else {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");

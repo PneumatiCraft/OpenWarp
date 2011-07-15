@@ -1,5 +1,6 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -19,9 +20,9 @@ public class OWWarpListCommand extends OWCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
-	    boolean sendPublic = (args.length == 0 || StringUtil.arrayContains(args, "public"));
-	    boolean sendPrivate = (args.length == 0 || StringUtil.arrayContains(args, "private"));
+	public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+	    boolean sendPublic = (args.size() == 0 || args.contains("public"));
+	    boolean sendPrivate = (args.size() == 0 || args.contains("private"));
 	    
 	    if(sendPublic) sender.sendMessage(this.getPublicWarpsList());
 	    //if(sendPrivate) sender.sendMessage(this.getPrivateWarpsList(sender)); //TODO

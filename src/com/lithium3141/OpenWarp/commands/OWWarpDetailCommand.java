@@ -1,5 +1,7 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,8 +17,8 @@ public class OWWarpDetailCommand extends OWCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
-        if(args.length == 0) {
+    public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+        if(args.size() == 0) {
             sender.sendMessage(ChatColor.YELLOW + "Usage: /warp detail {name}");
             return true;
         }

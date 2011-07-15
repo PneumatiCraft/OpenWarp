@@ -19,7 +19,7 @@ public class OWJumpCommand extends OWCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
+    public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
         if(!this.checkPlayerSender(sender)) return true;
         
         CraftPlayer player = (CraftPlayer)sender;

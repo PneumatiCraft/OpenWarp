@@ -1,5 +1,7 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -16,7 +18,7 @@ public class OWTopCommand extends OWCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
+    public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
         if(!this.checkPlayerSender(sender)) return true;
         
         CraftPlayer player = (CraftPlayer)sender;

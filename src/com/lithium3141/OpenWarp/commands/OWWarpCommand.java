@@ -1,5 +1,7 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,11 +18,11 @@ public class OWWarpCommand extends OWCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
 	    if(!this.checkPlayerSender(sender)) return true;
 	    
 		// args will have at least one argument (due to trie command mapping & adapter)
-	    String warpName = args[0];
+	    String warpName = args.get(0);
 	    
 	    Warp target = this.plugin.getWarp(sender, warpName);
 	    if(target == null) {

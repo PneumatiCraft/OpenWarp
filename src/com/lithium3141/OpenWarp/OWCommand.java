@@ -1,5 +1,7 @@
 package com.lithium3141.OpenWarp;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +15,7 @@ public abstract class OWCommand {
 		this.plugin = plugin;
 	}
 	
-	public abstract boolean execute(CommandSender sender, Command command, String commandLabel, String[] args);
+	public abstract boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args);
 	
 	public boolean checkPlayerSender(CommandSender sender) {
 	    if(sender instanceof ConsoleCommandSender) {

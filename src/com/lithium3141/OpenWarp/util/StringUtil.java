@@ -1,5 +1,8 @@
 package com.lithium3141.OpenWarp.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringUtil {
     public static boolean arrayContains(String[] arr, String x) {
         for(int i = 0; i < arr.length; i++) {
@@ -41,5 +44,21 @@ public class StringUtil {
     
     public static String arrayJoin(String[] array) {
         return arrayJoin(array, " ");
+    }
+    
+    public static List<String> trimListLeft(List<String> value, List<String> trim) {
+        List<String> result = new ArrayList<String>();
+        
+        boolean trimming = true;
+        for(int i = 0; i < value.size(); i++) {
+            if(trimming && value.get(i).equals(trim.get(i))) {
+                continue;
+            } else {
+                trimming = false;
+                result.add(value.get(i));
+            }
+        }
+        
+        return result;
     }
 }
