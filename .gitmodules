@@ -1,0 +1,3 @@
+[submodule "lib/JavaStructures"]
+	path = lib/JavaStructures
+	url = https://github.com/lithium3141/JavaStructures.git
