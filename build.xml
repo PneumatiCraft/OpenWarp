@@ -36,8 +36,8 @@
         <copy file="${src}/plugin.yml" tofile="${build}/plugin.yml" />
     </target>
 
-    <target name="test">
-        <junit printsummary="yes" haltonfailure="yes">
+    <target name="test" depends="compile">
+        <junit printsummary="yes" haltonfailure="no">
             <formatter type="xml" />
 
             <classpath>
