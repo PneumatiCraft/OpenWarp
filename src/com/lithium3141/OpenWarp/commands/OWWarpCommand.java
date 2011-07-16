@@ -35,10 +35,7 @@ public class OWWarpCommand extends OWCommand {
 	    }
 	    
 	    CraftPlayer player = (CraftPlayer)sender;
-	    Location prevLoc = player.getLocation();
-        if(player.teleport(target.getLocation())) {
-            this.plugin.getLocationTracker().setPreviousLocation(player, prevLoc);
-        } else {
+        if(!player.teleport(target.getLocation())) {
             player.sendMessage(ChatColor.RED + "Error teleporting to warp: " + warpName);
         }
 	    

@@ -27,10 +27,7 @@ public class OWBackCommand extends OWCommand {
         CraftPlayer player = (CraftPlayer)sender;
         Location loc = this.plugin.getLocationTracker().getPreviousLocation(player);
         
-        Location prevLoc = player.getLocation();
-        if(player.teleport(loc)) {
-            this.plugin.getLocationTracker().setPreviousLocation(player, prevLoc);
-        } else {
+        if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error returning to previous location!");
         }
         

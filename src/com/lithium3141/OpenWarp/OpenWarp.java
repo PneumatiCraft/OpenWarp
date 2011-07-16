@@ -20,6 +20,8 @@ import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
+import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
+import com.lithium3141.OpenWarp.listeners.OWTeleportListener;
 import com.lithium3141.OpenWarp.util.StringUtil;
 import com.lithium3141.javastructures.trie.Trie;
 import com.lithium3141.javastructures.pair.Range;
@@ -129,6 +131,9 @@ public class OpenWarp extends JavaPlugin {
 		// Start listening for events
 		OWPlayerListener playerListener = new OWPlayerListener(this);
 		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
+		
+		OWTeleportListener teleportListener = new OWTeleportListener(this);
+		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, teleportListener, Priority.Normal, this);
 		
 		LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
 	}

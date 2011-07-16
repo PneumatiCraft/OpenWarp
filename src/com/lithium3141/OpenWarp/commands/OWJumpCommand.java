@@ -35,10 +35,7 @@ public class OWJumpCommand extends OWCommand {
         loc.setPitch(player.getLocation().getPitch());
         loc.setYaw(player.getLocation().getYaw());
         
-        Location prevLoc = player.getLocation();
-        if(player.teleport(loc)) {
-            this.plugin.getLocationTracker().setPreviousLocation(player, prevLoc);
-        } else {
+        if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to target block!");
         }
         

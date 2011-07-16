@@ -30,10 +30,7 @@ public class OWTopCommand extends OWCommand {
         int y = player.getWorld().getHighestBlockYAt(loc);
         loc.setY((double)y);
         
-        Location prevLoc = player.getLocation();
-        if(player.teleport(loc)) {
-            this.plugin.getLocationTracker().setPreviousLocation(player, prevLoc);
-        } else {
+        if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to top block!");
         }
         

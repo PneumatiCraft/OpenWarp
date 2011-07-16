@@ -1,8 +1,10 @@
-package com.lithium3141.OpenWarp;
+package com.lithium3141.OpenWarp.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+
+import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWPlayerListener extends PlayerListener {
 	private OpenWarp plugin;

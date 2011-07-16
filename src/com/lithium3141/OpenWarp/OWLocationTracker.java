@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 public class OWLocationTracker {
-    private Map<CraftPlayer, Location> previousLocations = new HashMap<CraftPlayer, Location>();
+    private Map<Player, Location> previousLocations = new HashMap<Player, Location>();
     
-    public Location getPreviousLocation(CraftPlayer player) {
+    public Location getPreviousLocation(Player player) {
         Location loc = this.previousLocations.get(player); 
         if(loc != null) {
             return loc;
@@ -18,11 +18,11 @@ public class OWLocationTracker {
         }
     }
     
-    public void setPreviousLocation(CraftPlayer player, Location location) {
+    public void setPreviousLocation(Player player, Location location) {
         this.previousLocations.put(player, location);
     }
     
-    public void clearPreviousLocation(CraftPlayer player) {
+    public void clearPreviousLocation(Player player) {
         this.previousLocations.remove(player);
     }
 }
