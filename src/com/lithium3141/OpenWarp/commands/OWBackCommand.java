@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -12,9 +11,9 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OpenWarp;
 
-public class OWJumpCommand extends OWCommand {
+public class OWBackCommand extends OWCommand {
 
-    public OWJumpCommand(OpenWarp plugin) {
+    public OWBackCommand(OpenWarp plugin) {
         super(plugin);
         
         this.minimumArgs = 0;
@@ -26,20 +25,13 @@ public class OWJumpCommand extends OWCommand {
         if(!this.checkPlayerSender(sender)) return true;
         
         CraftPlayer player = (CraftPlayer)sender;
-        
-        List<Block> blocks = player.getLastTwoTargetBlocks(null, 100);
-        Location loc = blocks.get(blocks.size() - 1).getLocation();
-        
-        int y = player.getWorld().getHighestBlockYAt(loc);
-        loc.setY((double)y);
-        loc.setPitch(player.getLocation().getPitch());
-        loc.setYaw(player.getLocation().getYaw());
+        Location loc = this.plugin.getLocationTracker().getPreviousLocation(player);
         
         Location prevLoc = player.getLocation();
         if(player.teleport(loc)) {
             this.plugin.getLocationTracker().setPreviousLocation(player, prevLoc);
         } else {
-            player.sendMessage(ChatColor.RED + "Error teleporting to target block!");
+            player.sendMessage(ChatColor.RED + "Error returning to previous location!");
         }
         
         return true;

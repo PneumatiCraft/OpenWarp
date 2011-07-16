@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
@@ -21,7 +22,6 @@ import org.bukkit.util.config.ConfigurationNode;
 import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.util.StringUtil;
 import com.lithium3141.javastructures.trie.Trie;
-import com.lithium3141.javastructures.trie.TrieNode;
 import com.lithium3141.javastructures.pair.Range;
 
 /**
@@ -53,6 +53,9 @@ public class OpenWarp extends JavaPlugin {
 	
 	// Supported commands
 	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
+	
+	// Per-player data
+	private OWLocationTracker locationTracker = new OWLocationTracker();
 
 	@Override
 	public void onDisable() {
@@ -146,6 +149,8 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.registerCommand(new OWJumpCommand(this), "jump");
 		this.registerCommand(new OWJumpCommand(this), "j");
+		
+		this.registerCommand(new OWBackCommand(this), "back");
 	}
 	
 	/**
@@ -256,6 +261,9 @@ public class OpenWarp extends JavaPlugin {
 	    return this.publicWarps;
 	}
 	
+	public OWLocationTracker getLocationTracker() {
+	    return this.locationTracker;
+	}
 
     /**
      * Get the Warp, if any, matching the given name for the given sender.

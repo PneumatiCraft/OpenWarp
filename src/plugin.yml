@@ -16,3 +16,6 @@ commands:
     jump:
         description: Jump to targeted block
         usage: /<command>
+    back:
+        description: Return to previous location
+        usage: /<command>
