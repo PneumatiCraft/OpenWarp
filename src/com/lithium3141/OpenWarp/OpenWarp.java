@@ -22,7 +22,7 @@ import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.util.StringUtil;
 import com.lithium3141.javastructures.trie.Trie;
 import com.lithium3141.javastructures.trie.TrieNode;
-import com.lithium3141.javastructures.pair.Pair;
+import com.lithium3141.javastructures.pair.Range;
 
 /**
  * Main plugin class. Responsible for setting up plugin and handling
@@ -52,7 +52,7 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>();
 	
 	// Supported commands
-	private Trie<String, Map<Pair<Integer>, OWCommand>> commandTrie;
+	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
 
 	@Override
 	public void onDisable() {
@@ -131,7 +131,7 @@ public class OpenWarp extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
-		this.commandTrie = new Trie<String, Map<Pair<Integer>, OWCommand>>();
+		this.commandTrie = new Trie<String, Map<Range<Integer>, OWCommand>>();
 		this.registerCommand(new OWWarpCommand(this), 1, 1, "warp");
 		this.registerCommand(new OWWarpListCommand(this), 0, 0, "warp");
 		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
@@ -192,21 +192,21 @@ public class OpenWarp extends JavaPlugin {
         }
         
         // Navigate trie, creating empty command nodes as needed
-        TrieNode<String, Map<Pair<Integer>, OWCommand>> current = this.commandTrie.getRoot();
+        TrieNode<String, Map<Range<Integer>, OWCommand>> current = this.commandTrie.getRoot();
         for(int i = 0; i < keys.size(); i++) {
             if(current.getChild(keys.get(i)) == null) {
-                current.setChild(keys.get(i), (Map<Pair<Integer>, OWCommand>)null);
+                current.setChild(keys.get(i), (Map<Range<Integer>, OWCommand>)null);
             }
             current = current.getChild(keys.get(i));
         }
         
         // Store given command
-        Map<Pair<Integer>, OWCommand> currentValue = current.getValue();
+        Map<Range<Integer>, OWCommand> currentValue = current.getValue();
         if(currentValue == null) {
-            current.setValue(new HashMap<Pair<Integer>, OWCommand>());
+            current.setValue(new HashMap<Range<Integer>, OWCommand>());
         }
         //current.getValue().setValue(command);
-        current.getValue().put(new Pair<Integer>(minimumArgs, maximumArgs), command);
+        current.getValue().put(new Range<Integer>(minimumArgs, maximumArgs), command);
 	}
 	
 	/**
@@ -236,12 +236,12 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Locate and run the best matching command from the key path
 		List<String> matchPath = this.commandTrie.getDeepestMatch(keyPath);
-		Map<Pair<Integer>, OWCommand> commandMap = this.commandTrie.get(matchPath);
+		Map<Range<Integer>, OWCommand> commandMap = this.commandTrie.get(matchPath);
 		List<String> remainingArgs = StringUtil.trimListLeft(keyPath, matchPath);
 		
 		OWCommand owCommand = null;
-		for(Pair<Integer> key : commandMap.keySet()) {
-		    if(key.getFirst() <= remainingArgs.size() && remainingArgs.size() <= key.getSecond()) {
+		for(Range<Integer> key : commandMap.keySet()) {
+		    if(key.contains(remainingArgs.size())) {
 		        owCommand = commandMap.get(key);
 		        break;
 		    }
