@@ -22,10 +22,10 @@ public abstract class OWCommand {
 	
 	public boolean checkPlayerSender(CommandSender sender) {
 	    if(sender instanceof ConsoleCommandSender) {
-            sender.sendMessage(ChatColor.RED + "Can't move the console!");
+            sender.sendMessage(ChatColor.RED + "Command must be run in-game!");
             return false;
         } else if(!(sender instanceof CraftPlayer)) {
-            sender.sendMessage(ChatColor.RED + "Can't move unknown command sender!");
+            sender.sendMessage(ChatColor.RED + "Cannot verify command's sender!");
             return false;
         }
 	    return true;

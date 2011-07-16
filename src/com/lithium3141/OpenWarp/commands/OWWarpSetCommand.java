@@ -19,8 +19,9 @@ public class OWWarpSetCommand extends OWCommand {
 
     @Override
     public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
-        // TODO Auto-generated method stub
-        return false;
+        if(!this.checkPlayerSender(sender)) return true;
+        
+        return true;
     }
 
 }
