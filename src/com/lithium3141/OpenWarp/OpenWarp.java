@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,10 +48,11 @@ public class OpenWarp extends JavaPlugin {
 	
 	// Global configuration variables
 	public Configuration configuration;
-	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
+	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>(); // player name => config
 	
 	public Configuration publicWarpsConfig;
-	private Map<String, Warp> publicWarps = new HashMap<String, Warp>();
+	private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
+	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
 	
 	// Supported commands
 	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
@@ -116,14 +117,7 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Read warp names
-		List<String> keys = this.publicWarpsConfig.getKeys(WARPS_LIST_KEY);
-		if(keys != null) {
-			for(String key : keys) {
-				ConfigurationNode node = this.publicWarpsConfig.getNode(WARPS_LIST_KEY + "." + key);
-				Warp warp = new Warp(this, key, node);
-				this.publicWarps.put(warp.getName(), warp);
-			}
-		}
+		this.loadWarps(this.publicWarpsConfig, this.publicWarps);
 		
 		// Set up supported commands
 		this.loadCommands();
@@ -132,6 +126,25 @@ public class OpenWarp extends JavaPlugin {
 		this.loadListeners();
 		
 		LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
+	}
+	
+	/**
+	 * Load warps listed at the given ConfigurationNode into the given warps
+	 * map. Mutates the `target` argument.
+	 * 
+	 * @param config The ConfigurationNode to search for warps. Must have the
+	 *               `warps` key.
+	 * @param target The map into which to load new Warp objects.
+	 */
+	public void loadWarps(ConfigurationNode config, Map<String, Warp> target) {
+	    List<String> keys = config.getKeys(WARPS_LIST_KEY);
+        if(keys != null) {
+            for(String key : keys) {
+                ConfigurationNode node = config.getNode(WARPS_LIST_KEY + "." + key);
+                Warp warp = new Warp(this, key, node);
+                target.put(warp.getName(), warp);
+            }
+        }
 	}
 	
 	private void loadCommands() {
@@ -270,6 +283,10 @@ public class OpenWarp extends JavaPlugin {
 	    return this.publicWarps;
 	}
 	
+	public Map<String, Map<String, Warp>> getPrivateWarps() {
+	    return this.privateWarps;
+	}
+	
 	public OWLocationTracker getLocationTracker() {
 	    return this.locationTracker;
 	}
@@ -293,7 +310,15 @@ public class OpenWarp extends JavaPlugin {
         }
         
         // If no match, check private warps
-        //TODO
+        if(sender instanceof Player) {
+            Player player = (Player)sender;
+            for(Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
+                String name = entry.getKey();
+                if(name.equalsIgnoreCase(warpName)) {
+                    return entry.getValue();
+                }
+            }
+        }
         
         // No match
         return null;

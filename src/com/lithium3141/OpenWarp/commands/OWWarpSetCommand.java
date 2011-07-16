@@ -36,7 +36,7 @@ public class OWWarpSetCommand extends OWCommand {
         if(args.size() >= 2) {
             warpType = args.get(1);
         } else {
-            warpType = "public";
+            warpType = "private";
         }
         
         if(!warpType.equals("public") && !warpType.equals("private")) {
@@ -48,7 +48,7 @@ public class OWWarpSetCommand extends OWCommand {
         if(warpType.equals("public")) {
             this.plugin.getPublicWarps().put(warp.getName(), warp);
         } else if(warpType.equals("private")) {
-            // TODO save private warp
+            this.plugin.getPrivateWarps().get(player.getName()).put(warp.getName(), warp);
         }
         
         return true;

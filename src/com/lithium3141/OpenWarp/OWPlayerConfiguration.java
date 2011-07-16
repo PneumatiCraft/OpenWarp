@@ -1,6 +1,7 @@
 package com.lithium3141.OpenWarp;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
@@ -73,6 +74,11 @@ public class OWPlayerConfiguration {
 		this.generalConfig.load();
 		this.warpConfig.load();
 		this.quotaConfig.load();
+		
+		if(this.plugin.getPrivateWarps().get(this.playerName) == null) {
+		    this.plugin.getPrivateWarps().put(this.playerName, new HashMap<String, Warp>());
+		}
+		this.plugin.loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 	}
 	
 	/**
