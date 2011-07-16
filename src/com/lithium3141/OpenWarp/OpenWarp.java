@@ -127,7 +127,7 @@ public class OpenWarp extends JavaPlugin {
 		OWPlayerListener playerListener = new OWPlayerListener(this);
 		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
 		
-		LOG.info(LOG_PREFIX + "Enabled!");
+		LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
 	}
 	
 	private void loadCommands() {
