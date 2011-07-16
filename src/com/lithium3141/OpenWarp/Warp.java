@@ -21,6 +21,12 @@ public class Warp {
 		this.location = this.parseLocation(node);
 	}
 	
+	public Warp(OpenWarp plugin, String name, Location location) {
+	    this.plugin = plugin;
+	    this.name = name;
+	    this.location = location;
+	}
+	
 	private Location parseLocation(ConfigurationNode node) {
 	    String worldName = node.getString(WORLD_KEY);
         if(worldName == null) {
