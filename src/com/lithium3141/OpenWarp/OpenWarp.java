@@ -70,19 +70,12 @@ public class OpenWarp extends JavaPlugin {
 			}
 			
 			// Save public warps
-			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, this.publicWarps);
-			// XXX DEBUGGING
-			Map<String, Object> zeroWarp = new HashMap<String, Object>();
-			zeroWarp.put("x", 0.0);
-			zeroWarp.put("y", 64.0);
-			zeroWarp.put("z", 0.0);
-			zeroWarp.put("pitch", 0.0f);
-			zeroWarp.put("yaw", 0.0f);
-			zeroWarp.put("world", "world");
 			Map<String, Object> warps = new HashMap<String, Object>();
-			warps.put("zero", zeroWarp);
+			for(Entry<String, Warp> entry : this.publicWarps.entrySet()) {
+			    warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
+			}
+			
 			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
-			// XXX END DEBUGGING
 			if(!this.publicWarpsConfig.save()) {
 				LOG.warning(LOG_PREFIX + "Couldn't save public warp list; continuing...");
 			}
@@ -286,6 +279,10 @@ public class OpenWarp extends JavaPlugin {
 	public Map<String, Map<String, Warp>> getPrivateWarps() {
 	    return this.privateWarps;
 	}
+	
+	public Map<String, Warp> getPrivateWarps(String playerName) {
+        return this.getPrivateWarps().get(playerName);
+    }
 	
 	public OWLocationTracker getLocationTracker() {
 	    return this.locationTracker;

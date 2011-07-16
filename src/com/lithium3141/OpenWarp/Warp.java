@@ -1,5 +1,8 @@
 package com.lithium3141.OpenWarp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.util.config.ConfigurationNode;
 
@@ -58,5 +61,18 @@ public class Warp {
 	
 	public String getDetailString() {
 	    return "(" + this.location.getX() + ", " + this.location.getY() + ", " + this.location.getZ() + ") in world " + this.location.getWorld().getName();
+	}
+	
+	public Map<String, Object> getConfigurationMap() {
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    
+	    result.put("x", this.location.getX());
+	    result.put("y", this.location.getY());
+	    result.put("z", this.location.getZ());
+	    result.put("pitch", this.location.getPitch());
+	    result.put("yaw", this.location.getYaw());
+	    result.put("world", this.location.getWorld().getName());
+	    
+	    return result;
 	}
 }

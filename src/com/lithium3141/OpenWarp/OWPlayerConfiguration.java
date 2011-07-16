@@ -2,6 +2,8 @@ package com.lithium3141.OpenWarp;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
@@ -88,6 +90,14 @@ public class OWPlayerConfiguration {
 	 *         false otherwise.
 	 */
 	public boolean save() {
+	    Map<String, Warp> playerWarps = this.plugin.getPrivateWarps(this.playerName);
+	    
+	    Map<String, Object> configWarps = new HashMap<String, Object>();
+	    for(Entry<String, Warp> entry : playerWarps.entrySet()) {
+	        configWarps.put(entry.getKey(), entry.getValue().getConfigurationMap());
+	    }
+	    this.warpConfig.setProperty(OpenWarp.WARPS_LIST_KEY, configWarps);
+	    
 		return this.generalConfig.save() && this.warpConfig.save() && this.quotaConfig.save();
 	}
 }
