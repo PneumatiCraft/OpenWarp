@@ -129,11 +129,7 @@ public class OpenWarp extends JavaPlugin {
 		this.loadCommands();
 		
 		// Start listening for events
-		OWPlayerListener playerListener = new OWPlayerListener(this);
-		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
-		
-		OWTeleportListener teleportListener = new OWTeleportListener(this);
-		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, teleportListener, Priority.Normal, this);
+		this.loadListeners();
 		
 		LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
 	}
@@ -156,6 +152,14 @@ public class OpenWarp extends JavaPlugin {
 		this.registerCommand(new OWJumpCommand(this), "j");
 		
 		this.registerCommand(new OWBackCommand(this), "back");
+	}
+	
+	private void loadListeners() {
+	    OWPlayerListener playerListener = new OWPlayerListener(this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
+        
+        OWTeleportListener teleportListener = new OWTeleportListener(this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, teleportListener, Priority.Normal, this);
 	}
 	
 	/**
@@ -210,7 +214,7 @@ public class OpenWarp extends JavaPlugin {
         try {
             commandMap = this.commandTrie.get(keys);
         } catch(IndexOutOfBoundsException e) {
-            this.commandTrie.insert(keys, new HashMap<Range<Integer>, OWCommand>());
+            this.commandTrie.put(keys, new HashMap<Range<Integer>, OWCommand>());
             commandMap = this.commandTrie.get(keys);
         }
         
