@@ -66,15 +66,15 @@ public class OpenWarp extends JavaPlugin {
 			// Save public warps
 			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, this.publicWarps);
 			// XXX DEBUGGING
-			Map<String, Object> storeWarp = new HashMap<String, Object>();
-			storeWarp.put("x", 0.0);
-			storeWarp.put("y", 64.0);
-			storeWarp.put("z", 0.0);
-			storeWarp.put("pitch", 0.0f);
-			storeWarp.put("yaw", 0.0f);
-			storeWarp.put("world", "world");
+			Map<String, Object> zeroWarp = new HashMap<String, Object>();
+			zeroWarp.put("x", 0.0);
+			zeroWarp.put("y", 64.0);
+			zeroWarp.put("z", 0.0);
+			zeroWarp.put("pitch", 0.0f);
+			zeroWarp.put("yaw", 0.0f);
+			zeroWarp.put("world", "world");
 			Map<String, Object> warps = new HashMap<String, Object>();
-			warps.put("store", storeWarp);
+			warps.put("zero", zeroWarp);
 			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
 			// XXX END DEBUGGING
 			if(!this.publicWarpsConfig.save()) {
@@ -246,7 +246,6 @@ public class OpenWarp extends JavaPlugin {
 		        break;
 		    }
 		}
-		
 		if(owCommand != null) {
 			return owCommand.execute(sender, command, commandLabel, remainingArgs);
 		} else {
