@@ -196,22 +196,15 @@ public class OpenWarp extends JavaPlugin {
             return;
         }
         
-        // Navigate trie, creating empty command nodes as needed
-        TrieNode<String, Map<Range<Integer>, OWCommand>> current = this.commandTrie.getRoot();
-        for(int i = 0; i < keys.size(); i++) {
-            if(current.getChild(keys.get(i)) == null) {
-                current.setChild(keys.get(i), (Map<Range<Integer>, OWCommand>)null);
-            }
-            current = current.getChild(keys.get(i));
+        Map<Range<Integer>, OWCommand> commandMap = null;
+        try {
+            commandMap = this.commandTrie.get(keys);
+        } catch(IndexOutOfBoundsException e) {
+            this.commandTrie.insert(keys, new HashMap<Range<Integer>, OWCommand>());
+            commandMap = this.commandTrie.get(keys);
         }
         
-        // Store given command
-        Map<Range<Integer>, OWCommand> currentValue = current.getValue();
-        if(currentValue == null) {
-            current.setValue(new HashMap<Range<Integer>, OWCommand>());
-        }
-        //current.getValue().setValue(command);
-        current.getValue().put(new Range<Integer>(minimumArgs, maximumArgs), command);
+        commandMap.put(new Range<Integer>(minimumArgs, maximumArgs), command);
 	}
 	
 	/**

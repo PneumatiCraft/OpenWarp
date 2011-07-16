@@ -51,7 +51,6 @@ public class OWWarpSetCommand extends OWCommand {
             // TODO save private warp
         }
         
-        
         return true;
     }
 
