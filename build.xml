@@ -38,7 +38,7 @@
 
     <target name="test">
         <junit printsummary="yes" haltonfailure="yes">
-            <formatter type="plain" />
+            <formatter type="xml" />
 
             <classpath>
                 <path refid="project.classpath" />
