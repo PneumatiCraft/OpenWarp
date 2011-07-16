@@ -14,6 +14,9 @@ public class OWWarpDetailCommand extends OWCommand {
 
     public OWWarpDetailCommand(OpenWarp plugin) {
         super(plugin);
+        
+        this.minimumArgs = 1;
+        this.maximumArgs = 1;
     }
 
     @Override

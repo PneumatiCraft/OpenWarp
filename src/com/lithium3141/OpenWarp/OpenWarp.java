@@ -2,6 +2,7 @@ package com.lithium3141.OpenWarp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.util.StringUtil;
 import com.lithium3141.javastructures.trie.Trie;
 import com.lithium3141.javastructures.trie.TrieNode;
+import com.lithium3141.javastructures.pair.Pair;
 
 /**
  * Main plugin class. Responsible for setting up plugin and handling
@@ -50,7 +52,7 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>();
 	
 	// Supported commands
-	private Trie<String, OWCommand> commandTrie;
+	private Trie<String, Map<Pair<Integer>, OWCommand>> commandTrie;
 
 	@Override
 	public void onDisable() {
@@ -129,11 +131,10 @@ public class OpenWarp extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
-		this.commandTrie = new Trie<String, OWCommand>();
-		this.registerCommand(new OWWarpCommandAdapter(this), "warp");
+		this.commandTrie = new Trie<String, Map<Pair<Integer>, OWCommand>>();
+		this.registerCommand(new OWWarpCommand(this), 1, 1, "warp");
+		this.registerCommand(new OWWarpListCommand(this), 0, 0, "warp");
 		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
-		this.registerCommand(new OWWarpCommand(this), "setwarp");
-		this.registerCommand(new OWWarpCommand(this), "warp", "set");
 		this.registerCommand(new OWWarpDetailCommand(this), "warp", "detail");
 		
 		this.registerCommand(new OWTopCommand(this), "top");
@@ -143,30 +144,69 @@ public class OpenWarp extends JavaPlugin {
 	}
 	
 	/**
-	 * Recursively add nodes to the command trie to insert the given
-	 * OWCommand at the given key path. Overwrites any commands already
-	 * in the trie at the given key path.
-	 *  
-	 * @param command The command to add to the trie
-	 * @param keys The key path to use for the new command
+	 * Register the given OWCommand with the given key path. Uses the command's
+	 * minimumArgs and maximumArgs properties.
+	 * 
+	 * @see registerCommand(OWCommand, int, int, List<String>)
 	 */
 	private void registerCommand(OWCommand command, String... keys) {
-		// Require a non-empty key path
-		if(keys.length == 0) {
-			return;
-		}
-		
-		// Navigate trie, creating empty command nodes as needed
-		TrieNode<String, OWCommand> current = this.commandTrie.getRoot();
-		for(int i = 0; i < keys.length; i++) {
-			if(current.getChild(keys[i]) == null) {
-				current.setChild(keys[i], (OWCommand)null);
-			}
-			current = current.getChild(keys[i]);
-		}
-		
-		// Store given command
-		current.setValue(command);
+		this.registerCommand(command, command.getMinimumArgs(), command.getMaximumArgs(), Arrays.asList(keys));
+	}
+	
+	/**
+     * Register the given OWCommand with the given key path. Uses the command's
+     * minimumArgs and maximumArgs properties.
+     * 
+     * @see registerCommand(OWCommand, int, int, List<String>)
+     */
+	private void registerCommand(OWCommand command, List<String> keys) {
+	    this.registerCommand(command, command.getMinimumArgs(), command.getMaximumArgs(), keys);
+	}
+	
+	/**
+     * Register the given OWCommand with the given key path. Convenience
+     * method wrapper.
+     * 
+     * @see registerCommand(OWCommand, int, int, List<String>)
+     */
+	private void registerCommand(OWCommand command, int minimumArgs, int maximumArgs, String... keys) {
+	    this.registerCommand(command, minimumArgs, maximumArgs, Arrays.asList(keys));
+	}
+	
+	/**
+     * Recursively add nodes to the command trie to insert the given
+     * OWCommand at the given key path. Overwrites any commands already
+     * in the trie at the given key path.
+     *  
+     * @param command The command to add to the trie
+     * @param minimumArgs The smallest number of arguments the command can take
+     *                    when reached from the given key path
+     * @param minimumArgs The largest number of arguments the command can take
+     *                    when reached from the given key path 
+     * @param keys The key path to use for the new command
+     */
+	private void registerCommand(OWCommand command, int minimumArgs, int maximumArgs, List<String> keys) {
+	    // Require a non-empty key path
+        if(keys.size() == 0) {
+            return;
+        }
+        
+        // Navigate trie, creating empty command nodes as needed
+        TrieNode<String, Map<Pair<Integer>, OWCommand>> current = this.commandTrie.getRoot();
+        for(int i = 0; i < keys.size(); i++) {
+            if(current.getChild(keys.get(i)) == null) {
+                current.setChild(keys.get(i), (Map<Pair<Integer>, OWCommand>)null);
+            }
+            current = current.getChild(keys.get(i));
+        }
+        
+        // Store given command
+        Map<Pair<Integer>, OWCommand> currentValue = current.getValue();
+        if(currentValue == null) {
+            current.setValue(new HashMap<Pair<Integer>, OWCommand>());
+        }
+        //current.getValue().setValue(command);
+        current.getValue().put(new Pair<Integer>(minimumArgs, maximumArgs), command);
 	}
 	
 	/**
@@ -196,9 +236,18 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Locate and run the best matching command from the key path
 		List<String> matchPath = this.commandTrie.getDeepestMatch(keyPath);
-		OWCommand owCommand = this.commandTrie.get(matchPath);
+		Map<Pair<Integer>, OWCommand> commandMap = this.commandTrie.get(matchPath);
+		List<String> remainingArgs = StringUtil.trimListLeft(keyPath, matchPath);
+		
+		OWCommand owCommand = null;
+		for(Pair<Integer> key : commandMap.keySet()) {
+		    if(key.getFirst() <= remainingArgs.size() && remainingArgs.size() <= key.getSecond()) {
+		        owCommand = commandMap.get(key);
+		        break;
+		    }
+		}
+		
 		if(owCommand != null) {
-		    List<String> remainingArgs = StringUtil.trimListLeft(keyPath, matchPath);
 			return owCommand.execute(sender, command, commandLabel, remainingArgs);
 		} else {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");

@@ -15,6 +15,9 @@ public class OWTopCommand extends OWCommand {
 
     public OWTopCommand(OpenWarp plugin) {
         super(plugin);
+        
+        this.minimumArgs = 0;
+        this.maximumArgs = 0;
     }
 
     @Override

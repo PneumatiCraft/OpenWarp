@@ -16,6 +16,9 @@ public class OWJumpCommand extends OWCommand {
 
     public OWJumpCommand(OpenWarp plugin) {
         super(plugin);
+        
+        this.minimumArgs = 0;
+        this.maximumArgs = 0;
     }
 
     @Override
