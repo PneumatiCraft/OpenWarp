@@ -15,7 +15,7 @@ public class OWPlayerConfiguration {
 	
 	// Configuration filenames
 	public static final String GENERAL_CONFIG_FILENAME = "general.yml";
-	public static final String WARP_CONFIG_FILENAME = "warp.yml";
+	public static final String WARP_CONFIG_FILENAME = "warps.yml";
 	public static final String QUOTA_CONFIG_FILENAME = "quota.yml";
 	
 	// Instance variables
@@ -63,7 +63,7 @@ public class OWPlayerConfiguration {
 	 * Load this player configuration from disk.
 	 */
 	public void load() {
-		this.configFolder = new File(this.plugin.getDataFolder(), playerName);
+		this.configFolder = new File(this.plugin.getDataFolder(), this.playerName);
 		this.configFolder.mkdirs();
 		
 		this.generalConfig = new Configuration(new File(this.configFolder, GENERAL_CONFIG_FILENAME));
