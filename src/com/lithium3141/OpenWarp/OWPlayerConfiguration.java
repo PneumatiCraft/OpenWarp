@@ -66,21 +66,28 @@ public class OWPlayerConfiguration {
 	 * Load this player configuration from disk.
 	 */
 	public void load() {
+	    // Locate configs
 		this.configFolder = new File(this.plugin.getDataFolder(), this.playerName);
 		this.configFolder.mkdirs();
 		
+		// Build config objects from files
 		this.generalConfig = new Configuration(new File(this.configFolder, GENERAL_CONFIG_FILENAME));
 		this.warpConfig = new Configuration(new File(this.configFolder, WARP_CONFIG_FILENAME));
 		this.quotaConfig = new Configuration(new File(this.configFolder, QUOTA_CONFIG_FILENAME));
 		
+		// Load configs
 		this.generalConfig.load();
 		this.warpConfig.load();
 		this.quotaConfig.load();
 		
+		// Warps
 		if(this.plugin.getPrivateWarps().get(this.playerName) == null) {
 		    this.plugin.getPrivateWarps().put(this.playerName, new HashMap<String, Warp>());
 		}
 		this.plugin.loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
+		
+		// Quotas
+		this.plugin.getQuotaManager().loadPrivateQuotas(this.playerName, this.quotaConfig);
 	}
 	
 	/**
@@ -90,6 +97,7 @@ public class OWPlayerConfiguration {
 	 *         false otherwise.
 	 */
 	public boolean save() {
+	    // Warps
 	    Map<String, Warp> playerWarps = this.plugin.getPrivateWarps(this.playerName);
 	    
 	    Map<String, Object> configWarps = new HashMap<String, Object>();
@@ -97,6 +105,9 @@ public class OWPlayerConfiguration {
 	        configWarps.put(entry.getKey(), entry.getValue().getConfigurationMap());
 	    }
 	    this.warpConfig.setProperty(OpenWarp.WARPS_LIST_KEY, configWarps);
+	    
+	    // Quotas
+	    this.quotaConfig.setProperty(OpenWarp.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));
 	    
 		return this.generalConfig.save() && this.warpConfig.save() && this.quotaConfig.save();
 	}

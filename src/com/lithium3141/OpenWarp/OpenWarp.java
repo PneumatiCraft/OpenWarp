@@ -45,6 +45,9 @@ public class OpenWarp extends JavaPlugin {
 	// Config key names
 	public static final String PLAYER_NAMES_LIST_KEY = "players";
 	public static final String WARPS_LIST_KEY = "warps";
+	public static final String QUOTAS_KEY = "quotas";
+    public static final String QUOTA_PUBLIC_KEY = "public";
+    public static final String QUOTA_PRIVATE_KEY = "private";
 	
 	// Global configuration variables
 	public Configuration configuration;
@@ -54,7 +57,9 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
 	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
 	
-	// Supported commands
+	private OWQuotaManager quotaManager = new OWQuotaManager();
+
+    // Supported commands
 	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
 	
 	// Per-player data
@@ -79,6 +84,9 @@ public class OpenWarp extends JavaPlugin {
 			if(!this.publicWarpsConfig.save()) {
 				LOG.warning(LOG_PREFIX + "Couldn't save public warp list; continuing...");
 			}
+			
+			// Save global quotas
+			this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
 			
 			// Save player-specific data
 			for(OWPlayerConfiguration config : this.playerConfigs.values()) {
@@ -111,6 +119,9 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Read warp names
 		this.loadWarps(this.publicWarpsConfig, this.publicWarps);
+		
+		// Read quotas
+		this.quotaManager.loadGlobalQuotas(this.configuration);
 		
 		// Set up supported commands
 		this.loadCommands();
@@ -151,6 +162,9 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.registerCommand(new OWWarpSetCommand(this), "warp", "set");
 		this.registerCommand(new OWWarpSetCommand(this), "setwarp");
+		
+		this.registerCommand(new OWQuotaShowCommand(this), 0, 0, "warp", "quota");
+		this.registerCommand(new OWQuotaShowCommand(this), "warp", "quota", "show");
 		
 		this.registerCommand(new OWTopCommand(this), "top");
 		
@@ -287,6 +301,10 @@ public class OpenWarp extends JavaPlugin {
 	public OWLocationTracker getLocationTracker() {
 	    return this.locationTracker;
 	}
+	
+	public OWQuotaManager getQuotaManager() {
+        return this.quotaManager;
+    }
 
     /**
      * Get the Warp, if any, matching the given name for the given sender.
