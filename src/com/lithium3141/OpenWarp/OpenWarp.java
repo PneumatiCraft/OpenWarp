@@ -166,10 +166,10 @@ public class OpenWarp extends JavaPlugin {
 		this.registerCommand(new OWWarpSetCommand(this), "warp", "set");
 		this.registerCommand(new OWWarpSetCommand(this), "setwarp");
 		
-		this.registerCommand(new OWQuotaShowCommand(this), 0, 0, "warp", "quota");
 		this.registerCommand(new OWQuotaShowCommand(this), "warp", "quota", "show");
 		
-		this.registerCommand(new OWQuotaUsageCommand(this), 0, 0, "warp", "quota", "usage");
+		this.registerCommand(new OWQuotaUsageCommand(this), 0, 0, "warp", "quota");
+		this.registerCommand(new OWQuotaUsageCommand(this), "warp", "quota", "usage");
 		
 		this.registerCommand(new OWTopCommand(this), "top");
 		

@@ -17,6 +17,9 @@ public class OWQuotaUsageCommand extends OWCommand {
 
     public OWQuotaUsageCommand(OpenWarp plugin) {
         super(plugin);
+        
+        this.minimumArgs = 0;
+        this.maximumArgs = 0;
     }
 
     @Override
