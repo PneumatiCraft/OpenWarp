@@ -172,6 +172,8 @@ public class OpenWarp extends JavaPlugin {
 		this.registerCommand(new OWQuotaUsageCommand(this), 0, 0, "warp", "quota");
 		this.registerCommand(new OWQuotaUsageCommand(this), "warp", "quota", "usage");
 		
+		this.registerCommand(new OWQuotaSetCommand(this), "warp", "quota", "set");
+		
 		this.registerCommand(new OWTopCommand(this), "top");
 		
 		this.registerCommand(new OWJumpCommand(this), "jump");
@@ -239,6 +241,10 @@ public class OpenWarp extends JavaPlugin {
         Map<Range<Integer>, OWCommand> commandMap = null;
         try {
             commandMap = this.commandTrie.get(keys);
+            if(commandMap == null) {
+                this.commandTrie.put(keys, new HashMap<Range<Integer>, OWCommand>());
+                commandMap = this.commandTrie.get(keys);
+            }
         } catch(IndexOutOfBoundsException e) {
             this.commandTrie.put(keys, new HashMap<Range<Integer>, OWCommand>());
             commandMap = this.commandTrie.get(keys);
