@@ -96,6 +96,14 @@ public class OWQuotaManager {
         return this.globalMaxPrivateWarps;
     }
     
+    public void setGlobalPublicWarpQuota(int quota) {
+        this.globalMaxPublicWarps = quota;
+    }
+    
+    public void setGlobalPrivateWarpQuota(int quota) {
+        this.globalMaxPrivateWarps = quota;
+    }
+    
     public Map<String, Integer> getPlayerMaxPublicWarps() {
         return this.playerMaxPublicWarps;
     }

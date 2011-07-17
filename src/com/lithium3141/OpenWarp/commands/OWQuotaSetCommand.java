@@ -1,12 +1,14 @@
 package com.lithium3141.OpenWarp.commands;
 
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWQuotaManager;
 import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWQuotaSetCommand extends OWCommand {
@@ -31,14 +33,47 @@ public class OWQuotaSetCommand extends OWCommand {
         }
         
         String value = args.get(1);
+        int quota = OWQuotaManager.QUOTA_UNDEFINED;
         if(!value.equals("unlimited") && !(Integer.parseInt(value) + "").equals(value)) {
             sender.sendMessage(ChatColor.YELLOW + this.usageString);
             return true;
+        } else if(value.equals("unlimited")) {
+            quota = OWQuotaManager.QUOTA_UNLIMITED;
+        } else {
+            quota = Integer.parseInt(value);
         }
         
         String playerName = null;
         if(args.size() > 2) {
             playerName = args.get(2);
+        }
+        
+        OWQuotaManager quotaManager = this.plugin.getQuotaManager();
+        
+        if(playerName == null) {
+            // Setting global quota
+            if(type.equals("public")) {
+                quotaManager.setGlobalPublicWarpQuota(quota);
+            } else if(type.equals("private")) {
+                quotaManager.setGlobalPrivateWarpQuota(quota);
+            }
+            sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "set global " + type + " quota to " + quota);
+        } else {
+            // Setting a player's quota
+            Map<String, Integer> quotaMap = null;
+            if(type.equals("public")) {
+                quotaMap = quotaManager.getPlayerMaxPublicWarps();
+            } else if(type.equals("private")) {
+                quotaMap = quotaManager.getPlayerMaxPrivateWarps();
+            }
+            
+            if(quotaMap != null) {
+                quotaMap.put(playerName, quota);
+                sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "set " + type + " warp quota for " + playerName + " to " + quota);
+            } else {
+                sender.sendMessage(ChatColor.RED + "Unknown error setting quota! Please report a bug.");
+            }
+            
         }
         
         return true;
