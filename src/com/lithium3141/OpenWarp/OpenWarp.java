@@ -156,6 +156,7 @@ public class OpenWarp extends JavaPlugin {
 	
 	private void loadCommands() {
 		this.commandTrie = new Trie<String, Map<Range<Integer>, OWCommand>>();
+		
 		this.registerCommand(new OWWarpCommand(this), 1, 1, "warp");
 		
 		this.registerCommand(new OWWarpListCommand(this), 0, 0, "warp");
