@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWQuotaManager;
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
 
@@ -29,8 +30,6 @@ public class OWWarpSetCommand extends OWCommand {
         CraftPlayer player = (CraftPlayer)sender;
         Location playerLoc = player.getLocation();
         
-        // TODO quota check
-        
         // Find warp type
         String warpType;
         if(args.size() >= 2) {
@@ -41,14 +40,31 @@ public class OWWarpSetCommand extends OWCommand {
         
         if(!warpType.equals("public") && !warpType.equals("private")) {
             player.sendMessage(ChatColor.YELLOW + "Usage: /warp set {NAME} [public|private]");
+            return true;
+        }
+        
+        // Check quota
+        OWQuotaManager quotaManager = this.plugin.getQuotaManager();
+        if(warpType.equals("public")) {
+            if(quotaManager.getPublicWarpCount(player) >= quotaManager.getPublicWarpQuota(player)) {
+                player.sendMessage(ChatColor.RED + "You are at your quota for public warps.");
+                return true;
+            }
+        } else if(warpType.equals("private")) {
+            if(quotaManager.getPrivateWarpCount(player) >= quotaManager.getPrivateWarpQuota(player)) {
+                player.sendMessage(ChatColor.RED + "You are at your quota for private warps.");
+                return true;
+            }
         }
         
         // Create and set warp
-        Warp warp = new Warp(this.plugin, args.get(0), playerLoc);
+        Warp warp = new Warp(this.plugin, args.get(0), playerLoc, player.getName());
         if(warpType.equals("public")) {
             this.plugin.getPublicWarps().put(warp.getName(), warp);
+            player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Created new public warp '" + warp.getName() + "'");
         } else if(warpType.equals("private")) {
             this.plugin.getPrivateWarps().get(player.getName()).put(warp.getName(), warp);
+            player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Created new private warp '" + warp.getName() + "'");
         }
         
         return true;

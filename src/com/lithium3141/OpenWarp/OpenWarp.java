@@ -57,7 +57,7 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
 	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
 	
-	private OWQuotaManager quotaManager = new OWQuotaManager();
+	private OWQuotaManager quotaManager;
 
     // Supported commands
 	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
@@ -110,6 +110,9 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
 		this.publicWarpsConfig.load();
+		
+		// Instantiate quota manager - need it for player configs
+        this.quotaManager = new OWQuotaManager(this);
 		
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
@@ -165,6 +168,8 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.registerCommand(new OWQuotaShowCommand(this), 0, 0, "warp", "quota");
 		this.registerCommand(new OWQuotaShowCommand(this), "warp", "quota", "show");
+		
+		this.registerCommand(new OWQuotaUsageCommand(this), 0, 0, "warp", "quota", "usage");
 		
 		this.registerCommand(new OWTopCommand(this), "top");
 		

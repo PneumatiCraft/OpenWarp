@@ -10,6 +10,7 @@ public class Warp {
     protected OpenWarp plugin;
 	protected String name;
 	protected Location location;
+	protected String owner;
 	
 	public static final String WORLD_KEY = "world";
 	public static final String X_KEY = "x";
@@ -17,20 +18,23 @@ public class Warp {
 	public static final String Z_KEY = "z";
 	public static final String PITCH_KEY = "pitch";
 	public static final String YAW_KEY = "yaw";
+	public static final String OWNER_KEY = "owner";
 	
 	public Warp(OpenWarp plugin, String name, ConfigurationNode node) {
 	    this.plugin = plugin;
 		this.name = name;
-		this.location = this.parseLocation(node);
+		
+		this.parseConfiguration(node);
 	}
 	
-	public Warp(OpenWarp plugin, String name, Location location) {
+	public Warp(OpenWarp plugin, String name, Location location, String owner) {
 	    this.plugin = plugin;
 	    this.name = name;
 	    this.location = location;
+	    this.owner = owner;
 	}
 	
-	private Location parseLocation(ConfigurationNode node) {
+	private void parseConfiguration(ConfigurationNode node) {
 	    String worldName = node.getString(WORLD_KEY);
         if(worldName == null) {
             worldName = this.plugin.getServer().getWorlds().get(0).getName();
@@ -44,7 +48,9 @@ public class Warp {
         float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
         float yaw = (float) node.getDouble(YAW_KEY, 0.0);
         
-        return new Location(this.plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+        this.location = new Location(this.plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+        
+        this.owner = node.getString(OWNER_KEY, "");
 	}
 	
 	public String getName() {
@@ -63,15 +69,21 @@ public class Warp {
 	    return "(" + this.location.getX() + ", " + this.location.getY() + ", " + this.location.getZ() + ") in world " + this.location.getWorld().getName();
 	}
 	
+	public String getOwner() {
+	    return this.owner;
+	}
+	
 	public Map<String, Object> getConfigurationMap() {
 	    Map<String, Object> result = new HashMap<String, Object>();
 	    
-	    result.put("x", this.location.getX());
-	    result.put("y", this.location.getY());
-	    result.put("z", this.location.getZ());
-	    result.put("pitch", this.location.getPitch());
-	    result.put("yaw", this.location.getYaw());
-	    result.put("world", this.location.getWorld().getName());
+	    result.put(X_KEY, this.location.getX());
+	    result.put(Y_KEY, this.location.getY());
+	    result.put(Z_KEY, this.location.getZ());
+	    result.put(PITCH_KEY, this.location.getPitch());
+	    result.put(YAW_KEY, this.location.getYaw());
+	    result.put(WORLD_KEY, this.location.getWorld().getName());
+	    
+	    result.put(OWNER_KEY, this.owner);
 	    
 	    return result;
 	}

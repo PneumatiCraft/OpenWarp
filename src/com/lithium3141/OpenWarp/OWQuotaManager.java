@@ -17,6 +17,12 @@ public class OWQuotaManager {
     public static final int QUOTA_UNLIMITED = -1;
     public static final int QUOTA_UNDEFINED = -2;
     
+    private OpenWarp plugin;
+    
+    public OWQuotaManager(OpenWarp plugin) {
+        this.plugin = plugin;
+    }
+    
     public void loadGlobalQuotas(ConfigurationNode configuration) {
         this.globalMaxPublicWarps = configuration.getInt(OpenWarp.QUOTAS_KEY + "." + OpenWarp.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED);
         this.globalMaxPrivateWarps = configuration.getInt(OpenWarp.QUOTAS_KEY + "." + OpenWarp.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED);
@@ -90,7 +96,6 @@ public class OWQuotaManager {
         return this.globalMaxPrivateWarps;
     }
     
-
     public Map<String, Integer> getPlayerMaxPublicWarps() {
         return this.playerMaxPublicWarps;
     }
@@ -98,5 +103,32 @@ public class OWQuotaManager {
     public Map<String, Integer> getPlayerMaxPrivateWarps() {
         return this.playerMaxPrivateWarps;
     }
+    
+    public int getPublicWarpCount(String playerName) {
+        int count = 0;
+        for(Warp warp : this.plugin.getPublicWarps().values()) {
+            if(warp.getOwner().equals(playerName)) {
+                count++;
+            }
+        }
+        return count;
+    }
 
+    public int getPublicWarpCount(Player player) {
+        return this.getPublicWarpCount(player.getName());
+    }
+    
+    public int getPrivateWarpCount(String playerName) {
+        int count = 0;
+        for(Warp warp : this.plugin.getPrivateWarps().get(playerName).values()) {
+            if(warp.getOwner().equals(playerName)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getPrivateWarpCount(Player player) {
+        return this.getPrivateWarpCount(player.getName());
+    }
 }
