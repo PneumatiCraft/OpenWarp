@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OpenWarp;
@@ -24,7 +24,7 @@ public class OWTopCommand extends OWCommand {
     public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
         if(!this.checkPlayerSender(sender)) return true;
         
-        CraftPlayer player = (CraftPlayer)sender;
+        Player player = (Player)sender;
         Location loc = player.getLocation();
         
         int y = player.getWorld().getHighestBlockYAt(loc);

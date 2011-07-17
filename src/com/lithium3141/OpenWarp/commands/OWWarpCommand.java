@@ -3,10 +3,9 @@ package com.lithium3141.OpenWarp.commands;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OpenWarp;
@@ -34,7 +33,7 @@ public class OWWarpCommand extends OWCommand {
 	        return true;
 	    }
 	    
-	    CraftPlayer player = (CraftPlayer)sender;
+	    Player player = (Player)sender;
         if(!player.teleport(target.getLocation())) {
             player.sendMessage(ChatColor.RED + "Error teleporting to warp: " + warpName);
         }

@@ -9,7 +9,7 @@
 
     <path id="project.classpath">
         <pathelement path="${classpath}" />
-        <pathelement location="${lib}/craftbukkit-0.0.1-SNAPSHOT.jar" />
+        <pathelement location="${lib}/bukkit-0.0.1-SNAPSHOT.jar" />
         <pathelement location="${lib}/Permissions.jar" />
         <pathelement location="${lib}/junit.jar" />
     </path>
@@ -21,7 +21,7 @@
         <mkdir dir="${build.result}" />
         <mkdir dir="${lib}" />
 
-        <get src="http://ci.bukkit.org/job/dev-CraftBukkit/Recommended/artifact/target/craftbukkit-0.0.1-SNAPSHOT.jar" dest="${lib}" skipexisting="true" />
+        <get src="http://ci.bukkit.org/job/dev-Bukkit/Recommended/artifact/target/bukkit-0.0.1-SNAPSHOT.jar" dest="${lib}" skipexisting="true" />
         <get src="http://www.theyeticave.net/downloads/permissions/3.1.5/Permissions.jar" dest="${lib}" skipexisting="true" />
         <get src="http://cloud.github.com/downloads/KentBeck/junit/junit-4.8.2.jar" dest="${lib}/junit.jar" skipexisting="true" />
     </target>

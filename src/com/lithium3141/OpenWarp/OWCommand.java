@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 public abstract class OWCommand {
 	protected OpenWarp plugin;
@@ -24,7 +24,7 @@ public abstract class OWCommand {
 	    if(sender instanceof ConsoleCommandSender) {
             sender.sendMessage(ChatColor.RED + "Command must be run in-game!");
             return false;
-        } else if(!(sender instanceof CraftPlayer)) {
+        } else if(!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Cannot verify command's sender!");
             return false;
         }
