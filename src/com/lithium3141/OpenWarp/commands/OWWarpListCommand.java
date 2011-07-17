@@ -1,19 +1,17 @@
 package com.lithium3141.OpenWarp.commands;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
-import com.lithium3141.OpenWarp.util.StringUtil;
 
 public class OWWarpListCommand extends OWCommand {
 
@@ -25,9 +23,11 @@ public class OWWarpListCommand extends OWCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+	public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
 	    boolean sendPublic = (args.size() == 0 || args.contains("public"));
 	    boolean sendPrivate = (args.size() == 0 || args.contains("private"));
+	    
+	    this.verifyPermission(sender, "openwarp.warp.list");
 	    
 	    if(sendPublic) this.sendPublicWarpsList(sender);
 	    if(sendPrivate) this.sendPrivateWarpsList(sender);

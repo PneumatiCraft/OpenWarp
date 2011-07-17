@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 import com.lithium3141.OpenWarp.OpenWarp;
 
@@ -23,8 +23,10 @@ public class OWQuotaUsageCommand extends OWCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
         OWQuotaManager quotaManager = this.plugin.getQuotaManager();
+        
+        this.verifyAnyPermission(sender, "openwarp.warp.quota", "openwarp.warp.quota.usage");
         
         if(sender instanceof Player) {
             Player player = (Player)sender;

@@ -58,6 +58,8 @@ public class OpenWarp extends JavaPlugin {
 	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
 	
 	private OWQuotaManager quotaManager;
+	
+	private OWPermissionsHandler permissionsHandler;
 
     // Supported commands
 	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
@@ -111,8 +113,9 @@ public class OpenWarp extends JavaPlugin {
 		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
 		this.publicWarpsConfig.load();
 		
-		// Instantiate quota manager - need it for player configs
+		// Instantiate quota manager, permissions - need them for player configs
         this.quotaManager = new OWQuotaManager(this);
+        this.permissionsHandler = new OWPermissionsHandler(this);
 		
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
@@ -291,7 +294,12 @@ public class OpenWarp extends JavaPlugin {
 		    }
 		}
 		if(owCommand != null) {
-			return owCommand.execute(sender, command, commandLabel, remainingArgs);
+		    try {
+		        return owCommand.execute(sender, remainingArgs);
+		    } catch(OWPermissionException e) {
+		        sender.sendMessage(ChatColor.RED + "You do not have permission to perform that command.");
+		        return true;
+		    }
 		} else {
 			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
 			return false;
@@ -317,6 +325,10 @@ public class OpenWarp extends JavaPlugin {
 	public OWQuotaManager getQuotaManager() {
         return this.quotaManager;
     }
+	
+	public OWPermissionsHandler getPermissionsHandler() {
+	    return this.permissionsHandler;
+	}
 
     /**
      * Get the Warp, if any, matching the given name for the given sender.

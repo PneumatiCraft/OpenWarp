@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWBackCommand extends OWCommand {
@@ -21,8 +21,10 @@ public class OWBackCommand extends OWCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
         if(!this.checkPlayerSender(sender)) return true;
+        
+        this.verifyPermission(sender, "openwarp.back");
         
         Player player = (Player)sender;
         Location loc = this.plugin.getLocationTracker().getPreviousLocation(player);

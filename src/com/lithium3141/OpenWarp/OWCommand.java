@@ -3,7 +3,6 @@ package com.lithium3141.OpenWarp;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +17,7 @@ public abstract class OWCommand {
 		this.plugin = plugin;
 	}
 	
-	public abstract boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args);
+	public abstract boolean execute(CommandSender sender, List<String> args) throws OWPermissionException;
 	
 	public boolean checkPlayerSender(CommandSender sender) {
 	    if(sender instanceof ConsoleCommandSender) {
@@ -45,5 +44,30 @@ public abstract class OWCommand {
 
     public void setMaximumArgs(int maximumArgs) {
         this.maximumArgs = maximumArgs;
+    }
+    
+    public boolean checkPermission(CommandSender sender, String permission) {
+        return this.plugin.getPermissionsHandler().hasPermission(sender, permission);
+    }
+    
+    public void verifyPermission(CommandSender sender, String permission) throws OWPermissionException {
+        if(!this.checkPermission(sender, permission)) {
+            throw new OWPermissionException("Sender " + sender + " does not have permission " + permission + "!");
+        }
+    }
+    
+    public void verifyAnyPermission(CommandSender sender, String... permissions) throws OWPermissionException {
+        for(String permission : permissions) {
+            if(this.checkPermission(sender, permission)) {
+                return;
+            }
+        }
+        throw new OWPermissionException("Sender " + sender + " has no given permissions!");
+    }
+    
+    public void verifyAllPermissions(CommandSender sender, String... permissions) throws OWPermissionException {
+        for(String permission : permissions) {
+            this.verifyPermission(sender, permission);
+        }
     }
 }

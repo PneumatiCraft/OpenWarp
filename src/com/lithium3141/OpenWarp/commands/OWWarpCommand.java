@@ -3,11 +3,11 @@ package com.lithium3141.OpenWarp.commands;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
 
@@ -21,11 +21,11 @@ public class OWWarpCommand extends OWCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+	public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
 	    if(!this.checkPlayerSender(sender)) return true;
 	    
-		// args will have at least one argument (due to trie command mapping)
 	    String warpName = args.get(0);
+	    this.verifyAnyPermission(sender, "openwarp.warp", "openwarp.warp." + warpName);
 	    
 	    Warp target = this.plugin.getWarp(sender, warpName);
 	    if(target == null) {

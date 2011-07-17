@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 import com.lithium3141.OpenWarp.OpenWarp;
 
@@ -25,12 +25,14 @@ public class OWQuotaSetCommand extends OWCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, Command command, String commandLabel, List<String> args) {
+    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
         String type = args.get(0);
         if(!type.equals("public") && !type.equals("private")) {
             sender.sendMessage(ChatColor.YELLOW + this.usageString);
             return true;
         }
+        
+        this.verifyAnyPermission(sender, "openwarp.warp.quota.set", "openwarp.warp.quota.set." + type);
         
         String value = args.get(1);
         int quota = OWQuotaManager.QUOTA_UNDEFINED;
