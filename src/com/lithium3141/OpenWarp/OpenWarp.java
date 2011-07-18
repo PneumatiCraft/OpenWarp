@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -177,6 +178,11 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.registerCommand(new OWQuotaSetCommand(this), "warp", "quota", "set");
 		
+		this.registerCommand(new OWStackPushCommand(this), "warp", "stack", "push");
+		this.registerCommand(new OWStackPopCommand(this), "warp", "stack", "pop");
+		this.registerCommand(new OWStackPeekCommand(this), "warp", "stack", "peek");
+		this.registerCommand(new OWStackPrintCommand(this), "warp", "stack", "print");
+		
 		this.registerCommand(new OWTopCommand(this), "top");
 		
 		this.registerCommand(new OWJumpCommand(this), "jump");
@@ -286,24 +292,29 @@ public class OpenWarp extends JavaPlugin {
 		Map<Range<Integer>, OWCommand> commandMap = this.commandTrie.get(matchPath);
 		List<String> remainingArgs = StringUtil.trimListLeft(keyPath, matchPath);
 		
-		OWCommand owCommand = null;
-		for(Range<Integer> key : commandMap.keySet()) {
-		    if(key.contains(remainingArgs.size())) {
-		        owCommand = commandMap.get(key);
-		        break;
-		    }
-		}
-		if(owCommand != null) {
-		    try {
-		        return owCommand.execute(sender, remainingArgs);
-		    } catch(OWPermissionException e) {
-		        sender.sendMessage(ChatColor.RED + "You do not have permission to perform that command.");
-		        return true;
-		    }
+		if(commandMap != null) {
+    		OWCommand owCommand = null;
+    		for(Range<Integer> key : commandMap.keySet()) {
+    		    if(key.contains(remainingArgs.size())) {
+    		        owCommand = commandMap.get(key);
+    		        break;
+    		    }
+    		}
+    		if(owCommand != null) {
+    		    try {
+    		        return owCommand.execute(sender, remainingArgs);
+    		    } catch(OWPermissionException e) {
+    		        sender.sendMessage(ChatColor.RED + "You do not have permission to perform that command.");
+    		        return true;
+    		    }
+    		} else {
+    			sender.sendMessage(ChatColor.YELLOW + "Unrecognized command");
+    			return true;
+    		}
 		} else {
-			sender.sendMessage(ChatColor.YELLOW + "Command not supported");
-			return false;
-		}
+            sender.sendMessage(ChatColor.YELLOW + "Unrecognized command");
+            return true;
+        }
 	}
 	
 	public Map<String, Warp> getPublicWarps() {
@@ -354,6 +365,38 @@ public class OpenWarp extends JavaPlugin {
             for(Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
                 String name = entry.getKey();
                 if(name.equalsIgnoreCase(warpName)) {
+                    return entry.getValue();
+                }
+            }
+        }
+        
+        // No match
+        return null;
+    }
+    
+    /**
+     * Get the Warp, if any, matching the given Location for the given sender.
+     * 
+     * @param sender The sender for whom to check for warps
+     * @param location The location of the warp to find
+     * @return The matching warp, if found
+     * @see getWarp(CommandSender, String)
+     */
+    public Warp getWarp(CommandSender sender, Location location) {
+        // First check public warps
+        for(Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
+            Location warpLoc = entry.getValue().getLocation();
+            if(location.equals(warpLoc)) {
+                return entry.getValue();
+            }
+        }
+        
+        // If no match, check private warps
+        if(sender instanceof Player) {
+            Player player = (Player)sender;
+            for(Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
+                Location warpLoc = entry.getValue().getLocation();
+                if(location.equals(warpLoc)) {
                     return entry.getValue();
                 }
             }
