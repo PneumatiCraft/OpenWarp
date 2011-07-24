@@ -78,6 +78,8 @@ public class OWQuotaSetCommand extends OWCommand {
             
         }
         
+        this.plugin.saveAllConfigurations();
+        
         return true;
     }
 

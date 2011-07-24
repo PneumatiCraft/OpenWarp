@@ -43,6 +43,8 @@ public class OWWarpDeleteCommand extends OWCommand {
             }
         }
         
+        this.plugin.saveAllConfigurations();
+        
         return true;
     }
 

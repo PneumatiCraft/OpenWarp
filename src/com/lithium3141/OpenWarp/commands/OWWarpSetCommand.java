@@ -77,6 +77,8 @@ public class OWWarpSetCommand extends OWCommand {
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Created new private warp '" + warp.getName() + "'");
         }
         
+        this.plugin.saveAllConfigurations();
+        
         return true;
     }
 

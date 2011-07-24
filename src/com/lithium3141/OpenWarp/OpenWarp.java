@@ -70,36 +70,40 @@ public class OpenWarp extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		if(this.configuration != null) {
-			// Save overall configuration
-			this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
-			if(!this.configuration.save()) {
-				LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
-			}
-			
-			// Save public warps
-			Map<String, Object> warps = new HashMap<String, Object>();
-			for(Entry<String, Warp> entry : this.publicWarps.entrySet()) {
-			    warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
-			}
-			
-			this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
-			if(!this.publicWarpsConfig.save()) {
-				LOG.warning(LOG_PREFIX + "Couldn't save public warp list; continuing...");
-			}
-			
-			// Save global quotas
-			this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
-			
-			// Save player-specific data
-			for(OWPlayerConfiguration config : this.playerConfigs.values()) {
-				if(!config.save()) {
-					LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
-				}
-			}
-		}
+		this.saveAllConfigurations();
 		
 		LOG.info(LOG_PREFIX + "Disabled!");
+	}
+	
+	public void saveAllConfigurations() {
+	    if(this.configuration != null) {
+            // Save overall configuration
+            this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
+            if(!this.configuration.save()) {
+                LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
+            }
+            
+            // Save public warps
+            Map<String, Object> warps = new HashMap<String, Object>();
+            for(Entry<String, Warp> entry : this.publicWarps.entrySet()) {
+                warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
+            }
+            
+            this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
+            if(!this.publicWarpsConfig.save()) {
+                LOG.warning(LOG_PREFIX + "Couldn't save public warp list; continuing...");
+            }
+            
+            // Save global quotas
+            this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
+            
+            // Save player-specific data
+            for(OWPlayerConfiguration config : this.playerConfigs.values()) {
+                if(!config.save()) {
+                    LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
+                }
+            }
+        }
 	}
 
 	@Override
