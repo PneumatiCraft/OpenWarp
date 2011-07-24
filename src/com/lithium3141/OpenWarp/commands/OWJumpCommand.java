@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,14 +30,41 @@ public class OWJumpCommand extends OWCommand {
         
         Player player = (Player)sender;
         
-        List<Block> blocks = player.getLastTwoTargetBlocks(null, 100);
-        Location loc = blocks.get(blocks.size() - 1).getLocation();
+        // Get target block and info
+        List<Block> blocks = null;
+        try {
+            blocks = player.getLastTwoTargetBlocks(null, 100);
+        } catch(IllegalStateException e) {
+            sender.sendMessage(ChatColor.RED + "Error finding jump target block; please try again.");
+        }
+        Block targetBlock = blocks.get(blocks.size() - 1);
+        Location loc = targetBlock.getLocation();
         
-        int y = player.getWorld().getHighestBlockYAt(loc);
-        loc.setY((double)y);
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
+        System.out.println("Aimed at position (" + x + "," + y + "," + z + ")"); // XXX
+        
+        // Find the next highest block from requested target that has air above it
+        Material last = targetBlock.getType();
+        int ny;
+        for(ny = y; ny < 127; ny++) {
+            Block b = player.getWorld().getBlockAt(x, ny, z);
+            Material m = b.getType();
+            if(m.equals(Material.AIR) && last.equals(Material.AIR)) {
+                break;
+            } else {
+                last = m;
+            }
+        }
+        
+        // Update location for safe jumps
+        loc.setY((double)(ny - 1));
+        System.out.println("Chose position (" + x + "," + (ny - 1) + "," + z + ")"); // XXX
         loc.setPitch(player.getLocation().getPitch());
         loc.setYaw(player.getLocation().getYaw());
         
+        // Transport player
         if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to target block!");
         }
