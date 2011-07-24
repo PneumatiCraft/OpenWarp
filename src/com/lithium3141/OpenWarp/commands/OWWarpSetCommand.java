@@ -50,19 +50,19 @@ public class OWWarpSetCommand extends OWCommand {
         OWQuotaManager quotaManager = this.plugin.getQuotaManager();
         int quota = Integer.MAX_VALUE;
         if(warpType.equals("public")) {
-            if(quotaManager.getPublicWarpCount(player) >= 0) {
+            if(quotaManager.getPublicWarpQuota(player) >= 0) {
                 quota = quotaManager.getPublicWarpQuota(player);
             }
             if(quotaManager.getPublicWarpCount(player) >= quota) {
-                player.sendMessage(ChatColor.RED + "You are at your quota for public warps.");
+                player.sendMessage(ChatColor.RED + "You are at your quota (" + quota + ") for public warps.");
                 return true;
             }
         } else if(warpType.equals("private")) {
-            if(quotaManager.getPublicWarpCount(player) >= 0) {
+            if(quotaManager.getPrivateWarpQuota(player) >= 0) {
                 quota = quotaManager.getPrivateWarpQuota(player);
             }
             if(quotaManager.getPrivateWarpCount(player) >= quota) {
-                player.sendMessage(ChatColor.RED + "You are at your quota for private warps.");
+                player.sendMessage(ChatColor.RED + "You are at your quota (" + quota + ") for private warps.");
                 return true;
             }
         }
