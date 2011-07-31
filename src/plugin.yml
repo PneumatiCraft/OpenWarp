@@ -19,3 +19,9 @@ commands:
     back:
         description: Return to previous location
         usage: /<command>
+    home:
+        description: Move to specified home
+        usage: /<command>
+    sethome:
+        description: Mark current location as home
+        usage: /<command>

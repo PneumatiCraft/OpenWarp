@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 /**
  * Configuration for a single player. Encapsulates all on-disk info
@@ -86,6 +87,12 @@ public class OWPlayerConfiguration {
 		}
 		this.plugin.loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 		
+		// Home
+		ConfigurationNode node = this.generalConfig.getNode(OpenWarp.HOME_KEY);
+		if(node != null) {
+		    this.plugin.getHomes().put(this.playerName, new Warp(this.plugin, "_home", node).getLocation());
+		}
+		
 		// Quotas
 		this.plugin.getQuotaManager().loadPrivateQuotas(this.playerName, this.quotaConfig);
 	}
@@ -105,6 +112,9 @@ public class OWPlayerConfiguration {
 	        configWarps.put(entry.getKey(), entry.getValue().getConfigurationMap());
 	    }
 	    this.warpConfig.setProperty(OpenWarp.WARPS_LIST_KEY, configWarps);
+	    
+	    // Home
+	    this.generalConfig.setProperty(OpenWarp.HOME_KEY, new Warp(this.plugin, "_HOME", this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap());
 	    
 	    // Quotas
 	    this.quotaConfig.setProperty(OpenWarp.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));

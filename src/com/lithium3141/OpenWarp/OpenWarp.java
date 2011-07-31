@@ -45,6 +45,7 @@ public class OpenWarp extends JavaPlugin {
 	public static final String QUOTAS_KEY = "quotas";
     public static final String QUOTA_PUBLIC_KEY = "public";
     public static final String QUOTA_PRIVATE_KEY = "private";
+    public static final String HOME_KEY = "home";
 	
 	// Global configuration variables
 	public Configuration configuration;
@@ -53,6 +54,7 @@ public class OpenWarp extends JavaPlugin {
 	public Configuration publicWarpsConfig;
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
 	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
+	private Map<String, Location> homes = new HashMap<String, Location>(); // player name => home
 	
 	private OWQuotaManager quotaManager;
 	
@@ -167,6 +169,9 @@ public class OpenWarp extends JavaPlugin {
 		this.commandHandler.registerCommand(new OWWarpSetCommand(this));
 		this.commandHandler.registerCommand(new OWWarpDeleteCommand(this));
 		
+		this.commandHandler.registerCommand(new OWHomeCommand(this));
+		this.commandHandler.registerCommand(new OWHomeSetCommand(this));
+		
 		this.commandHandler.registerCommand(new OWQuotaShowCommand(this));
 		this.commandHandler.registerCommand(new OWQuotaUsageCommand(this));
 		this.commandHandler.registerCommand(new OWQuotaSetCommand(this));
@@ -229,6 +234,10 @@ public class OpenWarp extends JavaPlugin {
 	public Map<String, Warp> getPrivateWarps(String playerName) {
         return this.getPrivateWarps().get(playerName);
     }
+	
+	public Map<String, Location> getHomes() {
+	    return this.homes;
+	}
 	
 	public OWLocationTracker getLocationTracker() {
 	    return this.locationTracker;
