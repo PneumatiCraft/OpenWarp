@@ -6,25 +6,27 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
-import com.lithium3141.OpenWarp.OWPermissionException;
-import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWTopCommand extends OWCommand {
 
-    public OWTopCommand(OpenWarp plugin) {
+    public OWTopCommand(JavaPlugin plugin) {
         super(plugin);
         
-        this.minimumArgs = 0;
-        this.maximumArgs = 0;
+        this.setName("Top");
+        this.setArgRange(0, 0);
+        this.setCommandUsage("/top");
+        this.setCommandExample("/top");
+        this.setPermission("openwarp.top", "Move to top block", PermissionDefault.TRUE);
+        this.addKey("top");
     }
 
     @Override
-    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
-        if(!this.checkPlayerSender(sender)) return true;
-        
-        this.verifyPermission(sender, "openwarp.top");
+    public void runCommand(CommandSender sender, List<String> args) {
+        if(!this.checkPlayerSender(sender)) return;
         
         Player player = (Player)sender;
         Location loc = player.getLocation();
@@ -35,8 +37,6 @@ public class OWTopCommand extends OWCommand {
         if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to top block!");
         }
-        
-        return true;
     }
 
 }

@@ -6,39 +6,39 @@ import java.util.Stack;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
-import com.lithium3141.OpenWarp.OWPermissionException;
-import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
 
 public class OWStackPrintCommand extends OWCommand {
 
-    public OWStackPrintCommand(OpenWarp plugin) {
+    public OWStackPrintCommand(JavaPlugin plugin) {
         super(plugin);
 
-        this.minimumArgs = 0;
-        this.maximumArgs = 0;
+        this.setName("Stack print");
+        this.setArgRange(0, 0);
+        this.setCommandUsage("/warp stack print");
+        this.setCommandExample("/warp stack print");
+        this.setPermission("openwarp.warp.stack.print", "Show the location stack", PermissionDefault.TRUE);
+        this.addKey("warp stack print");
     }
 
     @Override
-    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
-        if(!this.checkPlayerSender(sender)) return true;
+    public void runCommand(CommandSender sender, List<String> args) {
+        if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
         
-        this.verifyPermission(sender, "openwarp.stack.print");
-        
-        Stack<Location> locations = this.plugin.getLocationTracker().getLocationStack(player);
+        Stack<Location> locations = this.getPlugin().getLocationTracker().getLocationStack(player);
         
         for(Location location : locations) {
             sender.sendMessage(this.formatLocation(player, location));
         }
-        
-        return true;
     }
     
     protected String formatLocation(Player player, Location location) {
-        Warp matchingWarp = this.plugin.getWarp(player, location);
+        Warp matchingWarp = this.getPlugin().getWarp(player, location);
         if(matchingWarp != null) {
             return matchingWarp.getDetailString();
         } else {

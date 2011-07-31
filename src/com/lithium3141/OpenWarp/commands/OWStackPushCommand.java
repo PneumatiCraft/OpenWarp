@@ -5,45 +5,43 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
-import com.lithium3141.OpenWarp.OWPermissionException;
-import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
 
 public class OWStackPushCommand extends OWCommand {
 
-    public OWStackPushCommand(OpenWarp plugin) {
+    public OWStackPushCommand(JavaPlugin plugin) {
         super(plugin);
         
-        this.minimumArgs = 0;
-        this.maximumArgs = 1;
+        this.setName("Stack push");
+        this.setArgRange(0, 1);
+        this.setCommandUsage("/warp stack push [NAME]");
+        this.setCommandExample("/warp stack push public");
+        this.setPermission("openwarp.warp.stack.push", "Push a warp onto the location stack", PermissionDefault.TRUE);
+        this.addKey("warp stack push");
     }
 
     @Override
-    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
-        if(!this.checkPlayerSender(sender)) return true;
+    public void runCommand(CommandSender sender, List<String> args) {
+        if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
         
-        this.verifyPermission(sender, "openwarp.stack.push");
-        
         if(args.size() == 0) {
-            this.plugin.getLocationTracker().getLocationStack(player).push(player.getLocation());
+            this.getPlugin().getLocationTracker().getLocationStack(player).push(player.getLocation());
         } else {
             String warpName = args.get(0);
             
-            this.verifyAnyPermission(sender, "openwarp.warp", "openwarp.warp." + warpName);
+            Warp target = this.getPlugin().getWarp(player, warpName);
             
-            Warp target = this.plugin.getWarp(player, warpName);
-            
-            this.plugin.getLocationTracker().getLocationStack(player).push(target.getLocation());
+            this.getPlugin().getLocationTracker().getLocationStack(player).push(target.getLocation());
             
             if(!player.teleport(target.getLocation())) {
                 player.sendMessage(ChatColor.RED + "Error teleporting to warp '" + warpName + "'");
             }
         }
-        
-        return true;
     }
 
 }

@@ -6,8 +6,9 @@ import org.bukkit.plugin.Plugin;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
+import com.pneumaticraft.commandhandler.PermissionsInterface;
 
-public class OWPermissionsHandler {
+public class OWPermissionsHandler implements PermissionsInterface {
     
     private OpenWarp plugin;
     
@@ -23,16 +24,21 @@ public class OWPermissionsHandler {
         }
         
     }
-    
-    public boolean hasPermission(CommandSender sender, String permission) {
+
+    @Override
+    public boolean hasPermission(CommandSender sender, String node, boolean isOpRequired) {
         if(!(sender instanceof Player)) {
             return true;
         } else {
             Player player = (Player)sender;
             if(this.permissionHandler != null) {
-                return this.permissionHandler.has(player, permission);
+                return this.permissionHandler.has(player, node);
+            } else if(player.hasPermission(node)) {
+                return true;
+            } else if(isOpRequired) {
+                return player.isOp();
             } else {
-                return player.hasPermission(permission);
+                return false;
             }
         }
     }

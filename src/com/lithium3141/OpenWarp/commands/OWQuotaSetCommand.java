@@ -5,40 +5,40 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
-import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OWQuotaManager;
-import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWQuotaSetCommand extends OWCommand {
     
     protected String usageString;
 
-    public OWQuotaSetCommand(OpenWarp plugin) {
+    public OWQuotaSetCommand(JavaPlugin plugin) {
         super(plugin);
         
-        this.minimumArgs = 2;
-        this.maximumArgs = 3;
-        
-        this.usageString = "Usage: /warp quota set {public|private} {unlimited|VALUE} [PLAYER NAME]";
+        this.setName("Warp set");
+        this.setArgRange(2, 3);
+        this.setCommandUsage("/warp quota set {public|private} {unlimited|VALUE} [PLAYER NAME]");
+        this.setCommandExample("/warp quota set public 3 Bob");
+        this.setPermission("openwarp.warp.quota.set", "Create a new warp", PermissionDefault.OP);
+        this.addKey("warp set");
     }
 
     @Override
-    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
+    public void runCommand(CommandSender sender, List<String> args) {
         String type = args.get(0);
         if(!type.equals("public") && !type.equals("private")) {
             sender.sendMessage(ChatColor.YELLOW + this.usageString);
-            return true;
+            return;
         }
-        
-        this.verifyAnyPermission(sender, "openwarp.warp.quota.set", "openwarp.warp.quota.set." + type);
         
         String value = args.get(1);
         int quota = OWQuotaManager.QUOTA_UNDEFINED;
         if(!value.equals("unlimited") && !(Integer.parseInt(value) + "").equals(value)) {
             sender.sendMessage(ChatColor.YELLOW + this.usageString);
-            return true;
+            return;
         } else if(value.equals("unlimited")) {
             quota = OWQuotaManager.QUOTA_UNLIMITED;
         } else {
@@ -50,7 +50,7 @@ public class OWQuotaSetCommand extends OWCommand {
             playerName = args.get(2);
         }
         
-        OWQuotaManager quotaManager = this.plugin.getQuotaManager();
+        OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
         
         if(playerName == null) {
             // Setting global quota
@@ -78,9 +78,7 @@ public class OWQuotaSetCommand extends OWCommand {
             
         }
         
-        this.plugin.saveAllConfigurations();
-        
-        return true;
+        this.getPlugin().saveAllConfigurations();
     }
 
 }

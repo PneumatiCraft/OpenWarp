@@ -7,26 +7,28 @@ import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
-import com.lithium3141.OpenWarp.OWPermissionException;
 import com.lithium3141.OpenWarp.OWQuotaManager;
-import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWQuotaShowCommand extends OWCommand {
 
-    public OWQuotaShowCommand(OpenWarp plugin) {
+    public OWQuotaShowCommand(JavaPlugin plugin) {
         super(plugin);
         
-        this.minimumArgs = 0;
-        this.maximumArgs = 0;
+        this.setName("Quota show");
+        this.setArgRange(0, 0);
+        this.setCommandUsage("/warp quota show");
+        this.setCommandExample("/warp quota show");
+        this.setPermission("openwarp.warp.quota.show", "Show user warp quota", PermissionDefault.TRUE);
+        this.addKey("warp quota show");
     }
 
     @Override
-    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
-        this.verifyPermission(sender, "openwarp.warp.quota.show");
-        
-        OWQuotaManager quotaManager = this.plugin.getQuotaManager();
+    public void runCommand(CommandSender sender, List<String> args) {
+        OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
         
         if(sender instanceof Player) {
             Player player = (Player)sender;
@@ -44,8 +46,6 @@ public class OWQuotaShowCommand extends OWCommand {
                 sender.sendMessage("    " + ChatColor.LIGHT_PURPLE + playerName + ": " + ChatColor.WHITE + quotas);
             }
         }
-        
-        return true;
     }
     
     private String formatQuotaPair(int publicQuota, int privateQuota) {

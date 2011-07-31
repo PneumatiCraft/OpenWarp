@@ -2,14 +2,12 @@ package com.lithium3141.OpenWarp;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,9 +21,7 @@ import org.bukkit.util.config.ConfigurationNode;
 import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
 import com.lithium3141.OpenWarp.listeners.OWTeleportListener;
-import com.lithium3141.OpenWarp.util.StringUtil;
-import com.lithium3141.javastructures.trie.Trie;
-import com.lithium3141.javastructures.pair.Range;
+import com.pneumaticraft.commandhandler.CommandHandler;
 
 /**
  * Main plugin class. Responsible for setting up plugin and handling
@@ -63,7 +59,7 @@ public class OpenWarp extends JavaPlugin {
 	private OWPermissionsHandler permissionsHandler;
 
     // Supported commands
-	private Trie<String, Map<Range<Integer>, OWCommand>> commandTrie;
+	private CommandHandler commandHandler;
 	
 	// Per-player data
 	private OWLocationTracker locationTracker = new OWLocationTracker();
@@ -163,38 +159,26 @@ public class OpenWarp extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
-		this.commandTrie = new Trie<String, Map<Range<Integer>, OWCommand>>();
+		this.commandHandler = new CommandHandler(this, this.permissionsHandler);
 		
-		this.registerCommand(new OWWarpCommand(this), 1, 1, "warp");
+		this.commandHandler.registerCommand(new OWWarpCommand(this));
+		this.commandHandler.registerCommand(new OWWarpListCommand(this));
+		this.commandHandler.registerCommand(new OWWarpDetailCommand(this));
+		this.commandHandler.registerCommand(new OWWarpSetCommand(this));
+		this.commandHandler.registerCommand(new OWWarpDeleteCommand(this));
 		
-		this.registerCommand(new OWWarpListCommand(this), 0, 0, "warp");
-		this.registerCommand(new OWWarpListCommand(this), "warp", "list");
+		this.commandHandler.registerCommand(new OWQuotaShowCommand(this));
+		this.commandHandler.registerCommand(new OWQuotaUsageCommand(this));
+		this.commandHandler.registerCommand(new OWQuotaSetCommand(this));
 		
-		this.registerCommand(new OWWarpDetailCommand(this), "warp", "detail");
+		this.commandHandler.registerCommand(new OWStackPushCommand(this));
+		this.commandHandler.registerCommand(new OWStackPopCommand(this));
+		this.commandHandler.registerCommand(new OWStackPeekCommand(this));
+		this.commandHandler.registerCommand(new OWStackPrintCommand(this));
 		
-		this.registerCommand(new OWWarpSetCommand(this), "warp", "set");
-		this.registerCommand(new OWWarpSetCommand(this), "setwarp");
-		
-		this.registerCommand(new OWWarpDeleteCommand(this), "warp", "delete");
-		
-		this.registerCommand(new OWQuotaShowCommand(this), "warp", "quota", "show");
-		
-		this.registerCommand(new OWQuotaUsageCommand(this), 0, 0, "warp", "quota");
-		this.registerCommand(new OWQuotaUsageCommand(this), "warp", "quota", "usage");
-		
-		this.registerCommand(new OWQuotaSetCommand(this), "warp", "quota", "set");
-		
-		this.registerCommand(new OWStackPushCommand(this), "warp", "stack", "push");
-		this.registerCommand(new OWStackPopCommand(this), "warp", "stack", "pop");
-		this.registerCommand(new OWStackPeekCommand(this), "warp", "stack", "peek");
-		this.registerCommand(new OWStackPrintCommand(this), "warp", "stack", "print");
-		
-		this.registerCommand(new OWTopCommand(this), "top");
-		
-		this.registerCommand(new OWJumpCommand(this), "jump");
-		this.registerCommand(new OWJumpCommand(this), "j");
-		
-		this.registerCommand(new OWBackCommand(this), "back");
+		this.commandHandler.registerCommand(new OWTopCommand(this));
+		this.commandHandler.registerCommand(new OWJumpCommand(this));
+		this.commandHandler.registerCommand(new OWBackCommand(this));
 	}
 	
 	private void loadListeners() {
@@ -203,69 +187,6 @@ public class OpenWarp extends JavaPlugin {
         
         OWTeleportListener teleportListener = new OWTeleportListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, teleportListener, Priority.Normal, this);
-	}
-	
-	/**
-	 * Register the given OWCommand with the given key path. Uses the command's
-	 * minimumArgs and maximumArgs properties.
-	 * 
-	 * @see registerCommand(OWCommand, int, int, List<String>)
-	 */
-	private void registerCommand(OWCommand command, String... keys) {
-		this.registerCommand(command, command.getMinimumArgs(), command.getMaximumArgs(), Arrays.asList(keys));
-	}
-	
-	/**
-     * Register the given OWCommand with the given key path. Uses the command's
-     * minimumArgs and maximumArgs properties.
-     * 
-     * @see registerCommand(OWCommand, int, int, List<String>)
-     */
-	private void registerCommand(OWCommand command, List<String> keys) {
-	    this.registerCommand(command, command.getMinimumArgs(), command.getMaximumArgs(), keys);
-	}
-	
-	/**
-     * Register the given OWCommand with the given key path. Convenience
-     * method wrapper.
-     * 
-     * @see registerCommand(OWCommand, int, int, List<String>)
-     */
-	private void registerCommand(OWCommand command, int minimumArgs, int maximumArgs, String... keys) {
-	    this.registerCommand(command, minimumArgs, maximumArgs, Arrays.asList(keys));
-	}
-	
-	/**
-     * Recursively add nodes to the command trie to insert the given
-     * OWCommand at the given key path. Overwrites any commands already
-     * in the trie at the given key path.
-     *  
-     * @param command The command to add to the trie
-     * @param minimumArgs The smallest number of arguments the command can take
-     *                    when reached from the given key path
-     * @param minimumArgs The largest number of arguments the command can take
-     *                    when reached from the given key path 
-     * @param keys The key path to use for the new command
-     */
-	private void registerCommand(OWCommand command, int minimumArgs, int maximumArgs, List<String> keys) {
-	    // Require a non-empty key path
-        if(keys.size() == 0) {
-            return;
-        }
-        
-        Map<Range<Integer>, OWCommand> commandMap = null;
-        try {
-            commandMap = this.commandTrie.get(keys);
-            if(commandMap == null) {
-                this.commandTrie.put(keys, new HashMap<Range<Integer>, OWCommand>());
-                commandMap = this.commandTrie.get(keys);
-            }
-        } catch(IndexOutOfBoundsException e) {
-            this.commandTrie.put(keys, new HashMap<Range<Integer>, OWCommand>());
-            commandMap = this.commandTrie.get(keys);
-        }
-        
-        commandMap.put(new Range<Integer>(minimumArgs, maximumArgs), command);
 	}
 	
 	/**
@@ -294,33 +215,7 @@ public class OpenWarp extends JavaPlugin {
 		}
 		
 		// Locate and run the best matching command from the key path
-		List<String> matchPath = this.commandTrie.getDeepestMatch(keyPath);
-		Map<Range<Integer>, OWCommand> commandMap = this.commandTrie.get(matchPath);
-		List<String> remainingArgs = StringUtil.trimListLeft(keyPath, matchPath);
-		
-		if(commandMap != null) {
-    		OWCommand owCommand = null;
-    		for(Range<Integer> key : commandMap.keySet()) {
-    		    if(key.contains(remainingArgs.size())) {
-    		        owCommand = commandMap.get(key);
-    		        break;
-    		    }
-    		}
-    		if(owCommand != null) {
-    		    try {
-    		        return owCommand.execute(sender, remainingArgs);
-    		    } catch(OWPermissionException e) {
-    		        sender.sendMessage(ChatColor.RED + "You do not have permission to perform that command.");
-    		        return true;
-    		    }
-    		} else {
-    			sender.sendMessage(ChatColor.YELLOW + "Unrecognized command");
-    			return true;
-    		}
-		} else {
-            sender.sendMessage(ChatColor.YELLOW + "Unrecognized command");
-            return true;
-        }
+		return this.commandHandler.locateAndRunCommand(sender, keyPath);
 	}
 	
 	public Map<String, Warp> getPublicWarps() {

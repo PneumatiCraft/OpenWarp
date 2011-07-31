@@ -8,25 +8,28 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
-import com.lithium3141.OpenWarp.OWPermissionException;
-import com.lithium3141.OpenWarp.OpenWarp;
 
 public class OWJumpCommand extends OWCommand {
 
-    public OWJumpCommand(OpenWarp plugin) {
+    public OWJumpCommand(JavaPlugin plugin) {
         super(plugin);
         
-        this.minimumArgs = 0;
-        this.maximumArgs = 0;
+        this.setName("Warp set");
+        this.setArgRange(0, 0);
+        this.setCommandUsage("/jump");
+        this.setCommandExample("/jump");
+        this.setPermission("openwarp.jump", "Move to position under reticle", PermissionDefault.TRUE);
+        this.addKey("jump");
+        this.addKey("j");
     }
 
     @Override
-    public boolean execute(CommandSender sender, List<String> args) throws OWPermissionException {
-        if(!this.checkPlayerSender(sender)) return true;
-        
-        this.verifyPermission(sender, "openwarp.jump");
+    public void runCommand(CommandSender sender, List<String> args) {
+        if(!this.checkPlayerSender(sender)) return;
         
         Player player = (Player)sender;
         
@@ -68,8 +71,6 @@ public class OWJumpCommand extends OWCommand {
         if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to target block!");
         }
-        
-        return true;
     }
 
 }
