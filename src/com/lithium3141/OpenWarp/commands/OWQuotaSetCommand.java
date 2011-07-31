@@ -18,12 +18,12 @@ public class OWQuotaSetCommand extends OWCommand {
     public OWQuotaSetCommand(JavaPlugin plugin) {
         super(plugin);
         
-        this.setName("Warp set");
+        this.setName("Quota set");
         this.setArgRange(2, 3);
         this.setCommandUsage("/warp quota set {public|private} {unlimited|VALUE} [PLAYER NAME]");
         this.setCommandExample("/warp quota set public 3 Bob");
         this.setPermission("openwarp.warp.quota.set", "Create a new warp", PermissionDefault.OP);
-        this.addKey("warp set");
+        this.addKey("warp quota set");
     }
 
     @Override
