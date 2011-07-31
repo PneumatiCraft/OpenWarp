@@ -12,8 +12,6 @@ import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 
 public class OWQuotaSetCommand extends OWCommand {
-    
-    protected String usageString;
 
     public OWQuotaSetCommand(JavaPlugin plugin) {
         super(plugin);
@@ -30,14 +28,14 @@ public class OWQuotaSetCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         String type = args.get(0);
         if(!type.equals("public") && !type.equals("private")) {
-            sender.sendMessage(ChatColor.YELLOW + this.usageString);
+            sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
         
         String value = args.get(1);
         int quota = OWQuotaManager.QUOTA_UNDEFINED;
         if(!value.equals("unlimited") && !(Integer.parseInt(value) + "").equals(value)) {
-            sender.sendMessage(ChatColor.YELLOW + this.usageString);
+            sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         } else if(value.equals("unlimited")) {
             quota = OWQuotaManager.QUOTA_UNLIMITED;

@@ -44,7 +44,7 @@ public class OWWarpSetCommand extends OWCommand {
         }
         
         if(!warpType.equals("public") && !warpType.equals("private")) {
-            player.sendMessage(ChatColor.YELLOW + "Usage: /warp set {NAME} [public|private]");
+            player.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
         

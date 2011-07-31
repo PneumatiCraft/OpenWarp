@@ -26,7 +26,7 @@ public class OWWarpDetailCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if(args.size() == 0) {
-            sender.sendMessage(ChatColor.YELLOW + "Usage: /warp detail {name}");
+            sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
         
