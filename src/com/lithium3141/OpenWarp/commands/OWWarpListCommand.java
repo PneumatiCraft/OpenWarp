@@ -21,10 +21,10 @@ public class OWWarpListCommand extends OWCommand {
 		this.setName("Warp set");
         this.setArgRange(0, 2);
         this.setCommandUsage("/warp list [public] [private]");
-        this.setCommandExample("/warp list public");
+        this.addCommandExample("/warp list public");
         this.setPermission("openwarp.warp.list", "Show warps", PermissionDefault.TRUE);
         this.addKey("warp list");
-        this.addKey("warp", 0, 0);
+        this.addKey("warp");
 	}
 
 	@Override

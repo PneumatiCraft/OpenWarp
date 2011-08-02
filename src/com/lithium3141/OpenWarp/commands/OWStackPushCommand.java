@@ -19,7 +19,7 @@ public class OWStackPushCommand extends OWCommand {
         this.setName("Stack push");
         this.setArgRange(0, 1);
         this.setCommandUsage("/warp stack push [NAME]");
-        this.setCommandExample("/warp stack push public");
+        this.addCommandExample("/warp stack push public");
         this.setPermission("openwarp.warp.stack.push", "Push a warp onto the location stack", PermissionDefault.TRUE);
         this.addKey("warp stack push");
     }

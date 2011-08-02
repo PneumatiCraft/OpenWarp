@@ -21,7 +21,7 @@ public class OWJumpCommand extends OWCommand {
         this.setName("Warp set");
         this.setArgRange(0, 0);
         this.setCommandUsage("/jump");
-        this.setCommandExample("/jump");
+        this.addCommandExample("/jump");
         this.setPermission("openwarp.jump", "Move to position under reticle", PermissionDefault.TRUE);
         this.addKey("jump");
         this.addKey("j");

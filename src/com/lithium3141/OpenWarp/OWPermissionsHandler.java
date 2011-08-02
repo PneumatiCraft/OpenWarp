@@ -1,5 +1,7 @@
 package com.lithium3141.OpenWarp;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -41,6 +43,26 @@ public class OWPermissionsHandler implements PermissionsInterface {
                 return false;
             }
         }
+    }
+
+    @Override
+    public boolean hasAnyPermission(CommandSender sender, List<String> allPermissionStrings, boolean opRequired) {
+        for(String node : allPermissionStrings) {
+            if(this.hasPermission(sender, node, opRequired)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasAllPermission(CommandSender sender, List<String> allPermissionStrings, boolean opRequired) {
+        for(String node : allPermissionStrings) {
+            if(!this.hasPermission(sender, node, opRequired)) {
+                return false;
+            }
+        }
+        return true;
     }
     
 }

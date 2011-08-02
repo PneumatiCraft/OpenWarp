@@ -18,7 +18,7 @@ public class OWStackPeekCommand extends OWStackPopCommand {
         this.setName("Stack peek");
         this.setArgRange(0, 0);
         this.setCommandUsage("/warp stack peek");
-        this.setCommandExample("/warp stack peek");
+        this.addCommandExample("/warp stack peek");
         this.setPermission("openwarp.warp.stack.peek", "Show the last location on the stack", PermissionDefault.TRUE);
         this.addKey("warp stack peek");
     }

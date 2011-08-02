@@ -19,7 +19,7 @@ public class OWBackCommand extends OWCommand {
         this.setName("Back");
         this.setArgRange(0, 0);
         this.setCommandUsage("/back");
-        this.setCommandExample("/back");
+        this.addCommandExample("/back");
         this.setPermission("openwarp.back", "Move to previous location", PermissionDefault.TRUE);
         this.addKey("back");
     }

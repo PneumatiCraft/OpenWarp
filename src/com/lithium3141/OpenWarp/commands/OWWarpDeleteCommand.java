@@ -18,7 +18,7 @@ public class OWWarpDeleteCommand extends OWCommand {
         this.setName("Warp delete");
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp delete {NAME}");
-        this.setCommandExample("/warp delete public");
+        this.addCommandExample("/warp delete public");
         this.setPermission("openwarp.warp.delete", "Remove an existing warp", PermissionDefault.OP);
         this.addKey("warp delete");
     }

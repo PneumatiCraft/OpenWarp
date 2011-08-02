@@ -19,7 +19,7 @@ public class OWTopCommand extends OWCommand {
         this.setName("Top");
         this.setArgRange(0, 0);
         this.setCommandUsage("/top");
-        this.setCommandExample("/top");
+        this.addCommandExample("/top");
         this.setPermission("openwarp.top", "Move to top block", PermissionDefault.TRUE);
         this.addKey("top");
     }

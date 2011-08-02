@@ -20,7 +20,7 @@ public class OWStackPrintCommand extends OWCommand {
         this.setName("Stack print");
         this.setArgRange(0, 0);
         this.setCommandUsage("/warp stack print");
-        this.setCommandExample("/warp stack print");
+        this.addCommandExample("/warp stack print");
         this.setPermission("openwarp.warp.stack.print", "Show the location stack", PermissionDefault.TRUE);
         this.addKey("warp stack print");
     }

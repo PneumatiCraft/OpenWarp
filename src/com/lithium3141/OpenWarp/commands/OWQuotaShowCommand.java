@@ -21,7 +21,7 @@ public class OWQuotaShowCommand extends OWCommand {
         this.setName("Quota show");
         this.setArgRange(0, 0);
         this.setCommandUsage("/warp quota show");
-        this.setCommandExample("/warp quota show");
+        this.addCommandExample("/warp quota show");
         this.setPermission("openwarp.warp.quota.show", "Show user warp quota", PermissionDefault.TRUE);
         this.addKey("warp quota show");
     }

@@ -19,7 +19,7 @@ public class OWHomeCommand extends OWCommand {
         this.setName("Home");
         this.setArgRange(0, 0);
         this.setCommandUsage("/home");
-        this.setCommandExample("/home");
+        this.addCommandExample("/home");
         this.setPermission("openwarp.home", "Move to player's home", PermissionDefault.TRUE);
         this.addKey("home");
     }

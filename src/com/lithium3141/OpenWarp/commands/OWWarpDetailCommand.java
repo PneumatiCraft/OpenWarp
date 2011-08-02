@@ -18,7 +18,7 @@ public class OWWarpDetailCommand extends OWCommand {
         this.setName("Warp detail");
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp detail {NAME}");
-        this.setCommandExample("/warp detail community");
+        this.addCommandExample("/warp detail community");
         this.setPermission("openwarp.warp.detail", "Show warp information", PermissionDefault.TRUE);
         this.addKey("warp detail");
     }

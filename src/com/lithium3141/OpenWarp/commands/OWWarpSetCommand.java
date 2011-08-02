@@ -21,7 +21,7 @@ public class OWWarpSetCommand extends OWCommand {
         this.setName("Warp set");
         this.setArgRange(1, 2);
         this.setCommandUsage("/warp set {NAME} [public|private]");
-        this.setCommandExample("/warp set community public");
+        this.addCommandExample("/warp set community public");
         this.setPermission("openwarp.warp.set", "Create a new warp", PermissionDefault.OP);
         this.addKey("warp set");
         this.addKey("setwarp");

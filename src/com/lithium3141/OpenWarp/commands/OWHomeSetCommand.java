@@ -18,7 +18,7 @@ public class OWHomeSetCommand extends OWCommand {
         this.setName("Set home");
         this.setArgRange(0, 0);
         this.setCommandUsage("/home set");
-        this.setCommandExample("/home set");
+        this.addCommandExample("/home set");
         this.setPermission("openwarp.home.set", "Set a new home", PermissionDefault.TRUE);
         this.addKey("home set");
         this.addKey("sethome");

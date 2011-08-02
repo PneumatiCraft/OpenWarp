@@ -24,7 +24,7 @@ public class OWStackPopCommand extends OWCommand {
         this.setName("Stack pop");
         this.setArgRange(0, 0);
         this.setCommandUsage("/warp stack pop");
-        this.setCommandExample("/warp stack pop");
+        this.addCommandExample("/warp stack pop");
         this.setPermission("openwarp.warp.stack.pop", "Pop and move to the last location on the stack", PermissionDefault.TRUE);
         this.addKey("warp stack pop");
     }
