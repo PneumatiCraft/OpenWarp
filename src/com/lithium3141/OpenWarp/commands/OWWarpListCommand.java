@@ -24,7 +24,7 @@ public class OWWarpListCommand extends OWCommand {
         this.addCommandExample("/warp list public");
         this.setPermission("openwarp.warp.list", "Show warps", PermissionDefault.TRUE);
         this.addKey("warp list");
-        this.addKey("warp");
+        this.addKey("warp", 0, 0);
 	}
 
 	@Override

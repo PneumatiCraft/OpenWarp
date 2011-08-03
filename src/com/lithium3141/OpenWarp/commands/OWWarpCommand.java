@@ -21,7 +21,7 @@ public class OWWarpCommand extends OWCommand {
         this.setCommandUsage("/warp {NAME}");
         this.addCommandExample("/warp public");
         this.setPermission("openwarp.warp", "Teleport to a warp", PermissionDefault.TRUE);
-        this.addKey("warp");
+        this.addKey("warp", 1, 1);
 	}
 
 	@Override
