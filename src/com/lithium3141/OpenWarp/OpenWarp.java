@@ -14,6 +14,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
@@ -128,6 +131,7 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Read warp names
 		this.loadWarps(this.publicWarpsConfig, this.publicWarps);
+		this.loadWarpPermissions();
 		
 		// Read quotas
 		this.quotaManager.loadGlobalQuotas(this.configuration);
@@ -158,6 +162,48 @@ public class OpenWarp extends JavaPlugin {
                 target.put(warp.getName(), warp);
             }
         }
+	}
+	
+	/**
+	 * Create warp permission nodes for all loaded warps.
+	 */
+	public void loadWarpPermissions() {
+	    PluginManager pm = this.getServer().getPluginManager();
+	    
+	    // Finagle a new permission for public warps
+	    Map<String, Boolean> publicWarpChildren = new HashMap<String, Boolean>();
+	    for(Warp publicWarp : this.getPublicWarps().values()) {
+	        String permString = "openwarp.warp.access.public." + publicWarp.getName();
+	        Permission publicWarpPermission = new Permission(permString, PermissionDefault.TRUE);
+	        publicWarpChildren.put(permString, true);
+	        pm.addPermission(publicWarpPermission);
+	    }
+	    Permission warpAccessPublicPerm = new Permission("openwarp.warp.access.public.*", PermissionDefault.TRUE, publicWarpChildren);
+	    pm.addPermission(warpAccessPublicPerm);
+	    
+	    // The same, for private warps
+	    Map<String, Boolean> privateWarpChildren = new HashMap<String, Boolean>();
+	    for(String playerName : this.getPrivateWarps().keySet()) {
+	        String permPrefix = "openwarp.warp.access.private." + playerName;
+	        privateWarpChildren.put(permPrefix + ".*", true);
+	        
+	        Map<String, Boolean> privateWarpSubchildren = new HashMap<String, Boolean>();
+	        for(Warp privateWarp : this.getPrivateWarps(playerName).values()) {
+	            String permString = permPrefix + "." + privateWarp.getName();
+	            Permission privateWarpPermission = new Permission(permString, PermissionDefault.TRUE);
+	            privateWarpSubchildren.put(permString, true);
+	            pm.addPermission(privateWarpPermission);
+	        }
+	        Permission warpAccessPrivateSubperm = new Permission(permPrefix + ".*", privateWarpSubchildren);
+	        pm.addPermission(warpAccessPrivateSubperm);
+	    }
+	    Permission warpAccessPrivatePerm = new Permission("openwarp.warp.access.private.*", PermissionDefault.TRUE, privateWarpChildren);
+	    pm.addPermission(warpAccessPrivatePerm);
+	    
+	    // Put the actual access perms in
+	    Map<String, Boolean> accessChildren = new HashMap<String, Boolean>() {{ put("openwarp.warp.access.public.*", true); put("openwarp.warp.access.private.*", true); }};
+	    Permission warpAccessPerm = new Permission("openwarp.warp.access.*", PermissionDefault.TRUE, accessChildren);
+	    pm.addPermission(warpAccessPerm);
 	}
 	
 	private void loadCommands() {
