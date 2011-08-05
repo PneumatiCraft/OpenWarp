@@ -1,6 +1,5 @@
 package com.lithium3141.OpenWarp.commands;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -38,15 +37,16 @@ public class OWWarpCommand extends OWCommand {
         }
 	    
 	    // Verify actual permission to access the warp
-	    List<String> permissionStrings = new ArrayList<String>();
-	    permissionStrings.add("openwarp.warp.access");
+	    String permString = "openwarp.warp.access.*";
 	    if(target.isPublic()) {
-	        permissionStrings.add("openwarp.warp.access.public." + warpName);
+	        permString ="openwarp.warp.access.public." + warpName;
 	    } else {
-	        permissionStrings.add("openwarp.warp.access.private." + target.getOwner() + "." + warpName);
+	        permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
 	    }
-	    if(!this.getPlugin().getPermissionsHandler().hasAnyPermission(sender, permissionStrings, !target.isPublic())) {
+	    System.out.println("Checking perm: " + permString);
+	    if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
 	        sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
+	        return;
 	    }
 	    
 	    // Move to warp
@@ -54,8 +54,6 @@ public class OWWarpCommand extends OWCommand {
         if(!player.teleport(target.getLocation())) {
             player.sendMessage(ChatColor.RED + "Error teleporting to warp: " + warpName);
         }
-	    
-		return;
 	}
 
 }

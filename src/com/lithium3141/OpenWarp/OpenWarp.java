@@ -112,6 +112,9 @@ public class OpenWarp extends JavaPlugin {
 		// Set up configuration folder if necessary
 		this.getDataFolder().mkdirs();
 		
+		// Create overall permission
+		this.getServer().getPluginManager().addPermission(new Permission("openwarp.*", PermissionDefault.OP));
+		
 		// Get configuration file (even if nonexistent)
 		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
 		this.configuration.load();
@@ -131,13 +134,13 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Read warp names
 		this.loadWarps(this.publicWarpsConfig, this.publicWarps);
-		this.loadWarpPermissions();
 		
 		// Read quotas
 		this.quotaManager.loadGlobalQuotas(this.configuration);
 		
 		// Set up supported commands
 		this.loadCommands();
+		this.loadWarpPermissions();
 		
 		// Start listening for events
 		this.loadListeners();
@@ -204,6 +207,15 @@ public class OpenWarp extends JavaPlugin {
 	    Map<String, Boolean> accessChildren = new HashMap<String, Boolean>() {{ put("openwarp.warp.access.public.*", true); put("openwarp.warp.access.private.*", true); }};
 	    Permission warpAccessPerm = new Permission("openwarp.warp.access.*", PermissionDefault.TRUE, accessChildren);
 	    pm.addPermission(warpAccessPerm);
+	    
+	    // Make the primary access perm a child of overall warp perms
+	    Permission warpPerm = pm.getPermission("openwarp.warp.*");
+	    if(warpPerm != null) {
+	        pm.getPermission("openwarp.warp.*").getChildren().put("openwarp.warp.access.*", true);
+	        pm.getPermission("openwarp.warp.*").recalculatePermissibles();
+	    } else {
+	        LOG.severe(LOG_PREFIX + "Error inserting warp access permissions. This is a bug!");
+	    }
 	}
 	
 	private void loadCommands() {
