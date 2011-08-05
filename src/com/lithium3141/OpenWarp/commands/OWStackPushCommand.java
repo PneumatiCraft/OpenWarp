@@ -35,6 +35,22 @@ public class OWStackPushCommand extends OWCommand {
             String warpName = args.get(0);
             
             Warp target = this.getPlugin().getWarp(player, warpName);
+            if(target == null) {
+                sender.sendMessage(ChatColor.RED + "No warp found matching name: " + warpName);
+                return;
+            }
+            
+            String permString = "openwarp.warp.access.*";
+            if(target.isPublic()) {
+                permString ="openwarp.warp.access.public." + warpName;
+            } else {
+                permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
+            }
+            System.out.println("Checking perm: " + permString);
+            if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
+                sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
+                return;
+            }
             
             this.getPlugin().getLocationTracker().getLocationStack(player).push(target.getLocation());
             
