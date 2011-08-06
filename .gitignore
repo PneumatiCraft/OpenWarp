@@ -4,7 +4,7 @@
 .settings
 
 # Testing
-minecraft
+minecraft*
 OpenWarp.jar
 
 # Binary directories
