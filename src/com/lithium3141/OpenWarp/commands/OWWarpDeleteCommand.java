@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
@@ -26,10 +27,13 @@ public class OWWarpDeleteCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         String warpName = args.get(0);
+        String permString = null;
         
+        // Remove warp
         if(this.getPlugin().getPublicWarps().containsKey(warpName)) {
             if(this.getPlugin().getPublicWarps().remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed public warp '" + warpName + "'");
+                permString = "openwarp.warp.access.public." + warpName;
             } else {
                 sender.sendMessage(ChatColor.RED + "No such public warp: " + warpName);
             }
@@ -40,8 +44,18 @@ public class OWWarpDeleteCommand extends OWCommand {
             
             if(this.getPlugin().getPrivateWarps(player.getName()).remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed private warp '" + warpName + "'");
+                permString = "openwarp.warp.access.private." + player.getName() + "." + warpName;
             } else {
                 sender.sendMessage(ChatColor.RED + "No such warp: " + warpName);
+            }
+        }
+        
+        // Remove permission
+        if(permString != null) {
+            PluginManager pm = this.getPlugin().getServer().getPluginManager();
+            pm.removePermission(permString);
+            for(Player p : this.getPlugin().getServer().getOnlinePlayers()) {
+                p.recalculatePermissions();
             }
         }
         

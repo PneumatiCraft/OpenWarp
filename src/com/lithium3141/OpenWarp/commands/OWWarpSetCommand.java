@@ -6,7 +6,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
@@ -77,6 +79,24 @@ public class OWWarpSetCommand extends OWCommand {
         } else if(warpType.equals("private")) {
             this.getPlugin().getPrivateWarps().get(player.getName()).put(warp.getName(), warp);
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Created new private warp '" + warp.getName() + "'");
+        }
+        
+        // Create permission for warp
+        String permString = "";
+        if(warpType.equals("public")) {
+            permString = "openwarp.warp.access.public." + warp.getName();
+        } else if(warpType.equals("private")) {
+            permString = "openwarp.warp.access.private." + warp.getOwner() + "." + warp.getName();
+        }
+        Permission accessPerm = new Permission(permString, PermissionDefault.TRUE);
+        PluginManager pm = this.getPlugin().getServer().getPluginManager();
+        pm.addPermission(accessPerm);
+        Permission parentPerm = pm.getPermission("openwarp.warp.access." + warpType + ".*");
+        parentPerm.getChildren().put(permString, true);
+        accessPerm.recalculatePermissibles();
+        parentPerm.recalculatePermissibles();
+        for(Player p : this.getPlugin().getServer().getOnlinePlayers()) {
+            p.recalculatePermissions();
         }
         
         this.getPlugin().saveAllConfigurations();
