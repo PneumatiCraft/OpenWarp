@@ -114,7 +114,9 @@ public class OWPlayerConfiguration {
 	    this.warpConfig.setProperty(OpenWarp.WARPS_LIST_KEY, configWarps);
 	    
 	    // Home
-	    this.generalConfig.setProperty(OpenWarp.HOME_KEY, new Warp(this.plugin, "_HOME", this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap());
+	    if(this.plugin.getHomes().get(this.playerName) != null) {
+	        this.generalConfig.setProperty(OpenWarp.HOME_KEY, new Warp(this.plugin, "_HOME", this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap());	        
+	    }
 	    
 	    // Quotas
 	    this.quotaConfig.setProperty(OpenWarp.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));
