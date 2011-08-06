@@ -10,6 +10,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.util.BlockSafety;
 
 public class OWTopCommand extends OWCommand {
 
@@ -31,10 +32,7 @@ public class OWTopCommand extends OWCommand {
         Player player = (Player)sender;
         Location loc = player.getLocation();
         
-        int y = player.getWorld().getHighestBlockYAt(loc);
-        loc.setY((double)y);
-        
-        if(!player.teleport(loc)) {
+        if(!player.teleport(BlockSafety.safeTopFrom(loc))) {
             player.sendMessage(ChatColor.RED + "Error teleporting to top block!");
         }
     }

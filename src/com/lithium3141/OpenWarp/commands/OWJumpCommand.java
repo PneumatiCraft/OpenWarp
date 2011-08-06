@@ -41,7 +41,9 @@ public class OWJumpCommand extends OWCommand {
             sender.sendMessage(ChatColor.RED + "Error finding jump target block; please try again.");
         }
         Block targetBlock = blocks.get(blocks.size() - 1);
-        Location loc = BlockSafety.safeTopFrom(targetBlock);
+        Location loc = BlockSafety.safeNextUpFrom(targetBlock);
+        loc.setPitch(player.getLocation().getPitch());
+        loc.setYaw(player.getLocation().getYaw());
         
         // Transport player
         if(!player.teleport(loc)) {

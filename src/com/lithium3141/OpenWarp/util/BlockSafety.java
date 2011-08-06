@@ -6,7 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class BlockSafety {
-    public static Location safeTopFrom(Block block) {
+    public static Location safeNextUpFrom(Block block) {
         if(block == null) return null;
         
         Location loc = block.getLocation();
@@ -14,7 +14,6 @@ public class BlockSafety {
         int x = loc.getBlockX();
         int y = loc.getBlockY();
         int z = loc.getBlockZ();
-        System.out.println("Aimed at position (" + x + "," + y + "," + z + ")"); // XXX
         
         // Find the next highest block from requested target that has air above it
         Material last = block.getType();
@@ -30,7 +29,37 @@ public class BlockSafety {
             }
         }
         
-        Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny - 1), loc.getZ(), loc.getYaw(), loc.getPitch());
+        Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny - 1), loc.getZ());
+        result.setPitch(loc.getPitch());
+        result.setYaw(loc.getYaw());
+        return result;
+    }
+    
+    public static Location safeTopFrom(Location loc) {
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
+        
+        // Find the highest block from requested target that is solid with air above it
+        Block block = loc.getBlock();
+        Material last2 = block.getType();
+        Material last = block.getType();
+        int ny;
+        World world = block.getWorld();
+        for(ny = 126; ny > y; ny--) {
+            Block b = world.getBlockAt(x, ny, z);
+            Material m = b.getType();
+            if(!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
+                break;
+            } else {
+                last2 = last;
+                last = m;
+            }
+        }
+        
+        Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 1), loc.getZ());
+        result.setPitch(loc.getPitch());
+        result.setYaw(loc.getYaw());
         return result;
     }
 }
