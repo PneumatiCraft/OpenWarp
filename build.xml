@@ -65,7 +65,18 @@
         </junit>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="gitinfo">
+        <exec executable="git" outputproperty="git.revision">
+            <arg value="rev-parse"/>
+            <arg value="HEAD"/>
+        </exec>
+    </target>
+
+    <target name="tag" depends="gitinfo">
+        <replace file="${build}/plugin.yml" token="@BUILD@" value="${git.revision}" />
+    </target>
+
+    <target name="jar" depends="compile,tag">
         <jar jarfile="${dist}/OpenWarp.jar" basedir="${build}" includes="**/*.class plugin.yml">
             <manifest>
                 <attribute name="Main-Class" value="OpenWarp" />
@@ -78,5 +89,6 @@
         <delete>
             <fileset dir="${lib}" includes="*.jar" />
         </delete>
+        <delete file="${dist}/OpenWarp.jar" />
     </target>
 </project>
