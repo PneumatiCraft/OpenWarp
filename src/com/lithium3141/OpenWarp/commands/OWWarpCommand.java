@@ -43,7 +43,6 @@ public class OWWarpCommand extends OWCommand {
 	    } else {
 	        permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
 	    }
-	    System.out.println("Checking perm: " + permString);
 	    if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
 	        sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
 	        return;
