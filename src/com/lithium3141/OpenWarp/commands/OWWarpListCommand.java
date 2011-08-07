@@ -58,8 +58,10 @@ public class OWWarpListCommand extends OWCommand {
 	private String formatWarpsList(Map<String, Warp> list) {
 	    String result = "";
 	    if(list.size() > 0) {
-            for(Entry<String, Warp> entry : list.entrySet()) {
-                result += " " + entry.getKey();
+	        boolean even = false;
+            for(String key : list.keySet()) {
+                result += " " + (even ? ChatColor.GRAY : ChatColor.WHITE) + key;
+                even = !even;
             }
         }
 	    return result;
