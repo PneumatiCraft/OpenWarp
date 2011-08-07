@@ -17,8 +17,8 @@ public class OWHomeCommand extends OWCommand {
         super(plugin);
         
         this.setName("Home");
-        this.setArgRange(0, 0);
-        this.setCommandUsage("/home");
+        this.setArgRange(0, 1);
+        this.setCommandUsage("/home [player]");
         this.addCommandExample("/home");
         this.setPermission("openwarp.home.use", "Move to player's home", PermissionDefault.TRUE);
         this.addKey("home");
@@ -29,11 +29,30 @@ public class OWHomeCommand extends OWCommand {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
         
-        Location home = this.getPlugin().getHomes().get(player.getName());
+        Location home = null;
+        if(args.size() == 0) {
+            home = this.getPlugin().getHomes().get(player.getName());
+        } else if(args.size() == 1) {
+            // Accessing a specific home - check perms if necessary
+            if(!args.get(0).equals(player.getName())) {
+                // Somebody else's home
+                if(!player.hasPermission("openwarp.home.access." + args.get(0))) {
+                    player.sendMessage(ChatColor.RED + "Error: You do not have access to that home.");
+                    return;
+                }
+            }
+            
+            home = this.getPlugin().getHomes().get(args.get(0));
+        }
+        
         if(home == null) {
-            player.sendMessage(ChatColor.RED + "Error: You must first set a home using /home set");
+            if(args.size() == 0 || args.get(0).equals(player.getName())) {
+                player.sendMessage(ChatColor.RED + "Error: You must first set a home using /home set");
+            } else {
+                player.sendMessage(ChatColor.RED + "Error: player " + args.get(0) + " has not set a home");
+            }
         } else {
-            if(!player.teleport(home)) {
+            if (!player.teleport(home)) {
                 player.sendMessage(ChatColor.RED + "Error teleporting you to your home");
             }
         }

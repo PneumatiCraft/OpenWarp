@@ -140,7 +140,10 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Set up supported commands
 		this.loadCommands();
+		
+		// Instantiate permission nodes for all relevant objects
 		this.loadWarpPermissions();
+		this.loadHomePermissions();
 		
 		// Start listening for events
 		this.loadListeners();
@@ -215,6 +218,36 @@ public class OpenWarp extends JavaPlugin {
 	        pm.getPermission("openwarp.warp.*").recalculatePermissibles();
 	    } else {
 	        LOG.severe(LOG_PREFIX + "Error inserting warp access permissions. This is a bug!");
+	    }
+	}
+	
+	/**
+	 * Create home permission nodes for all loaded homes.
+	 */
+	public void loadHomePermissions() {
+	    PluginManager pm = this.getServer().getPluginManager();
+	    
+	    Map<String, Boolean> homeAccessChildren = new HashMap<String, Boolean>();
+	    for(Entry<String, Location> entry : this.getHomes().entrySet()) {
+	        String playerName = entry.getKey();
+	        String permString = "openwarp.home.access." + playerName;
+	        
+	        Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
+	        homeAccessChildren.put(permString, true);
+	        
+	        pm.addPermission(homeAccessPerm);
+	    }
+	    
+	    Permission homeAccessPerm = new Permission("openwarp.home.access.*", PermissionDefault.OP, homeAccessChildren);
+	    pm.addPermission(homeAccessPerm);
+	    homeAccessPerm.recalculatePermissibles();
+	    
+	    Permission homePerm = pm.getPermission("openwarp.home.*");
+	    if(homePerm != null) {
+	        homePerm.getChildren().put("openwarp.home.access.*", true);
+	        homePerm.recalculatePermissibles();
+	    } else {
+	        LOG.severe(LOG_PREFIX + "Could not locate master home permission node. This is a bug.");
 	    }
 	}
 	
