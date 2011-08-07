@@ -42,8 +42,8 @@ public class BlockSafety {
         
         // Find the highest block from requested target that is solid with air above it
         Block block = loc.getBlock();
-        Material last2 = block.getType();
-        Material last = block.getType();
+        Material last2 = Material.BEDROCK;
+        Material last = Material.BEDROCK;
         int ny;
         World world = block.getWorld();
         for(ny = 126; ny > y; ny--) {
