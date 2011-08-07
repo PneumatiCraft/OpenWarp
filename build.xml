@@ -76,6 +76,12 @@
         <replace file="${build}/plugin.yml" token="@BUILD@" value="${git.revision}" />
     </target>
 
+    <target name="retag" depends="gitinfo">
+        <delete file="${build}/plugin.yml" />
+        <antcall target="compile" />
+        <antcall target="tag" />
+    </target>
+
     <target name="jar" depends="compile,tag">
         <jar jarfile="${dist}/OpenWarp.jar" basedir="${build}" includes="**/*.class plugin.yml">
             <manifest>
