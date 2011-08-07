@@ -39,12 +39,14 @@ public class OWHomeSetCommand extends OWCommand {
         String permString = "openwarp.home.access." + player.getName();
         
         PluginManager pm = this.getPlugin().getServer().getPluginManager();
-        Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
-        pm.addPermission(homeAccessPerm);
-        
-        Permission allHomePerm = pm.getPermission("openwarp.home.access.*");
-        allHomePerm.getChildren().put(permString, true);
-        allHomePerm.recalculatePermissibles();
+        if(pm.getPermission(permString) == null) {
+            Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
+            pm.addPermission(homeAccessPerm);
+            
+            Permission allHomePerm = pm.getPermission("openwarp.home.access.*");
+            allHomePerm.getChildren().put(permString, true);
+            allHomePerm.recalculatePermissibles();
+        }
     }
 
 }
