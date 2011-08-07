@@ -82,7 +82,7 @@
         <antcall target="tag" />
     </target>
 
-    <target name="jar" depends="compile,tag">
+    <target name="jar" depends="compile,retag">
         <jar jarfile="${dist}/OpenWarp.jar" basedir="${build}" includes="**/*.class plugin.yml">
             <manifest>
                 <attribute name="Main-Class" value="OpenWarp" />
