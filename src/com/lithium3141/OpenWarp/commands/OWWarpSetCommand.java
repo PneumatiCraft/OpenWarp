@@ -90,13 +90,15 @@ public class OWWarpSetCommand extends OWCommand {
         }
         Permission accessPerm = new Permission(permString, PermissionDefault.TRUE);
         PluginManager pm = this.getPlugin().getServer().getPluginManager();
-        pm.addPermission(accessPerm);
-        Permission parentPerm = pm.getPermission("openwarp.warp.access." + warpType + ".*");
-        parentPerm.getChildren().put(permString, true);
-        accessPerm.recalculatePermissibles();
-        parentPerm.recalculatePermissibles();
-        for(Player p : this.getPlugin().getServer().getOnlinePlayers()) {
-            p.recalculatePermissions();
+        if(pm.getPermission(permString) == null) {
+            pm.addPermission(accessPerm);
+            Permission parentPerm = pm.getPermission("openwarp.warp.access." + warpType + ".*");
+            parentPerm.getChildren().put(permString, true);
+            accessPerm.recalculatePermissibles();
+            parentPerm.recalculatePermissibles();
+            for(Player p : this.getPlugin().getServer().getOnlinePlayers()) {
+                p.recalculatePermissions();
+            }
         }
         
         this.getPlugin().saveAllConfigurations();
