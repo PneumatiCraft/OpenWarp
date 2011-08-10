@@ -22,6 +22,7 @@ import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
+import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
 import com.lithium3141.OpenWarp.listeners.OWTeleportListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
@@ -281,8 +282,8 @@ public class OpenWarp extends JavaPlugin {
 	    OWPlayerListener playerListener = new OWPlayerListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
         
-        OWTeleportListener teleportListener = new OWTeleportListener(this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, teleportListener, Priority.Normal, this);
+        OWEntityListener entityListener = new OWEntityListener(this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
 	}
 	
 	/**

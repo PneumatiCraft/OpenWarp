@@ -3,6 +3,7 @@ package com.lithium3141.OpenWarp.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 
@@ -18,4 +19,10 @@ public class OWPlayerListener extends PlayerListener {
 		Player player = event.getPlayer();
 		this.plugin.registerPlayerName(player.getName());
 	}
+	
+	@Override
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+	    System.out.println("Teleport! " + event.getFrom());
+        this.plugin.getLocationTracker().setPreviousLocation(event.getPlayer(), event.getFrom());
+    }
 }

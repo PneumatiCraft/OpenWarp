@@ -31,7 +31,13 @@ public class OWBackCommand extends OWCommand {
         Player player = (Player)sender;
         Location loc = this.getPlugin().getLocationTracker().getPreviousLocation(player);
         
+        if(loc == null) {
+            player.sendMessage(ChatColor.RED + "You do not currently have a previous location!");
+            return;
+        }
+        
         if(!player.teleport(loc)) {
+            System.out.println("Back to: " + loc);
             player.sendMessage(ChatColor.RED + "Error returning to previous location!");
         }
     }
