@@ -60,7 +60,7 @@ public class OWWarpListCommand extends OWCommand {
 	    if(list.size() > 0) {
 	        boolean even = false;
             for(String key : list.keySet()) {
-                result += " " + (even ? ChatColor.GRAY : ChatColor.WHITE) + key;
+                result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + key;
                 even = !even;
             }
         }
