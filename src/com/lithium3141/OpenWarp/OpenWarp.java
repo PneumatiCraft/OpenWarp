@@ -24,7 +24,6 @@ import org.bukkit.util.config.ConfigurationNode;
 import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
-import com.lithium3141.OpenWarp.listeners.OWTeleportListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
 
 /**
