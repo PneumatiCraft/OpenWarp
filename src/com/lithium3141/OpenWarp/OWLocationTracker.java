@@ -21,7 +21,6 @@ public class OWLocationTracker {
     }
     
     public void setPreviousLocation(Player player, Location location) {
-        System.out.println("Setting previous location: " + location);
         this.previousLocations.put(player, location);
     }
     

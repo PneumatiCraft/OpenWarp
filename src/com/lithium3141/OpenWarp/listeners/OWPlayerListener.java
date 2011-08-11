@@ -22,7 +22,6 @@ public class OWPlayerListener extends PlayerListener {
 	
 	@Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-	    System.out.println("Teleport! " + event.getFrom());
         this.plugin.getLocationTracker().setPreviousLocation(event.getPlayer(), event.getFrom());
     }
 }

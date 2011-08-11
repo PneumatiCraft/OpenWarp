@@ -37,7 +37,6 @@ public class OWBackCommand extends OWCommand {
         }
         
         if(!player.teleport(loc)) {
-            System.out.println("Back to: " + loc);
             player.sendMessage(ChatColor.RED + "Error returning to previous location!");
         }
     }

@@ -280,6 +280,7 @@ public class OpenWarp extends JavaPlugin {
 	private void loadListeners() {
 	    OWPlayerListener playerListener = new OWPlayerListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
         
         OWEntityListener entityListener = new OWEntityListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);

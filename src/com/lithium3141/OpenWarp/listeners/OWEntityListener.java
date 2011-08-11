@@ -17,7 +17,6 @@ public class OWEntityListener extends EntityListener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player)(event.getEntity());
-            System.out.println("Died at: " + player.getLocation());
             this.plugin.getLocationTracker().setPreviousLocation(player, player.getLocation());
         }
     }
