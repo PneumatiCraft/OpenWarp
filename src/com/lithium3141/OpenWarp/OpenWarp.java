@@ -114,6 +114,11 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Create overall permission
 		this.getServer().getPluginManager().addPermission(new Permission("openwarp.*", PermissionDefault.OP));
+		Permission wildcardPerm = this.getServer().getPluginManager().getPermission("*");
+		if(wildcardPerm != null) {
+		    wildcardPerm.getChildren().put("openwarp.*", true);
+		    wildcardPerm.recalculatePermissibles();
+		}
 		
 		// Get configuration file (even if nonexistent)
 		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
