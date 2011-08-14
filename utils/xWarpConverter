@@ -1,0 +1,31 @@
+#!/bin/sh
+
+if [ ! -e $1/xWarp/warps.db ] ; then
+    echo "Usage: $0 <path to plugins>"
+    echo "Example: $0 /opt/minecraft/plugins"
+    exit 1
+fi
+
+if [ -e $1/OpenWarp/warps.yml ] ; then
+    echo "Warning warps.yml detected. Running this conversion script on a non-clean OpenWarp install will require manual editing or you will be left with a broken config! Aborting."
+    exit 1
+fi
+
+mkdir -p $1/OpenWarp
+
+echo -n Doing public warps...
+sqlite3 "$1/xWarp/warps.db" "SELECT * FROM warps WHERE publicLevel = 1" | awk -F '|' 'BEGIN {print "warps:"} {gsub("\x27", "", $0); print "    " $2 ":\n        yaw: " $8 "\n        owner: " $12 "\n        pitch: " $9 "\n        z: " $7 "\n        world: " $4 "\n        y: " $6 "\n        x: " $5 }' >> "$1/OpenWarp/warps.yml"
+echo " Done."
+
+echo -n Doing private warps...
+for private in `sqlite3 $1/xWarp/warps.db "SELECT owner FROM warps WHERE publicLevel = 0 GROUP BY owner"` ; do
+    echo -n .
+    mkdir -p "$1/OpenWarp/$private"
+    sqlite3 "$1/xWarp/warps.db" "SELECT * FROM warps WHERE publicLevel = 0 AND owner = '$private'" | awk -F '|' 'BEGIN {print "warps:"} {gsub("\x27", "", $0); print "    " $2 ":\n        yaw: " $8 "\n        owner: " $12 "\n        pitch: " $9 "\n        z: " $7 "\n        world: " $4 "\n        y: " $6 "\n        x: " $5 }' >> "$1/OpenWarp/$private/warps.yml"
+done
+echo " Done."
+
+echo You need to grant the following Permissions in SuperPerms:
+for perms in `sqlite3 $1/xWarp/warps.db "SELECT name, editor, owner FROM warps, permissions WHERE publicLevel = 0 AND permissions.id = warps.id ORDER BY editor"` ; do
+    echo "$perms" | awk -F '|' '{print "Give " $2 " permission node openwarp.warp.access.private." $3 "." $1}'
+done
