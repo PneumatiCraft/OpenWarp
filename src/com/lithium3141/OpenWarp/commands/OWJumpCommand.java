@@ -26,6 +26,8 @@ public class OWJumpCommand extends OWCommand {
         this.addKey("jump");
         this.addKey("j");
     }
+    
+    public static final String JUMP_ERROR = "Error finding jump target block; please try again.";
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
@@ -38,8 +40,15 @@ public class OWJumpCommand extends OWCommand {
         try {
             blocks = player.getLastTwoTargetBlocks(null, 100);
         } catch(IllegalStateException e) {
-            sender.sendMessage(ChatColor.RED + "Error finding jump target block; please try again.");
+            sender.sendMessage(ChatColor.RED + JUMP_ERROR);
+            return;
         }
+        
+        if(blocks == null) {
+            sender.sendMessage(ChatColor.RED + JUMP_ERROR);
+            return;
+        }
+        
         Block targetBlock = blocks.get(blocks.size() - 1);
         Location loc = BlockSafety.safeNextUpFrom(targetBlock);
         loc.setPitch(player.getLocation().getPitch());
