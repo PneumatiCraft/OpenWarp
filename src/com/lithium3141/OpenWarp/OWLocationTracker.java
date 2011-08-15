@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 public class OWLocationTracker {
     private Map<Player, Location> previousLocations = new HashMap<Player, Location>();
     private Map<Player, Stack<Location>> locationStacks = new HashMap<Player, Stack<Location>>();
+    private Map<Player, Boolean> ignoreNexts = new HashMap<Player, Boolean>();
     
     public Location getPreviousLocation(Player player) {
         Location loc = this.previousLocations.get(player); 
@@ -21,11 +22,18 @@ public class OWLocationTracker {
     }
     
     public void setPreviousLocation(Player player, Location location) {
-        this.previousLocations.put(player, location);
+        if(!(this.ignoreNexts.containsKey(player) && this.ignoreNexts.get(player) == true)) {
+            this.previousLocations.put(player, location);
+        }
+        this.ignoreNexts.put(player, false);
     }
     
     public void clearPreviousLocation(Player player) {
         this.previousLocations.remove(player);
+    }
+    
+    public void ignoreNextSet(Player player) {
+        this.ignoreNexts.put(player, true);
     }
     
     public Stack<Location> getLocationStack(Player player) {
