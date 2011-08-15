@@ -100,8 +100,8 @@ public class OWPlayerConfiguration {
 	/**
 	 * Save this player configuration to disk.
 	 * 
-	 * @return true if this player configuration was saved successfully;
-	 *         false otherwise.
+	 * @return true if this player configuration was saved successfully
+	 *         or skipped; false on error.
 	 */
 	public boolean save() {
 	    // Warps
@@ -115,7 +115,13 @@ public class OWPlayerConfiguration {
 	    
 	    // Home
 	    if(this.plugin.getHomes().get(this.playerName) != null) {
-	        this.generalConfig.setProperty(OpenWarp.HOME_KEY, new Warp(this.plugin, "_HOME", this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap());	        
+	        Map<String, Object> homeWarpConfig = new Warp(this.plugin, "_HOME", this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap();
+	        if(homeWarpConfig != null) {
+	            this.generalConfig.setProperty(OpenWarp.HOME_KEY, homeWarpConfig);
+	        } else {
+	            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to missing warp world");
+	            return true;
+	        }
 	    }
 	    
 	    // Quotas

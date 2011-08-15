@@ -85,6 +85,7 @@ public class Warp {
 	    if(this.location.getWorld() == null) {
 	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Target world is null; this is a bug!");
 	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "See https://github.com/PneumatiCraft/OpenWarp/issues/22");
+	        return null;
 	    }
 	    
 	    result.put(WORLD_KEY, this.location.getWorld().getName());
