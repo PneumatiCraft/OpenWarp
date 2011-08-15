@@ -81,6 +81,12 @@ public class Warp {
 	    result.put(Z_KEY, this.location.getZ());
 	    result.put(PITCH_KEY, this.location.getPitch());
 	    result.put(YAW_KEY, this.location.getYaw());
+	    
+	    if(this.location.getWorld() == null) {
+	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Target world is null; this is a bug!");
+	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "See https://github.com/PneumatiCraft/OpenWarp/issues/22");
+	    }
+	    
 	    result.put(WORLD_KEY, this.location.getWorld().getName());
 	    
 	    result.put(OWNER_KEY, this.owner);
