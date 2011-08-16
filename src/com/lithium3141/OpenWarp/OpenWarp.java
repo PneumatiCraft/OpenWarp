@@ -76,9 +76,46 @@ public class OpenWarp extends JavaPlugin {
 		LOG.info(LOG_PREFIX + "Disabled!");
 	}
 	
+	/**
+	 * Save all configuration files currently loaded, including global
+	 * warp and quota configurations and configurations for each player.
+	 */
 	public void saveAllConfigurations() {
 	    if(this.configuration != null) {
-            // Save overall configuration
+            this.saveGlobalConfiguration();
+            
+            // Save player-specific data
+            for(String playerName : this.playerConfigs.keySet()) {
+                this.savePrivateConfiguration(playerName);
+            }
+        }
+	}
+	
+	/**
+	 * Save global configurations and the individual configuration for the
+	 * provided player.
+	 * 
+	 * @param player the Player to save configurations for.
+	 */
+	public void saveConfigurations(Player player) {
+	    this.saveGlobalConfiguration();
+	    this.savePrivateConfiguration(player.getName());
+	}
+	
+	/**
+     * Save global configurations and the individual configuration for the
+     * provided player.
+     * 
+     * @param playerName the name of the player to save configurations for.
+     */
+	public void saveConfigurations(String playerName) {
+	    this.saveGlobalConfiguration();
+	    this.savePrivateConfiguration(playerName);
+	}
+	
+	private void saveGlobalConfiguration() {
+	    if(this.configuration != null) {
+	        // Save overall configuration
             this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
             if(!this.configuration.save()) {
                 LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
@@ -97,14 +134,17 @@ public class OpenWarp extends JavaPlugin {
             
             // Save global quotas
             this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
-            
-            // Save player-specific data
-            for(OWPlayerConfiguration config : this.playerConfigs.values()) {
-                if(!config.save()) {
-                    LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
-                }
+	    }
+	}
+	
+	private void savePrivateConfiguration(String playerName) {
+	    if(this.configuration != null) {
+	        OWPlayerConfiguration config = this.playerConfigs.get(playerName);
+	        
+	        if(!config.save()) {
+                LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
             }
-        }
+	    }
 	}
 
 	@Override

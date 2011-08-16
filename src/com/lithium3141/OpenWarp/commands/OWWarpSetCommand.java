@@ -101,7 +101,7 @@ public class OWWarpSetCommand extends OWCommand {
             }
         }
         
-        this.getPlugin().saveAllConfigurations();
+        this.getPlugin().saveConfigurations(player);
     }
 
 }
