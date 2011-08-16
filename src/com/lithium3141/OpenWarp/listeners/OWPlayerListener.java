@@ -19,6 +19,7 @@ public class OWPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		this.plugin.registerPlayerName(player.getName());
+		this.plugin.getLocationTracker().ignoreNextSets(player, 2);
 	}
 	
 	@Override

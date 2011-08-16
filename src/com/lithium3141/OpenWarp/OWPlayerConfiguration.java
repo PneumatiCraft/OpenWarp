@@ -22,6 +22,9 @@ public class OWPlayerConfiguration {
 	public static final String WARP_CONFIG_FILENAME = "warps.yml";
 	public static final String QUOTA_CONFIG_FILENAME = "quota.yml";
 	
+	public static final String TEMP_HOME_NAME = "_HOME";
+	public static final String TEMP_BACK_NAME = "_BACK";
+	
 	// Instance variables
 	private OpenWarp plugin;
 	private String playerName;
@@ -88,9 +91,15 @@ public class OWPlayerConfiguration {
 		this.plugin.loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 		
 		// Home
-		ConfigurationNode node = this.generalConfig.getNode(OpenWarp.HOME_KEY);
-		if(node != null) {
-		    this.plugin.getHomes().put(this.playerName, new Warp(this.plugin, "_home", node).getLocation());
+		ConfigurationNode homeNode = this.generalConfig.getNode(OpenWarp.HOME_KEY);
+		if(homeNode != null) {
+		    this.plugin.getHomes().put(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
+		}
+		
+		// Back
+		ConfigurationNode backNode = this.generalConfig.getNode(OpenWarp.BACK_KEY);
+		if(backNode != null) {
+		    this.plugin.getLocationTracker().setPreviousLocation(this.playerName, new Warp(this.plugin, TEMP_BACK_NAME, backNode).getLocation());
 		}
 		
 		// Quotas
@@ -115,12 +124,20 @@ public class OWPlayerConfiguration {
 	    
 	    // Home
 	    if(this.plugin.getHomes().get(this.playerName) != null) {
-	        Map<String, Object> homeWarpConfig = new Warp(this.plugin, "_HOME", this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap();
+	        Map<String, Object> homeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap();
 	        if(homeWarpConfig != null) {
 	            this.generalConfig.setProperty(OpenWarp.HOME_KEY, homeWarpConfig);
 	        } else {
 	            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to missing warp world");
 	            return true;
+	        }
+	    }
+	    
+	    // Back
+	    if(this.plugin.getLocationTracker().getPreviousLocation(this.playerName) != null) {
+	        Map<String, Object> backWarpConfig = new Warp(this.plugin, TEMP_BACK_NAME, this.plugin.getLocationTracker().getPreviousLocation(this.playerName), this.playerName).getConfigurationMap();
+	        if(backWarpConfig != null) {
+	            this.generalConfig.setProperty(OpenWarp.BACK_KEY, backWarpConfig);
 	        }
 	    }
 	    

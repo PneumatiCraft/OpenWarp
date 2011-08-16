@@ -49,6 +49,7 @@ public class OpenWarp extends JavaPlugin {
     public static final String QUOTA_PUBLIC_KEY = "public";
     public static final String QUOTA_PRIVATE_KEY = "private";
     public static final String HOME_KEY = "home";
+    public static final String BACK_KEY = "back";
 	
 	// Global configuration variables
 	public Configuration configuration;
@@ -67,7 +68,7 @@ public class OpenWarp extends JavaPlugin {
 	private CommandHandler commandHandler;
 	
 	// Per-player data
-	private OWLocationTracker locationTracker = new OWLocationTracker();
+	private OWLocationTracker locationTracker;
 
 	@Override
 	public void onDisable() {
@@ -141,7 +142,7 @@ public class OpenWarp extends JavaPlugin {
 	    if(this.configuration != null) {
 	        OWPlayerConfiguration config = this.playerConfigs.get(playerName);
 	        
-	        if(!config.save()) {
+	        if(config != null && !config.save()) {
                 LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
             }
 	    }
@@ -159,6 +160,9 @@ public class OpenWarp extends JavaPlugin {
 		    wildcardPerm.getChildren().put("openwarp.*", true);
 		    wildcardPerm.recalculatePermissibles();
 		}
+		
+		// Start location tracking
+		this.locationTracker = new OWLocationTracker(this);
 		
 		// Get configuration file (even if nonexistent)
 		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
