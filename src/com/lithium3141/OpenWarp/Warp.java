@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.util.config.ConfigurationNode;
 
 public class Warp {
@@ -48,7 +49,11 @@ public class Warp {
         float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
         float yaw = (float) node.getDouble(YAW_KEY, 0.0);
         
-        this.location = new Location(this.plugin.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+        World world = this.plugin.getServer().getWorld(worldName);
+        if(world == null) {
+            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Couldn't locate world named '" + worldName + "'; this is likely a problem");
+        }
+        this.location = new Location(world, x, y, z, yaw, pitch);
         
         this.owner = node.getString(OWNER_KEY, "");
 	}
@@ -85,7 +90,7 @@ public class Warp {
 	    if(this.location.getWorld() == null) {
 	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Target world is null; this is a bug!");
 	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "See https://github.com/PneumatiCraft/OpenWarp/issues/22");
-	        return null;
+	        return result;
 	    }
 	    
 	    result.put(WORLD_KEY, this.location.getWorld().getName());

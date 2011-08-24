@@ -3,6 +3,7 @@ main: com.lithium3141.OpenWarp.OpenWarp
 author: lithium3141
 version: 1.0 (rev @BUILD@)
 database: false
+softdepend: [Multiverse-Core, MultiVerse]
 commands:
     warp:
         description: Manipulate warp points
