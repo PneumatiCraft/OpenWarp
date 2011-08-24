@@ -1,10 +1,14 @@
 package com.lithium3141.OpenWarp;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Stack;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
@@ -24,6 +28,7 @@ public class OWPlayerConfiguration {
 	
 	public static final String TEMP_HOME_NAME = "_HOME";
 	public static final String TEMP_BACK_NAME = "_BACK";
+	public static final String TEMP_STACK_NAME = "_STACK";
 	
 	// Instance variables
 	private OpenWarp plugin;
@@ -102,6 +107,15 @@ public class OWPlayerConfiguration {
 		    this.plugin.getLocationTracker().setPreviousLocation(this.playerName, new Warp(this.plugin, TEMP_BACK_NAME, backNode).getLocation());
 		}
 		
+		// Stack
+		ConfigurationNode stackNode = this.generalConfig.getNode(OpenWarp.STACK_KEY);
+		if(stackNode != null) {
+		    List<Object> stackConfig = stackNode.getList(""); // TODO is there a better call for this?
+		    for(Object o : stackConfig) {
+		        // TODO figure out how to parse this appropriately
+		    }
+		}
+		
 		// Quotas
 		this.plugin.getQuotaManager().loadPrivateQuotas(this.playerName, this.quotaConfig);
 	}
@@ -129,6 +143,7 @@ public class OWPlayerConfiguration {
 	            this.generalConfig.setProperty(OpenWarp.HOME_KEY, homeWarpConfig);
 	        } else {
 	            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to missing warp world");
+	            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in some data loss! Check the warp configuration for " + this.playerName);
 	            return true;
 	        }
 	    }
@@ -138,6 +153,20 @@ public class OWPlayerConfiguration {
 	        Map<String, Object> backWarpConfig = new Warp(this.plugin, TEMP_BACK_NAME, this.plugin.getLocationTracker().getPreviousLocation(this.playerName), this.playerName).getConfigurationMap();
 	        if(backWarpConfig != null) {
 	            this.generalConfig.setProperty(OpenWarp.BACK_KEY, backWarpConfig);
+	        }
+	    }
+	    
+	    // History stack
+	    if(this.plugin.getLocationTracker().getLocationStack(this.playerName) != null) {
+	        Stack<Location> locationStack = this.plugin.getLocationTracker().getLocationStack(this.playerName);
+	        List<Map<String, Object>> locationStackConfig = new ArrayList<Map<String, Object>>();
+	        for(Location location : locationStack) {
+	            locationStackConfig.add(new Warp(this.plugin, TEMP_STACK_NAME, location, this.playerName).getConfigurationMap());
+	        }
+	        if(locationStackConfig.size() > 0) {
+	            this.generalConfig.setProperty(OpenWarp.STACK_KEY, locationStackConfig);
+	        } else {
+	            this.generalConfig.setProperty(OpenWarp.STACK_KEY, null);
 	        }
 	    }
 	    

@@ -37,7 +37,7 @@ public class OWLocationTracker {
     
     public void setPreviousLocation(String playerName, Location location) {
         if(!(this.ignoreNexts.containsKey(playerName) && this.ignoreNexts.get(playerName) > 0)) {
-            System.out.println("Setting previous location (" + playerName + "): " + location);
+            OpenWarp.LOG.fine(OpenWarp.LOG_PREFIX + "Setting previous location (" + playerName + "): " + location);
             this.previousLocations.put(playerName, location);
         }
         if(this.ignoreNexts.containsKey(playerName)) {
