@@ -64,7 +64,7 @@ public class OWQuotaUsageCommand extends OWCommand {
     
     private String formatUsage(int used, int quota, String label) {
         if(quota < 0) {
-            return "unlimited " + label + "; " + used + " created";
+            return "unlimited " + label + " (" + used + " created)";
         } else {
             return used + " / " + quota + " " + label;
         }

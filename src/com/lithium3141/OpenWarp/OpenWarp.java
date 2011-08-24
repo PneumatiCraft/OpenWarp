@@ -174,19 +174,19 @@ public class OpenWarp extends JavaPlugin {
 		
 		// Read warp names
         this.loadWarps(this.publicWarpsConfig, this.publicWarps);
-		
-		// Instantiate quota manager, permissions - need them for player configs
+        
+        // Instantiate quota manager, permissions - need them for player configs
         this.quotaManager = new OWQuotaManager(this);
         this.permissionsHandler = new OWPermissionsHandler(this);
-		
+
+        // Read quotas
+        this.quotaManager.loadGlobalQuotas(this.configuration);
+        
 		// Read player names and create configurations for each
 		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
 		for(String playerName : playerNames) {
 			this.registerPlayerName(playerName);
 		}
-		
-		// Read quotas
-		this.quotaManager.loadGlobalQuotas(this.configuration);
 		
 		// Set up supported commands
 		this.loadCommands();
