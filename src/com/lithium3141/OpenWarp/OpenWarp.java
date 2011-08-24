@@ -50,6 +50,7 @@ public class OpenWarp extends JavaPlugin {
     public static final String QUOTA_PRIVATE_KEY = "private";
     public static final String HOME_KEY = "home";
     public static final String BACK_KEY = "back";
+    public static final String STACK_KEY = "stack";
 	
 	// Global configuration variables
 	public Configuration configuration;
@@ -171,6 +172,9 @@ public class OpenWarp extends JavaPlugin {
 		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
 		this.publicWarpsConfig.load();
 		
+		// Read warp names
+        this.loadWarps(this.publicWarpsConfig, this.publicWarps);
+		
 		// Instantiate quota manager, permissions - need them for player configs
         this.quotaManager = new OWQuotaManager(this);
         this.permissionsHandler = new OWPermissionsHandler(this);
@@ -180,9 +184,6 @@ public class OpenWarp extends JavaPlugin {
 		for(String playerName : playerNames) {
 			this.registerPlayerName(playerName);
 		}
-		
-		// Read warp names
-		this.loadWarps(this.publicWarpsConfig, this.publicWarps);
 		
 		// Read quotas
 		this.quotaManager.loadGlobalQuotas(this.configuration);
