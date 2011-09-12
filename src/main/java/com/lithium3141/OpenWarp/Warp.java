@@ -99,4 +99,9 @@ public class Warp {
 	    
 	    return result;
 	}
+	// Added for MV compatability. Defaults to true.
+	// TODO: Add methods to set this to false.
+    public boolean useSafeTeleporter() {
+        return true;
+    }
 }

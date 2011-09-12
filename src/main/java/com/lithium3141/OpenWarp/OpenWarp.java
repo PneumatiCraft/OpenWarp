@@ -24,6 +24,7 @@ import org.bukkit.util.config.ConfigurationNode;
 import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
+import com.lithium3141.OpenWarp.util.MVConnector;
 import com.pneumaticraft.commandhandler.CommandHandler;
 
 /**
@@ -103,7 +104,7 @@ public class OpenWarp extends JavaPlugin {
 	    this.saveGlobalConfiguration();
 	    this.savePrivateConfiguration(player.getName());
 	}
-	
+	 
 	/**
      * Save global configurations and the individual configuration for the
      * provided player.
@@ -198,10 +199,18 @@ public class OpenWarp extends JavaPlugin {
 		// Start listening for events
 		this.loadListeners();
 		
+		// Enable Multiverse Support
+		this.enableMultiverseSupport();
+		
 		LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
 	}
-	
-	/**
+
+    private void enableMultiverseSupport() {
+        new MVConnector(this.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+        System.out.println("[OpenWarp] Found Multiverse 2, Support Enabled.");
+    }
+
+    /**
 	 * Load warps listed at the given ConfigurationNode into the given warps
 	 * map. Mutates the `target` argument.
 	 * 
