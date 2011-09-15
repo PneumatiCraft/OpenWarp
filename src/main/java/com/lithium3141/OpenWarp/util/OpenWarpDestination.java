@@ -96,7 +96,6 @@ public class OpenWarpDestination implements MVDestination {
         return new Vector();
     }
 
-    @Override
     public boolean useSafeTeleporter() {
         Warp w = this.plugin.getWarp(null, this.warpName);
         if (w != null)
