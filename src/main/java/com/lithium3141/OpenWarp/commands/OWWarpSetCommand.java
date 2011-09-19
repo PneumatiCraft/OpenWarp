@@ -50,6 +50,20 @@ public class OWWarpSetCommand extends OWCommand {
             return;
         }
         
+        // See if warp exists already - this affects quota checking
+        System.out.println("Checking for warp '" + args.get(0) + "' in " + warpType + " warps for player " + player.getName());
+        boolean warpExists = false;
+        if(warpType.equals("public")) {
+            if(this.getPlugin().getPublicWarps().get(args.get(0)) != null) {
+                warpExists = true;
+            }
+        } else if(warpType.equals("private")) {
+            if(this.getPlugin().getPrivateWarps().get(player.getName()).get(args.get(0)) != null) {
+                warpExists = true;
+            }
+        }
+        System.out.println("warp exists: " + warpExists);
+
         // Check quota
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
         int quota = Integer.MAX_VALUE;
@@ -57,7 +71,7 @@ public class OWWarpSetCommand extends OWCommand {
             if(quotaManager.getPublicWarpQuota(player) >= 0) {
                 quota = quotaManager.getPublicWarpQuota(player);
             }
-            if(quotaManager.getPublicWarpCount(player) >= quota) {
+            if(quotaManager.getPublicWarpCount(player) >= quota && !warpExists) {
                 player.sendMessage(ChatColor.RED + "You are at your quota (" + quota + ") for public warps.");
                 return;
             }
@@ -65,7 +79,7 @@ public class OWWarpSetCommand extends OWCommand {
             if(quotaManager.getPrivateWarpQuota(player) >= 0) {
                 quota = quotaManager.getPrivateWarpQuota(player);
             }
-            if(quotaManager.getPrivateWarpCount(player) >= quota) {
+            if(quotaManager.getPrivateWarpCount(player) >= quota && !warpExists) {
                 player.sendMessage(ChatColor.RED + "You are at your quota (" + quota + ") for private warps.");
                 return;
             }
