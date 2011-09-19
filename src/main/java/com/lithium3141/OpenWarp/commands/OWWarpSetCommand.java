@@ -87,12 +87,13 @@ public class OWWarpSetCommand extends OWCommand {
         
         // Create and set warp
         Warp warp = new Warp(this.getPlugin(), args.get(0), playerLoc, player.getName());
+        String successMsg = (warpExists ? "Moved" : "Created new");
         if(warpType.equals("public")) {
             this.getPlugin().getPublicWarps().put(warp.getName(), warp);
-            player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Created new public warp '" + warp.getName() + "'");
+            player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " public warp '" + warp.getName() + "'");
         } else if(warpType.equals("private")) {
             this.getPlugin().getPrivateWarps().get(player.getName()).put(warp.getName(), warp);
-            player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Created new private warp '" + warp.getName() + "'");
+            player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " private warp '" + warp.getName() + "'");
         }
         
         // Create permission for warp
