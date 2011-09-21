@@ -10,12 +10,23 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.pneumaticraft.commandhandler.PermissionsInterface;
 
+/**
+ * Utility class to handle permissions checks for OpenWarp. Implements basic
+ * functionality required by CommandHandler for permissions checking and
+ * command dispatch. Interfaces with both SuperPerms-based systems and old
+ * Permissions plugins.
+ */
 public class OWPermissionsHandler implements PermissionsInterface {
     
     private OpenWarp plugin;
     
     private PermissionHandler permissionHandler;
     
+    /**
+     * Create a new permissions handler for the given OpenWarp instance.
+     *
+     * @param plugin The OpenWarp instance for which to handle permissions.
+     */
     public OWPermissionsHandler(OpenWarp plugin) {
         this.plugin = plugin;
         
