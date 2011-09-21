@@ -5,7 +5,22 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+/**
+ * Utility class for determining "safe" teleport targets. In general, this class
+ * exists to provide static methods for performing teleports without injuring
+ * a player.
+ * <p>
+ * A location is declared "safe" if it consists of a non-air block below two
+ * air blocks. Note that this is a far cry from Multiverse's definition of "safe."
+ */
 public class BlockSafety {
+    /**
+     * Find the next safe block up from the given block. Searches in the positive
+     * Y-direction up to Y=127.
+     *
+     * @param block The Block at which to start searching.
+     * @return The next safe Location up from the given Block, inclusive.
+     */
     public static Location safeNextUpFrom(Block block) {
         if(block == null) return null;
         
@@ -42,6 +57,13 @@ public class BlockSafety {
         return result;
     }
     
+    /**
+     * Find the next safe block down from the given block. Searches in the negative
+     * Y-direction down to Y=0.
+     *
+     * @param block The Block at which to start searching.
+     * @return The next safe Location down from the given Block, inclusive.
+     */
     public static Location safeNextDownFrom(Block block) {
         if(block == null) return null;
         
@@ -78,6 +100,13 @@ public class BlockSafety {
         return result;
     }
     
+    /**
+     * Find the safe block closest to the top of the world from the given Location.
+     * Searches in the negative Y-direction starting at Y=127 down to the given location.
+     *
+     * @param loc The Location at which to stop searching.
+     * @return The highest safe Location sharing a column with the given Location.
+     */
     public static Location safeTopFrom(Location loc) {
         int x = loc.getBlockX();
         int y = loc.getBlockY();
