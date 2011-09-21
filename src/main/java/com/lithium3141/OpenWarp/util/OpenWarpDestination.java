@@ -10,6 +10,10 @@ import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
 import com.onarandombox.utils.MVDestination;
 
+/**
+ * Multiverse 2 destination type for OpenWarp. Allows users of both Multiverse
+ * and OpenWarp to use Multiverse commands to move to OpenWarp warps.
+ */
 public class OpenWarpDestination implements MVDestination {
 
     private OpenWarp plugin;
@@ -96,6 +100,11 @@ public class OpenWarpDestination implements MVDestination {
         return new Vector();
     }
 
+    /**
+     * Check whether to use Multiverse's safe teleporter.
+     *
+     * @return True.
+     */
     public boolean useSafeTeleporter() {
         Warp w = this.plugin.getWarp(null, this.warpName);
         if (w != null)
