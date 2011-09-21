@@ -22,12 +22,34 @@ import org.bukkit.util.config.ConfigurationNode;
 public class OWPlayerConfiguration {
 	
 	// Configuration filenames
+    /**
+     * File containing general configuration for the player.
+     */
 	public static final String GENERAL_CONFIG_FILENAME = "general.yml";
+
+    /**
+     * File containing warp listings and information for the player.
+     */
 	public static final String WARP_CONFIG_FILENAME = "warps.yml";
+    
+    /**
+     * File containing quota information for the player.
+     */
 	public static final String QUOTA_CONFIG_FILENAME = "quota.yml";
 	
+    /**
+     * Temporary warp name to encapsulate the home location in a configuration file.
+     */
 	public static final String TEMP_HOME_NAME = "_HOME";
+	
+    /**
+     * Temporary warp name to encapsulate the previous location in a configuration file.
+     */
 	public static final String TEMP_BACK_NAME = "_BACK";
+	
+    /**
+     * Temporary warp name to encapsulate the warp stack in a configuration file.
+     */
 	public static final String TEMP_STACK_NAME = "_STACK";
 	
 	// Instance variables
