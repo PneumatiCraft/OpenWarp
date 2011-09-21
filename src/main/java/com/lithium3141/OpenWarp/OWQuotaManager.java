@@ -287,7 +287,7 @@ public class OWQuotaManager {
      * @return The number of private warps owned by the given Player.
      * @see #getPrivateWarpCount(String)
      */
-    private int getPrivateWarpCount(Player player) {
+    public int getPrivateWarpCount(Player player) {
         return this.getPrivateWarpCount(player.getName());
     }
 }
