@@ -8,16 +8,43 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.pneumaticraft.commandhandler.Command;
 
+/**
+ * Abstract parent class for all executable commands in OpenWarp. Every command
+ * handled by OpenWarp is a concrete subclass of OWCommand, which itself subclasses
+ * CommandHandler's Command class.
+ */
 public abstract class OWCommand extends Command {
     
+    /**
+     * Instantiate a command backed by the given plugin. The plugin is used
+     * in subclasses for various queries back into Bukkit.
+     *
+     * @param plugin The plugin used for Bukkit calls in concrete command
+     * subclasses.
+     */
 	public OWCommand(JavaPlugin plugin) {
         super(plugin);
     }
 	
+    /**
+     * Get this OWCommand's plugin. Casts the plugin passed in the constructor
+     * to an instance of OpenWarp.
+     *
+     * @see #OWCommand(JavaPlugin)
+     *
+     * @return The OpenWarp plugin instance handling this OWCommand.
+     */
 	public OpenWarp getPlugin() {
 	    return (OpenWarp)this.plugin;
 	}
 	
+    /**
+     * Check if the sender of this OWCommand is a Player. If the sender is not a
+     * Player, send an error message back.
+     *
+     * @param sender The CommandSender to check.
+     * @return true if the sender is a Player; false otherwise.
+     */
 	public boolean checkPlayerSender(CommandSender sender) {
 	    if(sender instanceof ConsoleCommandSender) {
             sender.sendMessage(ChatColor.RED + "Command must be run in-game!");
