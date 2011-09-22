@@ -1,10 +1,13 @@
 package com.lithium3141.OpenWarp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
 /**
@@ -47,6 +50,12 @@ public class Warp {
      * warps.
      */
 	protected String owner;
+
+    /**
+     * The names of players invited to this Warp. Only truly applicable for private
+     * warps.
+     */
+    protected List<String> invitees;
 	
     /**
      * Configuration key for the World component of this Warp's Location.
@@ -98,6 +107,8 @@ public class Warp {
 		this.name = name;
 		
 		this.parseConfiguration(node);
+
+        this.invitees = new ArrayList<String>();
 	}
 	
     /**
@@ -114,6 +125,7 @@ public class Warp {
 	    this.name = name;
 	    this.location = location;
 	    this.owner = owner;
+        this.invitees = new ArrayList<String>();
 	}
 	
     /**
@@ -208,6 +220,80 @@ public class Warp {
 	public String getOwner() {
 	    return this.owner;
 	}
+
+    /**
+     * Get the list of people invited to this Warp. Only applicable for private warps;
+     * regardless of return value, a public warp will be accessible to players.
+     *
+     * @return A List of player names who may access this Warp through an invite.
+     */
+    public List<String> getInvitees() {
+        return this.invitees;
+    }
+
+    /**
+     * Check whether the given Player is invited to this Warp. Calls #isInvited(String)
+     * internally. Only applicable for private warps; regardless of return value, a
+     * public warp will be accessible to the provided Player.
+     *
+     * @param player The Player to check for invite status.
+     * @return True if the Player is invited to this Warp; false otherwise.
+     */
+    public boolean isInvited(Player player) {
+        return this.isInvited(player.getName());
+    }
+
+    /**
+     * Check whether the given player is invited to this Warp. Only applicable for
+     * private warps; regardless of return value, a public warp will be accessible to
+     * the provided player.
+     *
+     * @param playerName The player to check for invite status.
+     * @return True if the player is invited to this Warp; false otherwise.
+     */
+    public boolean isInvited(String playerName) {
+        return this.invitees.contains(playerName);
+    }
+
+    /**
+     * Invite the given Player to this Warp. Only applicable for private warps. Calls
+     * #addInvitee(String) internally.
+     *
+     * @param player The Player to invite to this Warp.
+     */
+    public void addInvitee(Player player) {
+        this.addInvitee(player.getName());
+    }
+
+    /**
+     * Invite the given player to this Warp. Only applicable for private warps.
+     *
+     * @param playerName The player to invite to this Warp.
+     */
+    public void addInvitee(String playerName) {
+        if(!this.invitees.contains(playerName)) {
+            this.invitees.add(playerName);
+        }
+    }
+
+    /**
+     * Uninvite the given Player from this Warp. Only applicable for private warps.
+     * Calls #removeInvitee(String) internally.
+     *
+     * @param player The Player to uninvite from this Warp.
+     */
+    public void removeInvitee(Player player) {
+        this.removeInvitee(player.getName());
+    }
+
+    /**
+     * Uninvite the given player from this Warp. Only applicable for private warps.
+     *
+     * @param playerName The player to uninvite from this Warp.
+     */
+    public void removeInvitee(String playerName) {
+        this.invitees.remove(playerName);
+    }
 	
     /**
      * Get a Map suitable for writing to a configuration file that represents
