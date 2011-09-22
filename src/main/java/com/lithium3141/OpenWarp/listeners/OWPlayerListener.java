@@ -1,5 +1,6 @@
 package com.lithium3141.OpenWarp.listeners;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -24,24 +25,44 @@ public class OWPlayerListener extends PlayerListener {
 	public OWPlayerListener(OpenWarp plugin) {
 		this.plugin = plugin;
 	}
+
+    /**
+     * The distance a player must travel to update their previous location.
+     */
+    public static final double FUZZ_FACTOR = 1.0;
 	
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
+        OpenWarp.DEBUG_LOG.fine("Player '" + player.getName() + "'joined.");
 		this.plugin.registerPlayerName(player.getName());
-		this.plugin.getLocationTracker().ignoreNextSets(player, 2);
 	}
 	
 	@Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        this.plugin.getLocationTracker().setPreviousLocation(event.getPlayer(), event.getFrom());
-        if(!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
-            this.plugin.getLocationTracker().ignoreNextSet(event.getPlayer());
+        OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "' teleported ( " + prettyLocation(event.getFrom()) + " -> " + prettyLocation(event.getTo()) + " ).");
+        if(event.isCancelled()) {
+            OpenWarp.DEBUG_LOG.fine("...cancelled!");
+        }
+        if(!locationsWithin(event.getFrom(), event.getTo(), FUZZ_FACTOR)) {
+            this.plugin.getLocationTracker().setPreviousLocation(event.getPlayer(), event.getFrom());
         }
     }
 	
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-	    this.plugin.getLocationTracker().ignoreNextSet(event.getPlayer());
+        OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "'respawned.");
 	}
+
+    private String prettyLocation(Location loc) {
+        return loc.getWorld().getName() + "(" + loc.getX() + "," + loc.getY() + "," + loc.getZ() + ")";
+    }
+
+    private boolean locationsWithin(Location l1, Location l2, double fuzz) {
+        try {
+            return l1.distance(l2) < fuzz;
+        } catch(IllegalArgumentException e) {
+            return false;
+        }
+    }
 }

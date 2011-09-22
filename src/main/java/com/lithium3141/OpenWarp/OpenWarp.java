@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
@@ -38,6 +39,7 @@ public class OpenWarp extends JavaPlugin {
 	// Logging info
 	public static final Logger LOG = Logger.getLogger("Minecraft");
 	public static final String LOG_PREFIX = "[OpenWarp] ";
+    public static final Logger DEBUG_LOG = Logger.getLogger("OpenWarpDebug");
 	
 	// Global config filenames
 	public static final String MASTER_CONFIG_FILENAME = "config.yml";
@@ -154,6 +156,9 @@ public class OpenWarp extends JavaPlugin {
 	public void onEnable() {
 		// Set up configuration folder if necessary
 		this.getDataFolder().mkdirs();
+
+        // Initialize debug log
+        this.setupDebugLog();
 		
 		// Create overall permission
 		this.getServer().getPluginManager().addPermission(new Permission("openwarp.*", PermissionDefault.OP));
@@ -204,6 +209,13 @@ public class OpenWarp extends JavaPlugin {
 		
 		LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
 	}
+
+    private void setupDebugLog() {
+        DEBUG_LOG.setLevel(Level.FINEST);
+        OWDebugHandler debugHandler = new OWDebugHandler(new File(this.getDataFolder(), "debug.log"));
+        debugHandler.setLevel(Level.FINEST);
+        DEBUG_LOG.addHandler(debugHandler);
+    }
 
     private void enableMultiverseSupport() {
         new MVConnector(this.getServer().getPluginManager().getPlugin("Multiverse-Core"));

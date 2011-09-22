@@ -27,6 +27,7 @@ public class OWEntityListener extends EntityListener {
     @Override
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
+            OpenWarp.DEBUG_LOG.fine("Player died.");
             Player player = (Player)(event.getEntity());
             this.plugin.getLocationTracker().setPreviousLocation(player, player.getLocation());
         }
