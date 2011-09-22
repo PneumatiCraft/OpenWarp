@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 public class OWLocationTracker {
     private Map<String, Location> previousLocations = new HashMap<String, Location>();
     private Map<String, Stack<Location>> locationStacks = new HashMap<String, Stack<Location>>();
-    private Map<String, Integer> ignoreNexts = new HashMap<String, Integer>();
     
     private OpenWarp plugin;
     
@@ -87,15 +86,8 @@ public class OWLocationTracker {
      * @param location The Location to record as "previous location."
      */
     public void setPreviousLocation(String playerName, Location location) {
-        if(!(this.ignoreNexts.containsKey(playerName) && this.ignoreNexts.get(playerName) > 0)) {
-            OpenWarp.DEBUG_LOG.fine("Setting previous location (" + playerName + "): " + location);
-            this.previousLocations.put(playerName, location);
-        }
-        if(this.ignoreNexts.containsKey(playerName)) {
-            this.ignoreNexts.put(playerName, this.ignoreNexts.get(playerName) - 1);            
-        } else {
-            this.ignoreNexts.put(playerName, 0);
-        }
+        OpenWarp.DEBUG_LOG.fine("Setting previous location (" + playerName + "): " + location);
+        this.previousLocations.put(playerName, location);
         this.plugin.saveConfigurations(playerName);
     }
     
@@ -116,68 +108,6 @@ public class OWLocationTracker {
      */
     public void clearPreviousLocation(String playerName) {
         this.previousLocations.remove(playerName);
-    }
-    
-    /**
-     * Ignore the next call to #setPreviousLocation(String, Location) for the
-     * given Player. Calls #ignoreNextSet(String) internally.
-     * <p>
-     * This method is most often used when handling repeated or multiply-fired
-     * events from other plugins. It gives OpenWarp the ability to ignore spurious
-     * events that would otherwise set the previous location falsely.
-     *
-     * @param player The Player for whom to ignore the next previous location setting.
-     */
-    public void ignoreNextSet(Player player) {
-        this.ignoreNextSet(player.getName());
-    }
-    
-    /**
-     * Ignore the next call to #setPreviousLocation(String, Location) for the
-     * given Player.
-     * <p>
-     * This method is most often used when handling repeated or multiply-fired
-     * events from other plugins. It gives OpenWarp the ability to ignore spurious
-     * events that would otherwise set the previous location falsely.
-     *
-     * @param playerName The player for whom to ignore the next previous location setting.
-     */
-    public void ignoreNextSet(String playerName) {
-        if(this.ignoreNexts.containsKey(playerName)) {
-            this.ignoreNexts.put(playerName, this.ignoreNexts.get(playerName) - 1);
-        } else {
-            this.ignoreNexts.put(playerName, 1);
-        }
-    }
-    
-    /**
-     * Ignore the next calls to #setPreviousLocation(String, Location) for the
-     * given Player. Calls #ignoreNextSets(String, int) internally.
-     * <p>
-     * This method is most often used when handling repeated or multiply-fired
-     * events from other plugins. It gives OpenWarp the ability to ignore spurious
-     * events that would otherwise set the previous location falsely.
-     *
-     * @param player The Player for whom to ignore the next previous location setting.
-     * @param count The number of sets to ignore.
-     */
-    public void ignoreNextSets(Player player, int count) {
-        this.ignoreNextSets(player.getName(), count);
-    }
-    
-    /**
-     * Ignore the next calls to #setPreviousLocation(String, Location) for the
-     * given Player.
-     * <p>
-     * This method is most often used when handling repeated or multiply-fired
-     * events from other plugins. It gives OpenWarp the ability to ignore spurious
-     * events that would otherwise set the previous location falsely.
-     *
-     * @param playerName The player for whom to ignore the next previous location setting.
-     * @param count The number of sets to ignore.
-     */
-    public void ignoreNextSets(String playerName, int count) {
-        this.ignoreNexts.put(playerName, count);
     }
     
     /**
