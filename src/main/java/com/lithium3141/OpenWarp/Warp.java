@@ -91,6 +91,11 @@ public class Warp {
      * Configuration key for the owner name of this Warp.
      */
 	public static final String OWNER_KEY = "owner";
+
+    /**
+     * Configuration key for the invitee list of this Warp.
+     */
+    public static final String INVITEES_KEY = "invitees";
 	
     /**
      * Create a new Warp with the given name, deriving Location data from the given
@@ -107,8 +112,6 @@ public class Warp {
 		this.name = name;
 		
 		this.parseConfiguration(node);
-
-        this.invitees = new ArrayList<String>();
 	}
 	
     /**
@@ -159,6 +162,7 @@ public class Warp {
         this.location = new Location(world, x, y, z, yaw, pitch);
         
         this.owner = node.getString(OWNER_KEY, "");
+        this.invitees = node.getStringList(INVITEES_KEY, new ArrayList<String>());
 	}
 	
     /**
@@ -322,6 +326,7 @@ public class Warp {
 	    result.put(WORLD_KEY, this.location.getWorld().getName());
 	    
 	    result.put(OWNER_KEY, this.owner);
+        result.put(INVITEES_KEY, this.invitees);
 	    
 	    return result;
 	}

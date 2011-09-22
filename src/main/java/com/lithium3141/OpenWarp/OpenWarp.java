@@ -2,6 +2,7 @@ package com.lithium3141.OpenWarp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
 import com.lithium3141.OpenWarp.util.MVConnector;
+import com.lithium3141.OpenWarp.util.StringUtil;
 import com.pneumaticraft.commandhandler.CommandHandler;
 
 /**
@@ -453,6 +455,25 @@ public class OpenWarp extends JavaPlugin {
                 }
             }
         }
+
+        // If still no match, check shared warps
+        if(warpName.contains(":") && (sender instanceof Player)) {
+            String requester = ((Player)sender).getName();
+            String[] parts = warpName.split(":");
+            String recipient = parts[0];
+            warpName = StringUtil.arrayJoin(Arrays.copyOfRange(parts, 1, parts.length), ":");
+
+            if(this.getPrivateWarps().containsKey(recipient)) {
+                for(Entry<String, Warp> entry : this.getPrivateWarps().get(recipient).entrySet()) {
+                    if(entry.getKey().equalsIgnoreCase(warpName)) {
+                        Warp warp = entry.getValue();
+                        if(warp.isInvited(requester)) {
+                            return warp;
+                        }
+                    }
+                }
+            }
+        }
         
         // No match
         return null;
@@ -485,7 +506,24 @@ public class OpenWarp extends JavaPlugin {
                 }
             }
         }
-        
+
+        // If still no match, check shared warps
+        if(sender instanceof Player) {
+            Player player = (Player)sender;
+            for(Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
+                String recipient = mapEntry.getKey();
+                if(recipient.equals(player.getName())) {
+                    continue;
+                }
+                for(Entry<String, Warp> entry : this.getPrivateWarps().get(recipient).entrySet()) {
+                    Warp warp = entry.getValue();
+                    if(location.equals(warp.getLocation()) && warp.isInvited(player)) {
+                        return warp;
+                    }
+                }
+            }
+        }
+
         // No match
         return null;
     }
