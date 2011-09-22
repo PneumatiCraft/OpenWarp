@@ -11,6 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
 
+/**
+ * Move to a particular warp. This command searches public warps, then
+ * the calling player's private warps. If no warp is found matching
+ * the requested name, prints a message and does nothing.
+ */
 public class OWWarpCommand extends OWCommand {
 
 	public OWWarpCommand(JavaPlugin plugin) {

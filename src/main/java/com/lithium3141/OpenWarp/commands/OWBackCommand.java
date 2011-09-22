@@ -11,6 +11,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
 
+/**
+ * Command for moving back to previous registered location. For the purposes
+ * of this command, "previous location" means the last location of a given
+ * player immediately before their most recent teleport or death. This includes
+ * teleports triggered by other plugins or commands, such as vanilla <code>/tp</code>
+ * or Multiverse portal teleports.
+ */
 public class OWBackCommand extends OWCommand {
 
     public OWBackCommand(JavaPlugin plugin) {

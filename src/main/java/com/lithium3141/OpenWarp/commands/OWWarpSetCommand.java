@@ -15,6 +15,12 @@ import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 import com.lithium3141.OpenWarp.Warp;
 
+/**
+ * Create a new warp or move an existing warp. Places the warp at
+ * the player's current location. Private warp names may overlap
+ * between different players. This command will fail if the setting
+ * player is at their warp quota for the specified warp type.
+ */
 public class OWWarpSetCommand extends OWCommand {
 
     public OWWarpSetCommand(JavaPlugin plugin) {

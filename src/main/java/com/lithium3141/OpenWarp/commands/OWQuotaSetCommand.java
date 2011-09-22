@@ -11,6 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 
+/**
+ * Set the quota for a certain type of warp, either globally or on
+ * a particular player. Warp quotas are managed using the OWQuotaManager
+ * class.
+ */
 public class OWQuotaSetCommand extends OWCommand {
 
     public OWQuotaSetCommand(JavaPlugin plugin) {

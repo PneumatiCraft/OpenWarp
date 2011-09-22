@@ -13,6 +13,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.util.BlockSafety;
 
+/**
+ * Command to jump to the block under a player's reticle. OpenWarp will
+ * match the targeted block as precisely as it can, but may move a player
+ * upwards (in the positive Y-direction) until they reach a "safe" location.
+ */
 public class OWJumpCommand extends OWCommand {
 
     public OWJumpCommand(JavaPlugin plugin) {
@@ -27,6 +32,9 @@ public class OWJumpCommand extends OWCommand {
         this.addKey("j");
     }
     
+    /**
+     * Error message displayed when failing to find a target block.
+     */
     public static final String JUMP_ERROR = "Error finding jump target block; please try again.";
 
     @Override

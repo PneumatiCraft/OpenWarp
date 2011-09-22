@@ -13,6 +13,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 
+/**
+ * Show a player's usage of their quotas. Displays both the
+ * quotas in effect on a player and their current usage of those
+ * quotas (e.g. 2 of 3 public warps).
+ */
 public class OWQuotaUsageCommand extends OWCommand {
 
     public OWQuotaUsageCommand(JavaPlugin plugin) {

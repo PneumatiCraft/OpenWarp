@@ -12,6 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
 
+/**
+ * Print the locations on a player's location stack. Locations are printed
+ * in reverse order; that is, the location on the top of the stack will
+ * be the last printed.
+ */
 public class OWStackPrintCommand extends OWCommand {
 
     public OWStackPrintCommand(JavaPlugin plugin) {

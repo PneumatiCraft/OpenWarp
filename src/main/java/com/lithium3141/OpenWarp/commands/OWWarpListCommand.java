@@ -13,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
 
+/**
+ * List all warps visible to a player. Separates public from private warps.
+ */
 public class OWWarpListCommand extends OWCommand {
 
 	public OWWarpListCommand(JavaPlugin plugin) {

@@ -12,6 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.util.BlockSafety;
 
+/**
+ * Move to the top safe location in the player's current (x,z) column.
+ */
 public class OWTopCommand extends OWCommand {
 
     public OWTopCommand(JavaPlugin plugin) {

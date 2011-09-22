@@ -11,6 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
 
+/**
+ * Push a location onto a player's location stack. If the command is
+ * given a warp name, pushes that location; otherwise, pushes the player's
+ * current location.
+ */
 public class OWStackPushCommand extends OWCommand {
 
     public OWStackPushCommand(JavaPlugin plugin) {

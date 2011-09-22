@@ -12,6 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
 
+/**
+ * Command for setting a player's home. A player may only set one
+ * home overall, rather than one per world. Players move to their homes
+ * using OWHomeCommand.
+ */
 public class OWHomeSetCommand extends OWCommand {
 
     public OWHomeSetCommand(JavaPlugin plugin) {

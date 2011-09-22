@@ -11,6 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
 
+/**
+ * Deletes a warp owned by the player. Searches the player's public
+ * warps first, then private warps.
+ */
 public class OWWarpDeleteCommand extends OWCommand {
 
     public OWWarpDeleteCommand(JavaPlugin plugin) {

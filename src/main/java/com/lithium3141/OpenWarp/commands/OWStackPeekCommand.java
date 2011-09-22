@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Move to the location stored on top of a player's location stack, without
+ * removing that location from the stack.
+ */
 public class OWStackPeekCommand extends OWStackPopCommand {
 
     public OWStackPeekCommand(JavaPlugin plugin) {

@@ -13,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 
+/**
+ * Show the quotas in effect on a player.
+ */
 public class OWQuotaShowCommand extends OWCommand {
 
     public OWQuotaShowCommand(JavaPlugin plugin) {

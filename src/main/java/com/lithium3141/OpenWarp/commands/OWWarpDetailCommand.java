@@ -10,6 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
 
+/**
+ * Prints information about a warp visible to a player.
+ */
 public class OWWarpDetailCommand extends OWCommand {
 
     public OWWarpDetailCommand(JavaPlugin plugin) {

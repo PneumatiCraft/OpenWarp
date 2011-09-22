@@ -12,6 +12,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
 
+/**
+ * Move to the location on top of a player's location stack and remove
+ * that location from the stack. If the stack is empty, does nothing.
+ */
 public class OWStackPopCommand extends OWCommand {
 
     public OWStackPopCommand(JavaPlugin plugin) {
