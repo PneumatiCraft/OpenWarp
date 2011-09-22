@@ -437,6 +437,10 @@ public class OpenWarp extends JavaPlugin {
      *          or (3) null.
      */
     public Warp getWarp(CommandSender sender, String warpName) {
+        if(sender instanceof Player) {
+            DEBUG_LOG.finer(((Player)sender).getName() + " requests warp '" + warpName + "'");
+        }
+
         // First check public warps
         for(Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
             String name = entry.getKey();
@@ -462,13 +466,16 @@ public class OpenWarp extends JavaPlugin {
             String[] parts = warpName.split(":");
             String recipient = parts[0];
             warpName = StringUtil.arrayJoin(Arrays.copyOfRange(parts, 1, parts.length), ":");
+            DEBUG_LOG.finest("Checking shared warps; want player '" + recipient + "' and warp '" + warpName + "'");
 
-            if(this.getPrivateWarps().containsKey(recipient)) {
-                for(Entry<String, Warp> entry : this.getPrivateWarps().get(recipient).entrySet()) {
-                    if(entry.getKey().equalsIgnoreCase(warpName)) {
-                        Warp warp = entry.getValue();
-                        if(warp.isInvited(requester)) {
-                            return warp;
+            for(Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
+                if(mapEntry.getKey().equalsIgnoreCase(recipient)) {
+                    for(Entry<String, Warp> entry : mapEntry.getValue().entrySet()) {
+                        if(entry.getKey().equalsIgnoreCase(warpName)) {
+                            Warp warp = entry.getValue();
+                            if(warp.isInvited(requester)) {
+                                return warp;
+                            }
                         }
                     }
                 }
