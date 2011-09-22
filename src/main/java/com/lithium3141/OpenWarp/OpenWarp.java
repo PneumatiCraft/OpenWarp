@@ -442,7 +442,7 @@ public class OpenWarp extends JavaPlugin {
      * @param sender The sender for whom to check for warps
      * @param location The location of the warp to find
      * @return The matching warp, if found
-     * @see getWarp(CommandSender, String)
+     * @see #getWarp(CommandSender, String)
      */
     public Warp getWarp(CommandSender sender, Location location) {
         // First check public warps
