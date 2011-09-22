@@ -2,6 +2,7 @@ package com.lithium3141.OpenWarp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,15 +47,16 @@ public class OpenWarp extends JavaPlugin {
 	public static final String PUBLIC_WARP_CONFIG_FILENAME = "warps.yml";
 	
 	// Config key names
-	public static final String PLAYER_NAMES_LIST_KEY = "players";
-	public static final String WARPS_LIST_KEY = "warps";
-	public static final String QUOTAS_KEY = "quotas";
+    public static final String PLAYER_NAMES_LIST_KEY = "players";
+    public static final String WARPS_LIST_KEY = "warps";
+    public static final String QUOTAS_KEY = "quotas";
     public static final String QUOTA_PUBLIC_KEY = "public";
     public static final String QUOTA_PRIVATE_KEY = "private";
     public static final String HOME_KEY = "home";
     public static final String BACK_KEY = "back";
     public static final String STACK_KEY = "stack";
-	
+    public static final String DEBUG_KEY = "debug";
+
 	// Global configuration variables
 	public Configuration configuration;
 	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>(); // player name => config
@@ -139,6 +141,9 @@ public class OpenWarp extends JavaPlugin {
             
             // Save global quotas
             this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
+
+            // Save debug flag
+            this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
 	    }
 	}
 	
@@ -157,9 +162,6 @@ public class OpenWarp extends JavaPlugin {
 		// Set up configuration folder if necessary
 		this.getDataFolder().mkdirs();
 
-        // Initialize debug log
-        this.setupDebugLog();
-		
 		// Create overall permission
 		this.getServer().getPluginManager().addPermission(new Permission("openwarp.*", PermissionDefault.OP));
 		Permission wildcardPerm = this.getServer().getPluginManager().getPermission("*");
@@ -177,6 +179,9 @@ public class OpenWarp extends JavaPlugin {
 		
 		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
 		this.publicWarpsConfig.load();
+		
+        // Initialize debug log
+        this.setupDebugLog();
 		
 		// Read warp names
         this.loadWarps(this.publicWarpsConfig, this.publicWarps);
@@ -211,10 +216,15 @@ public class OpenWarp extends JavaPlugin {
 	}
 
     private void setupDebugLog() {
-        DEBUG_LOG.setLevel(Level.FINEST);
+        boolean useDebug = this.configuration.getBoolean(DEBUG_KEY, false);
+        Level logLevel = (useDebug ? Level.FINEST : Level.OFF);
+
+        DEBUG_LOG.setLevel(logLevel);
         OWDebugHandler debugHandler = new OWDebugHandler(new File(this.getDataFolder(), "debug.log"));
-        debugHandler.setLevel(Level.FINEST);
+        debugHandler.setLevel(logLevel);
         DEBUG_LOG.addHandler(debugHandler);
+
+        DEBUG_LOG.fine("Enabled debug log at " + (new Date()).toString());
     }
 
     private void enableMultiverseSupport() {

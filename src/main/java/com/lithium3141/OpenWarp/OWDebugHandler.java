@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -27,9 +26,6 @@ public class OWDebugHandler extends Handler {
         } catch(IOException e) {
             OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't open debug log at " + file.getPath() + "; OpenWarp may not print debug messages.");
         }
-
-        this.out.println("Enabled debug logger at " + (new Date()).toString());
-        this.out.flush();
     }
 
     @Override
