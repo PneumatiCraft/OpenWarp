@@ -1,5 +1,6 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,8 +23,8 @@ public class OWWarpListCommand extends OWCommand {
 		super(plugin);
 		
 		this.setName("Warp set");
-        this.setArgRange(0, 2);
-        this.setCommandUsage("/warp list [public] [private]");
+        this.setArgRange(0, 3);
+        this.setCommandUsage("/warp list [public] [private] [invited]");
         this.addCommandExample("/warp list public");
         this.setPermission("openwarp.warp.list", "Show warps", PermissionDefault.TRUE);
         this.addKey("warp list");
@@ -34,9 +35,11 @@ public class OWWarpListCommand extends OWCommand {
 	public void runCommand(CommandSender sender, List<String> args) {
 	    boolean sendPublic = (args.size() == 0 || args.contains("public"));
 	    boolean sendPrivate = (args.size() == 0 || args.contains("private"));
+        boolean sendInvited = (args.size() == 0 || args.contains("invited"));
 	    
 	    if(sendPublic) this.sendPublicWarpsList(sender);
 	    if(sendPrivate) this.sendPrivateWarpsList(sender);
+        if(sendInvited) this.sendInvitedWarpsList(sender);
 	}
 	
 	private void sendPublicWarpsList(CommandSender sender) {
@@ -57,6 +60,30 @@ public class OWWarpListCommand extends OWCommand {
 	        }
 	    }
 	}
+
+    private void sendInvitedWarpsList(CommandSender sender) {
+        if(sender instanceof Player) {
+            Player player = (Player)sender;
+            List<Warp> invitedWarps = new ArrayList<Warp>();
+
+            for(Entry<String, Map<String, Warp>> mapEntry : this.getPlugin().getPrivateWarps().entrySet()) {
+                String targetName = mapEntry.getKey();
+                if(targetName.equals(player.getName())) {
+                    continue;
+                }
+
+                for(Entry<String, Warp> entry : mapEntry.getValue().entrySet()) {
+                    Warp warp = entry.getValue();
+                    if(warp.isInvited(player)) {
+                        System.out.println(player.getName() + " is invited to " + warp.getName() + " by " + warp.getOwner());
+                        invitedWarps.add(warp);
+                    }
+                }
+            }
+
+            sender.sendMessage(ChatColor.AQUA + "Invited:" + ChatColor.WHITE + this.formatInvitedWarpsList(invitedWarps));
+        }
+    }
 	
 	private String formatWarpsList(Map<String, Warp> list) {
 	    String result = "";
@@ -69,5 +96,17 @@ public class OWWarpListCommand extends OWCommand {
         }
 	    return result;
 	}
+
+    private String formatInvitedWarpsList(List<Warp> list) {
+        String result = "";
+        if(list.size() > 0) {
+            boolean even = false;
+            for(Warp warp : list) {
+                result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + warp.getOwner() + ":" + warp.getName();
+                even = !even;
+            }
+        }
+        return result;
+    }
 
 }
