@@ -6,9 +6,20 @@ import org.bukkit.event.entity.EntityListener;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 
+/**
+ * Entity listener for OpenWarp. Implements the <code>onEntityDeath</code>
+ * method in order to update player location histories; in turn, this allows
+ * OpenWarp to support players returning to death points with the <code>/back</code>
+ * command.
+ */
 public class OWEntityListener extends EntityListener {
     private OpenWarp plugin;
     
+    /**
+     * Create a new OWEntityListener backed by the given OpenWarp instance.
+     *
+     * @param plugin The OpenWarp instance used for various Bukkit queries.
+     */
     public OWEntityListener(OpenWarp plugin) {
         this.plugin = plugin;
     }

@@ -8,9 +8,19 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 
+/**
+ * Player listener for OpenWarp. Watches for player join, teleport, and respawn
+ * for various player location history updates. Allows use of the <code>/back</code>
+ * command.
+ */
 public class OWPlayerListener extends PlayerListener {
 	private OpenWarp plugin;
 	
+    /**
+     * Create a new OWPlayerListener backed by the given OpenWarp instance.
+     *
+     * @param plugin The OpenWarp instance used for various Bukkit queries.
+     */
 	public OWPlayerListener(OpenWarp plugin) {
 		this.plugin = plugin;
 	}
