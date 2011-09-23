@@ -81,7 +81,7 @@ public class OWWarpListCommand extends OWCommand {
                 }
             }
 
-            sender.sendMessage(ChatColor.AQUA + "Invited:" + ChatColor.WHITE + this.formatInvitedWarpsList(invitedWarps));
+            sender.sendMessage(ChatColor.GOLD + "Invited:" + ChatColor.WHITE + this.formatInvitedWarpsList(invitedWarps));
         }
     }
 	

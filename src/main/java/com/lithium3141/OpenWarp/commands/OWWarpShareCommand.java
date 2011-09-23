@@ -45,8 +45,8 @@ public class OWWarpShareCommand extends OWCommand {
         
         Player sharePlayer = this.getPlugin().getServer().getPlayer(sharePlayerName);
         if(sharePlayer != null) {
-            sharePlayer.sendMessage(ChatColor.GREEN + player.getName() + " has shared warp '" + warpName + "' with you!");
-            sharePlayer.sendMessage(ChatColor.GREEN + "Access via: /warp " + player.getName() + ":" + warpName);
+            sharePlayer.sendMessage(ChatColor.GOLD + player.getName() + " has shared warp '" + warpName + "' with you!");
+            sharePlayer.sendMessage(ChatColor.GOLD + "Access via: /warp " + player.getName() + ":" + warpName);
         }
     }
     
