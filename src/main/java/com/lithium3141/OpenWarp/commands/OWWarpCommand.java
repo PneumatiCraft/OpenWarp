@@ -44,7 +44,7 @@ public class OWWarpCommand extends OWCommand {
         }
 	    
 	    // Verify actual permission to access the warp
-        if(target.getOwner().equalsIgnoreCase(player.getName())) {
+        if(target.getOwner().equalsIgnoreCase(player.getName()) || target.isPublic()) {
 	        String permString = "openwarp.warp.access.*";
 	        if(target.isPublic()) {
 	            permString ="openwarp.warp.access.public." + warpName;
