@@ -343,6 +343,7 @@ public class OpenWarp extends JavaPlugin {
 		this.commandHandler.registerCommand(new OWWarpSetCommand(this));
 		this.commandHandler.registerCommand(new OWWarpDeleteCommand(this));
         this.commandHandler.registerCommand(new OWWarpShareCommand(this));
+        this.commandHandler.registerCommand(new OWWarpUnshareCommand(this));
 		
 		this.commandHandler.registerCommand(new OWHomeCommand(this));
 		this.commandHandler.registerCommand(new OWHomeSetCommand(this));
