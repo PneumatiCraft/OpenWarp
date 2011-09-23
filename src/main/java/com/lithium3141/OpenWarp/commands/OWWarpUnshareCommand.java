@@ -12,7 +12,7 @@ import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
 
 /**
- * Share a private warp with another player.
+ * Stop sharing a private warp with another player.
  */
 public class OWWarpUnshareCommand extends OWCommand {
 
