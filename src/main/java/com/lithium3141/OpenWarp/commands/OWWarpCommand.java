@@ -32,6 +32,7 @@ public class OWWarpCommand extends OWCommand {
 	@Override
 	public void runCommand(CommandSender sender, List<String> args) {
 	    if(!this.checkPlayerSender(sender)) return;
+	    Player player = (Player)sender;
 	    
 	    // Locate the warp
 	    String warpName = args.get(0);
@@ -42,19 +43,27 @@ public class OWWarpCommand extends OWCommand {
         }
 	    
 	    // Verify actual permission to access the warp
-	    String permString = "openwarp.warp.access.*";
-	    if(target.isPublic()) {
-	        permString ="openwarp.warp.access.public." + warpName;
-	    } else {
-	        permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
-	    }
-	    if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
-	        sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
-	        return;
-	    }
+        if(target.getOwner().equalsIgnoreCase(player.getName())) {
+	        String permString = "openwarp.warp.access.*";
+	        if(target.isPublic()) {
+	            permString ="openwarp.warp.access.public." + warpName;
+	        } else {
+	            permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
+	        }
+	        if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
+	            sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
+	            return;
+	        }
+        } else {
+            if(!target.isInvited(player)) {
+	            sender.sendMessage(ChatColor.RED + "You aren't invited to move to warp: " + warpName);
+                OpenWarp.DEBUG_LOG.warning("OpenWarp#getWarp() returned warp neither owned or invited. Possible bug.");
+                OpenWarp.DEBUG_LOG.warning("    Sender:" + player.getName() + " Warp:" + target.getName() + "Owner:" + target.getOwner());
+	            return;
+            }
+        }
 	    
 	    // Move to warp
-	    Player player = (Player)sender;
 	    if(target.getLocation().getWorld() == null) {
 	        sender.sendMessage(ChatColor.RED + "The target location's world is null - this is a bug!");
 	    }
