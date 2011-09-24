@@ -3,6 +3,7 @@ package com.lithium3141.OpenWarp.commands;
 import java.util.List;
 import java.util.Stack;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,6 +38,11 @@ public class OWStackPrintCommand extends OWCommand {
         
         Stack<Location> locations = this.getPlugin().getLocationTracker().getLocationStack(player);
         
+        if(locations.size() == 0) {
+            sender.sendMessage(ChatColor.YELLOW + "Your warp stack is currently empty.");
+            return;
+        }
+
         for(Location location : locations) {
             sender.sendMessage(this.formatLocation(player, location));
         }
