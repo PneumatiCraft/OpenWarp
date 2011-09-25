@@ -120,7 +120,7 @@ public class OWPlayerConfiguration {
 		// Home
 		ConfigurationNode homeNode = this.generalConfig.getNode(OpenWarp.HOME_KEY);
 		if(homeNode != null) {
-		    this.plugin.getHomes().put(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
+            this.plugin.setDefaultHome(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
 		}
 		
 		// Back
@@ -159,8 +159,8 @@ public class OWPlayerConfiguration {
 	    this.warpConfig.setProperty(OpenWarp.WARPS_LIST_KEY, configWarps);
 	    
 	    // Home
-	    if(this.plugin.getHomes().get(this.playerName) != null) {
-	        Map<String, Object> homeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, this.plugin.getHomes().get(this.playerName), this.playerName).getConfigurationMap();
+	    if(this.plugin.getDefaultHome(this.playerName) != null) {
+	        Map<String, Object> homeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, this.plugin.getDefaultHome(this.playerName), this.playerName).getConfigurationMap();
 	        if(homeWarpConfig != null) {
 	            this.generalConfig.setProperty(OpenWarp.HOME_KEY, homeWarpConfig);
 	        } else {

@@ -23,8 +23,8 @@ public class OWHomeSetCommand extends OWCommand {
         super(plugin);
         
         this.setName("Set home");
-        this.setArgRange(0, 0);
-        this.setCommandUsage("/home set");
+        this.setArgRange(0, 1);
+        this.setCommandUsage("/home set [default]");
         this.addCommandExample("/home set");
         this.setPermission("openwarp.home.set", "Set a new home", PermissionDefault.TRUE);
         this.addKey("home set");
@@ -36,7 +36,12 @@ public class OWHomeSetCommand extends OWCommand {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
         
-        this.getPlugin().getHomes().put(player.getName(), player.getLocation());
+        if(args.size() == 0) {
+            this.getPlugin().setHome(player, player.getLocation().getWorld(), player.getLocation());
+        } else {
+            this.getPlugin().setDefaultHome(player, player.getLocation());
+        }
+
         this.getPlugin().saveConfigurations(player);
         
         player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Set your home to your current location.");

@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -57,6 +58,7 @@ public class OpenWarp extends JavaPlugin {
     public static final String HOME_KEY = "home";
     public static final String BACK_KEY = "back";
     public static final String STACK_KEY = "stack";
+    public static final String MULTIWORLD_HOMES_KEY = "multiworld_homes";
     public static final String DEBUG_KEY = "debug";
 
 	// Global configuration variables
@@ -66,7 +68,7 @@ public class OpenWarp extends JavaPlugin {
 	public Configuration publicWarpsConfig;
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
 	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
-	private Map<String, Location> homes = new HashMap<String, Location>(); // player name => home
+	private Map<String, Map<String, Location>> homes = new HashMap<String, Map<String, Location>>(); // player name => (world name => home), world name == null implies "default" home
 	
 	private OWQuotaManager quotaManager;
 	
@@ -144,7 +146,8 @@ public class OpenWarp extends JavaPlugin {
             // Save global quotas
             this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
 
-            // Save debug flag
+            // Save flags
+            this.configuration.setProperty(MULTIWORLD_HOMES_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
             this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
 	    }
 	}
@@ -311,8 +314,7 @@ public class OpenWarp extends JavaPlugin {
 	    PluginManager pm = this.getServer().getPluginManager();
 	    
 	    Map<String, Boolean> homeAccessChildren = new HashMap<String, Boolean>();
-	    for(Entry<String, Location> entry : this.getHomes().entrySet()) {
-	        String playerName = entry.getKey();
+	    for(String playerName : this.homes.keySet()) {
 	        String permString = "openwarp.home.access." + playerName;
 	        
 	        Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
@@ -413,7 +415,7 @@ public class OpenWarp extends JavaPlugin {
         return this.getPrivateWarps().get(playerName);
     }
 	
-	public Map<String, Location> getHomes() {
+	public Map<String, Map<String, Location>> getHomes() {
 	    return this.homes;
 	}
 	
@@ -535,6 +537,111 @@ public class OpenWarp extends JavaPlugin {
 
         // No match
         return null;
+    }
+
+    /**
+     * Get the home for the given player in the given world. If no such home for the player
+     * exists in the specified world, returns the default home for that player; if that
+     * home does not exist, returns null. Notably, this method will not search other worlds
+     * for a home if no default home is set.
+     *
+     * @param playerName The player for whom to fetch a home.
+     * @param worldName The world within which to search for the player's home.
+     * @return A Location for the located home or null if no such home exists.
+     */
+    public Location getHome(String playerName, String worldName) {
+        DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
+        this.debugHomes();
+        
+        if(!this.homes.containsKey(playerName)) {
+            DEBUG_LOG.finer("    ...no such player");
+            return null;
+        }
+
+        Map<String, Location> playerHomes = this.homes.get(playerName);
+        if(playerHomes == null) {
+            DEBUG_LOG.finer("    ...player registered, but has no homes map");
+            return null;
+        }
+
+        if(playerHomes.containsKey(worldName)) {
+            DEBUG_LOG.finer("    ...located specific warp in world");
+            return playerHomes.get(worldName);
+        } else {
+            DEBUG_LOG.finer("    ...no specific warp; returning default warp");
+            return playerHomes.get(null);
+        }
+    }
+
+    public Location getHome(Player player, String worldName) {
+        return this.getHome(player.getName(), worldName);
+    }
+
+    public Location getHome(String playerName, World world) {
+        return this.getHome(playerName, world.getName());
+    }
+
+    public Location getHome(Player player, World world) {
+        return this.getHome(player.getName(), world.getName());
+    }
+
+    /**
+     * Get the default home for the given player.
+     *
+     * @param playerName The player for whom to fetch a home.
+     * @return The default home for the player, or null if none is set.
+     */
+    public Location getDefaultHome(String playerName) {
+        return this.getHome(playerName, (String)null);
+    }
+
+    public Location getDefaultHome(Player player) {
+        return this.getDefaultHome(player.getName());
+    }
+
+    /**
+     * Set the home for the given player in the given world. TODO finish this doc.
+     *
+     * @param playerName The player for whom to set the home.
+     * @param worldName The world in which to set the home; use null for default.
+     * @param home The new Location to use for the home.
+     * @return The Location being replaced, if any; null otherwise.
+     */
+    public Location setHome(String playerName, String worldName, Location home) {
+        DEBUG_LOG.fine("Setting home for player '" + playerName + "' in world '" + worldName + "'");
+
+        if(!this.homes.containsKey(playerName)) {
+            DEBUG_LOG.finer("    ...adding new player map");
+            this.homes.put(playerName, new HashMap<String, Location>());
+        }
+
+        if(this.homes.get(playerName).size() == 0) {
+            this.homes.get(playerName).put(null, home);
+        }
+        return this.homes.get(playerName).put(worldName, home);
+    }
+
+    public Location setHome(Player player, World world, Location home) {
+        return this.setHome(player.getName(), world.getName(), home);
+    }
+
+    public Location setDefaultHome(String playerName, Location home) {
+        return this.setHome(playerName, null, home);
+    }
+
+    public Location setDefaultHome(Player player, Location home) {
+        return this.setDefaultHome(player.getName(), home);
+    }
+
+    private void debugHomes() {
+        DEBUG_LOG.fine("Homes:");
+        for(String playerName : this.homes.keySet()) {
+            DEBUG_LOG.fine("    " + playerName + ":");
+            for(String worldName : this.homes.get(playerName).keySet()) {
+                Location home = this.homes.get(playerName).get(worldName);
+                DEBUG_LOG.fine("        " + worldName + ": (" + home.getX() + "," + home.getY() + "," + home.getZ() + ")");
+            }
+        }
     }
 
 }

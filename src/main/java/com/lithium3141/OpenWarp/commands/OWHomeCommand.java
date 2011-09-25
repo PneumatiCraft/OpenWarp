@@ -36,7 +36,7 @@ public class OWHomeCommand extends OWCommand {
         
         Location home = null;
         if(args.size() == 0) {
-            home = this.getPlugin().getHomes().get(player.getName());
+            home = this.getPlugin().getHome(player, player.getLocation().getWorld());
         } else if(args.size() == 1) {
             // Accessing a specific home - check perms if necessary
             if(!args.get(0).equals(player.getName())) {
@@ -47,7 +47,7 @@ public class OWHomeCommand extends OWCommand {
                 }
             }
             
-            home = this.getPlugin().getHomes().get(args.get(0));
+            home = this.getPlugin().getHome(args.get(0), player.getLocation().getWorld());
         }
         
         if(home == null) {
