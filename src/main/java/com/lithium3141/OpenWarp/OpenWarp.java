@@ -545,30 +545,48 @@ public class OpenWarp extends JavaPlugin {
      * home does not exist, returns null. Notably, this method will not search other worlds
      * for a home if no default home is set.
      *
+     * If OpenWarp is configured to not use multiworld homes, this method always returns
+     * the default home.
+     *
      * @param playerName The player for whom to fetch a home.
      * @param worldName The world within which to search for the player's home.
      * @return A Location for the located home or null if no such home exists.
      */
     public Location getHome(String playerName, String worldName) {
-        DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
-        this.debugHomes();
-        
-        if(!this.homes.containsKey(playerName)) {
-            DEBUG_LOG.finer("    ...no such player");
-            return null;
-        }
+        if(this.usingMultiworldHomes()) {
+            // Multiworld homes - get home for given world name
+            DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
+            this.debugHomes();
+            
+            if(!this.homes.containsKey(playerName)) {
+                DEBUG_LOG.finer("    ...no such player");
+                return null;
+            }
 
-        Map<String, Location> playerHomes = this.homes.get(playerName);
-        if(playerHomes == null) {
-            DEBUG_LOG.finer("    ...player registered, but has no homes map");
-            return null;
-        }
+            Map<String, Location> playerHomes = this.homes.get(playerName);
+            if(playerHomes == null) {
+                DEBUG_LOG.finer("    ...player registered, but has no homes map");
+                return null;
+            }
 
-        if(playerHomes.containsKey(worldName)) {
-            DEBUG_LOG.finer("    ...located specific warp in world");
-            return playerHomes.get(worldName);
+            if(playerHomes.containsKey(worldName)) {
+                DEBUG_LOG.finer("    ...located specific warp in world");
+                return playerHomes.get(worldName);
+            } else {
+                DEBUG_LOG.finer("    ...no specific warp; returning default warp");
+                return playerHomes.get(null);
+            }
         } else {
-            DEBUG_LOG.finer("    ...no specific warp; returning default warp");
+            // No multiworld homes - fetch default home
+            if(!this.homes.containsKey(playerName)) {
+                return null;
+            }
+
+            Map<String, Location> playerHomes = this.homes.get(playerName);
+            if(playerHomes == null) {
+                return null;
+            }
+
             return playerHomes.get(null);
         }
     }
@@ -608,17 +626,26 @@ public class OpenWarp extends JavaPlugin {
      * @return The Location being replaced, if any; null otherwise.
      */
     public Location setHome(String playerName, String worldName, Location home) {
-        DEBUG_LOG.fine("Setting home for player '" + playerName + "' in world '" + worldName + "'");
+        if(this.usingMultiworldHomes()) {
+            // Multiworld homes - save home under world name key
+            DEBUG_LOG.fine("Setting home for player '" + playerName + "' in world '" + worldName + "'");
 
-        if(!this.homes.containsKey(playerName)) {
-            DEBUG_LOG.finer("    ...adding new player map");
-            this.homes.put(playerName, new HashMap<String, Location>());
-        }
+            if(!this.homes.containsKey(playerName)) {
+                DEBUG_LOG.finer("    ...adding new player map");
+                this.homes.put(playerName, new HashMap<String, Location>());
+            }
 
-        if(this.homes.get(playerName).size() == 0) {
-            this.homes.get(playerName).put(null, home);
+            if(this.homes.get(playerName).size() == 0) {
+                this.homes.get(playerName).put(null, home);
+            }
+            return this.homes.get(playerName).put(worldName, home);
+        } else {
+            // No multiworld - place the home as the default (null key)
+            if(!this.homes.containsKey(playerName)) {
+                this.homes.put(playerName, new HashMap<String, Location>());
+            }
+            return this.homes.get(playerName).put(null, home);
         }
-        return this.homes.get(playerName).put(worldName, home);
     }
 
     public Location setHome(Player player, World world, Location home) {
@@ -633,6 +660,7 @@ public class OpenWarp extends JavaPlugin {
         return this.setDefaultHome(player.getName(), home);
     }
 
+    // TODO this method should go away.
     private void debugHomes() {
         DEBUG_LOG.fine("Homes:");
         for(String playerName : this.homes.keySet()) {
@@ -642,6 +670,17 @@ public class OpenWarp extends JavaPlugin {
                 DEBUG_LOG.fine("        " + worldName + ": (" + home.getX() + "," + home.getY() + "," + home.getZ() + ")");
             }
         }
+    }
+
+    /**
+     * Check whether this instance of OpenWarp is configured to use multiworld
+     * homes. Multiworld homes allow users to set a home in each world, rather than
+     * one overall; this feature is configured in the plugin YAML file.
+     *
+     * @return True if OpenWarp is using multiworld homes; false otherwise.
+     */
+    public boolean usingMultiworldHomes() {
+        return this.configuration.getBoolean(MULTIWORLD_HOMES_KEY, false);
     }
 
 }
