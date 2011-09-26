@@ -415,10 +415,6 @@ public class OpenWarp extends JavaPlugin {
         return this.getPrivateWarps().get(playerName);
     }
 	
-	public Map<String, Map<String, Location>> getHomes() {
-	    return this.homes;
-	}
-	
 	public OWLocationTracker getLocationTracker() {
 	    return this.locationTracker;
 	}
@@ -537,6 +533,23 @@ public class OpenWarp extends JavaPlugin {
 
         // No match
         return null;
+    }
+
+    /**
+     * Get the set of homes for the given player. Fetches all homes for the player
+     * across every world. This method is mostly useful in configuration writing
+     * and printing information about all a player's homes.
+     *
+     * @param playerName The player for whom to fetch world-specific homes.
+     * @return A Map of world names to home Location instances, or null if OpenWarp
+     * is not using multiworld homes.
+     */
+    public Map<String, Location> getWorldHomes(String playerName) {
+        if(!this.usingMultiworldHomes()) {
+            return null;
+        }
+
+        return this.homes.get(playerName);
     }
 
     /**

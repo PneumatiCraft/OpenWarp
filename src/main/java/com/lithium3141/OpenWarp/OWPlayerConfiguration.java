@@ -117,11 +117,19 @@ public class OWPlayerConfiguration {
 		}
 		this.plugin.loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 		
-		// Home
+		// Homes
 		ConfigurationNode homeNode = this.generalConfig.getNode(OpenWarp.HOME_KEY);
 		if(homeNode != null) {
             this.plugin.setDefaultHome(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
 		}
+
+        ConfigurationNode multiworldHomesNode = this.generalConfig.getNode(OpenWarp.MULTIWORLD_HOMES_KEY);
+        if(multiworldHomesNode != null) {
+            Map<String, Object> multiworldHomesMap = multiworldHomesNode.getAll();
+            System.out.println("DEBUG: HAVE " + multiworldHomesMap.size() + " HOMES");
+        } else {
+            System.out.println("DEBUG: NO MULTIWORLD HOMES");
+        }
 		
 		// Back
 		ConfigurationNode backNode = this.generalConfig.getNode(OpenWarp.BACK_KEY);
@@ -169,6 +177,23 @@ public class OWPlayerConfiguration {
 	            return true;
 	        }
 	    }
+
+        Map<String, Location> worldHomes = this.plugin.getWorldHomes(this.playerName);
+        if(worldHomes != null) {
+            for(String worldName : worldHomes.keySet()) {
+                Location worldHome = worldHomes.get(worldName);
+                String yamlKey = OpenWarp.MULTIWORLD_HOMES_KEY + "." + worldName;
+
+                Map<String, Object> worldHomeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, worldHome, this.playerName).getConfigurationMap();
+                if(worldHomeWarpConfig != null) {
+                    this.generalConfig.setProperty(yamlKey, worldHomeWarpConfig);
+                } else {
+                    OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to broken multiworld home");
+                    OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in some data loss! Check the warp configuration for " + this.playerName);
+                    return true;
+                }
+            }
+        }
 	    
 	    // Back
 	    if(this.plugin.getLocationTracker().getPreviousLocation(this.playerName) != null) {
