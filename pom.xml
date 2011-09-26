@@ -73,7 +73,15 @@
 							<token>maven-version-number</token>
 							<value>${project.version}-${project.build.number}</value>
 						</replacement>
-					</replacements>
+                        <replacement>
+                            <token>@BUILD@</token>
+                            <value>${BUILD_NUMBER}</value>
+                        </replacement>
+                        <replacement>
+                            <token>@COMMIT@</token>
+                            <value>${GIT_COMMIT}</value>
+                        </replacement>
+                    </replacements>
 				</configuration>
 			</plugin>
 			<!-- Jar Plugin -->
