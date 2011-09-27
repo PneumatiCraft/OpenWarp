@@ -127,6 +127,7 @@ public class OpenWarp extends JavaPlugin {
 	private void saveGlobalConfiguration() {
 	    if(this.configuration != null) {
 	        // Save overall configuration
+            DEBUG_LOG.fine("Writing global player name list with " + this.playerConfigs.keySet().size() + " elements");
             this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
             if(!this.configuration.save()) {
                 LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
@@ -175,15 +176,15 @@ public class OpenWarp extends JavaPlugin {
 		    wildcardPerm.recalculatePermissibles();
 		}
 		
-		// Start location tracking
-		this.locationTracker = new OWLocationTracker(this);
-		
 		// Get configuration file (even if nonexistent)
 		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
 		this.configuration.load();
 		
 		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
 		this.publicWarpsConfig.load();
+		
+		// Start location tracking
+		this.locationTracker = new OWLocationTracker(this);
 		
         // Initialize debug log
         this.setupDebugLog();
@@ -396,7 +397,7 @@ public class OpenWarp extends JavaPlugin {
 		List<String> keyPath = new ArrayList<String>();
 		keyPath.add(commandLabel.toLowerCase());
 		for(int i = 0; i < args.length; i++) {
-			keyPath.add(args[i].toLowerCase());
+			keyPath.add(args[i]);
 		}
 		
 		// Locate and run the best matching command from the key path

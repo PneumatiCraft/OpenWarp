@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.OWQuotaManager;
 
@@ -72,6 +73,7 @@ public class OWQuotaSetCommand extends OWCommand {
                 quotaMap = quotaManager.getPlayerMaxPrivateWarps();
             }
             
+            OpenWarp.DEBUG_LOG.fine("Setting warp quota for " + playerName + " to " + quota);
             if(quotaMap != null) {
                 quotaMap.put(playerName, quota);
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "set " + type + " warp quota for " + playerName + " to " + quota);
