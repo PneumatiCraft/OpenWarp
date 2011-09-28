@@ -38,6 +38,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             if(this.getPlugin().getPublicWarps().remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed public warp '" + warpName + "'");
                 permString = "openwarp.warp.access.public." + warpName;
+                this.getPlugin().saveGlobalConfiguration();
             } else {
                 sender.sendMessage(ChatColor.RED + "No such public warp: " + warpName);
             }
@@ -45,13 +46,16 @@ public class OWWarpDeleteCommand extends OWCommand {
             if(!this.checkPlayerSender(sender)) return;
             
             Player player = (Player)sender;
+            String playerName = player.getName();
             
-            if(this.getPlugin().getPrivateWarps(player.getName()).remove(warpName) != null) {
+            if(this.getPlugin().getPrivateWarps(playerName).remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed private warp '" + warpName + "'");
-                permString = "openwarp.warp.access.private." + player.getName() + "." + warpName;
+                permString = "openwarp.warp.access.private." + playerName + "." + warpName;
+                this.getPlugin().savePlayerConfiguration(playerName);
             } else {
                 sender.sendMessage(ChatColor.RED + "No such warp: " + warpName);
             }
+
         }
         
         // Remove permission
@@ -62,8 +66,6 @@ public class OWWarpDeleteCommand extends OWCommand {
                 p.recalculatePermissions();
             }
         }
-        
-        this.getPlugin().saveAllConfigurations();
     }
 
 }

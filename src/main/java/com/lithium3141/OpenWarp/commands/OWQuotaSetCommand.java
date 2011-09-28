@@ -64,6 +64,7 @@ public class OWQuotaSetCommand extends OWCommand {
                 quotaManager.setGlobalPrivateWarpQuota(quota);
             }
             sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "set global " + type + " quota to " + quota);
+            this.getPlugin().saveGlobalConfiguration();
         } else {
             // Setting a player's quota
             Map<String, Integer> quotaMap = null;
@@ -81,9 +82,8 @@ public class OWQuotaSetCommand extends OWCommand {
                 sender.sendMessage(ChatColor.RED + "Unknown error setting quota! Please report a bug.");
             }
             
+            this.getPlugin().savePlayerConfiguration(playerName);
         }
-        
-        this.getPlugin().saveAllConfigurations();
     }
 
 }

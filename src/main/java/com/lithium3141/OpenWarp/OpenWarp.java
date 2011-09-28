@@ -92,39 +92,20 @@ public class OpenWarp extends JavaPlugin {
 	 * warp and quota configurations and configurations for each player.
 	 */
 	public void saveAllConfigurations() {
+        DEBUG_LOG.fine("Writing ALL OpenWarp configuration files");
 	    if(this.configuration != null) {
             this.saveGlobalConfiguration();
             
             // Save player-specific data
             for(String playerName : this.playerConfigs.keySet()) {
-                this.savePrivateConfiguration(playerName);
+                this.savePlayerConfiguration(playerName);
             }
         }
 	}
 	
-	/**
-	 * Save global configurations and the individual configuration for the
-	 * provided player.
-	 * 
-	 * @param player the Player to save configurations for.
-	 */
-	public void saveConfigurations(Player player) {
-	    this.saveGlobalConfiguration();
-	    this.savePrivateConfiguration(player.getName());
-	}
-	 
-	/**
-     * Save global configurations and the individual configuration for the
-     * provided player.
-     * 
-     * @param playerName the name of the player to save configurations for.
-     */
-	public void saveConfigurations(String playerName) {
-	    this.saveGlobalConfiguration();
-	    this.savePrivateConfiguration(playerName);
-	}
-	
-	private void saveGlobalConfiguration() {
+	public void saveGlobalConfiguration() {
+        DEBUG_LOG.fine("Writing OpenWarp global configuration file");
+
 	    if(this.configuration != null) {
 	        // Save overall configuration
             DEBUG_LOG.fine("Writing global player name list with " + this.playerConfigs.keySet().size() + " elements");
@@ -153,7 +134,13 @@ public class OpenWarp extends JavaPlugin {
 	    }
 	}
 	
-	private void savePrivateConfiguration(String playerName) {
+    public void savePlayerConfiguration(Player player) {
+        this.savePlayerConfiguration(player.getName());
+    }
+
+	public void savePlayerConfiguration(String playerName) {
+        DEBUG_LOG.fine("Writing OpenWarp player configuration file (" + playerName + ")");
+
 	    if(this.configuration != null) {
 	        OWPlayerConfiguration config = this.playerConfigs.get(playerName);
 	        

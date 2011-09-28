@@ -97,9 +97,11 @@ public class OWWarpSetCommand extends OWCommand {
         if(warpType.equals("public")) {
             this.getPlugin().getPublicWarps().put(warp.getName(), warp);
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " public warp '" + warp.getName() + "'");
+            this.getPlugin().saveGlobalConfiguration();
         } else if(warpType.equals("private")) {
             this.getPlugin().getPrivateWarps().get(player.getName()).put(warp.getName(), warp);
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " private warp '" + warp.getName() + "'");
+            this.getPlugin().savePlayerConfiguration(player.getName());
         }
         
         // Create permission for warp
@@ -121,8 +123,6 @@ public class OWWarpSetCommand extends OWCommand {
                 p.recalculatePermissions();
             }
         }
-        
-        this.getPlugin().saveConfigurations(player);
     }
 
 }

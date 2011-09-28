@@ -88,7 +88,7 @@ public class OWLocationTracker {
     public void setPreviousLocation(String playerName, Location location) {
         OpenWarp.DEBUG_LOG.fine("Setting previous location (" + playerName + "): " + location);
         this.previousLocations.put(playerName, location);
-        this.plugin.saveConfigurations(playerName);
+        this.plugin.savePlayerConfiguration(playerName);
     }
     
     /**
