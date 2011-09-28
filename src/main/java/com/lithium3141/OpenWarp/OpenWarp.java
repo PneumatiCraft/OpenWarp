@@ -90,6 +90,11 @@ public class OpenWarp extends JavaPlugin {
 	/**
 	 * Save all configuration files currently loaded, including global
 	 * warp and quota configurations and configurations for each player.
+     * Calls #saveGlobalConfiguration() and #savePlayerConfiguration(String)
+     * internally.
+     *
+     * @see #saveGlobalConfiguration()
+     * @see #savePlayerConfiguration(String)
 	 */
 	public void saveAllConfigurations() {
         DEBUG_LOG.fine("Writing ALL OpenWarp configuration files");
@@ -102,7 +107,13 @@ public class OpenWarp extends JavaPlugin {
             }
         }
 	}
-	
+
+	/**
+     * Save global configuration data, including the files <tt>warps.yml</tt>
+     * and <tt>config.yml</tt> in the primary OpenWarp directory. Writes all
+     * YAML nodes into those files from current in-memory sets. Currently does
+     * no checking about whether a write is necessary.
+     */
 	public void saveGlobalConfiguration() {
         DEBUG_LOG.fine("Writing OpenWarp global configuration file");
 
@@ -134,10 +145,26 @@ public class OpenWarp extends JavaPlugin {
 	    }
 	}
 	
+    /**
+     * Save the player-specific configuration files for the given Player.
+     * Calls #savePlayerConfiguration(String) internally.
+     *
+     * @param player The Player for whom to save configuration data.
+     * @see #savePlayerConfiguration(String)
+     */
     public void savePlayerConfiguration(Player player) {
         this.savePlayerConfiguration(player.getName());
     }
 
+    /**
+     * Save the player-specific configuration files for the given player.
+     * Writes files <tt>general.yml</tt>, <tt>quota.yml</tt>, and <tt>warps.yml</tt>
+     * into the OpenWarp subdirectory named for the player. Writes all YAML nodes
+     * into those files from current in-memory sets. Currently does no checking about
+     * whether such a write is necessary.
+     *
+     * @param playerName The name of the player for whom to save configuration data.
+     */
 	public void savePlayerConfiguration(String playerName) {
         DEBUG_LOG.fine("Writing OpenWarp player configuration file (" + playerName + ")");
 
