@@ -133,4 +133,17 @@ public class OWLocationTracker {
         }
         return this.locationStacks.get(playerName);
     }
+
+    /**
+     * Set the location stack for the given player. Useful in manually changing
+     * out the entire stack from outside the standard player listeners.
+     *
+     * @param playerName The player for whom to set the stack.
+     * @param stack The new stack of Location objects to use.
+     * @return The previous Location stack for the given player, if one exists;
+     * null otherwise.
+     */
+    public Stack<Location> setLocationStack(String playerName, Stack<Location> stack) {
+        return this.locationStacks.put(playerName, stack);
+    }
 }

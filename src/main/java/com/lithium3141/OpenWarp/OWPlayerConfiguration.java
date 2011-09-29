@@ -137,12 +137,13 @@ public class OWPlayerConfiguration {
 		}
 		
 		// Stack
-		ConfigurationNode stackNode = this.generalConfig.getNode(OpenWarp.STACK_KEY);
-		if(stackNode != null) {
-		    List<Object> stackConfig = stackNode.getList(""); // TODO is there a better call for this?
-		    for(Object o : stackConfig) {
-		        // TODO figure out how to parse this appropriately
+		List<ConfigurationNode> warpStackNodes = this.generalConfig.getNodeList(OpenWarp.STACK_KEY, new ArrayList<ConfigurationNode>());
+		if(warpStackNodes != null) {
+            Stack<Location> warpStack = new Stack<Location>();
+		    for(ConfigurationNode node : warpStackNodes) {
+                warpStack.push(new Warp(this.plugin, TEMP_STACK_NAME, node).getLocation());
 		    }
+            this.plugin.getLocationTracker().setLocationStack(this.playerName, warpStack);
 		}
 		
 		// Quotas
