@@ -38,7 +38,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             if(this.getPlugin().getPublicWarps().remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed public warp '" + warpName + "'");
                 permString = "openwarp.warp.access.public." + warpName;
-                this.getPlugin().saveGlobalConfiguration();
+                this.getPlugin().getConfigurationManager().saveGlobalConfiguration();
             } else {
                 sender.sendMessage(ChatColor.RED + "No such public warp: " + warpName);
             }
@@ -51,7 +51,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             if(this.getPlugin().getPrivateWarps(playerName).remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed private warp '" + warpName + "'");
                 permString = "openwarp.warp.access.private." + playerName + "." + warpName;
-                this.getPlugin().savePlayerConfiguration(playerName);
+                this.getPlugin().getConfigurationManager().savePlayerConfiguration(playerName);
             } else {
                 sender.sendMessage(ChatColor.RED + "No such warp: " + warpName);
             }

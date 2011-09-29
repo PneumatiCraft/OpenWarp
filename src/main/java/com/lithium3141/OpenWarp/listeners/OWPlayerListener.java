@@ -35,7 +35,7 @@ public class OWPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
         OpenWarp.DEBUG_LOG.fine("Player '" + player.getName() + "'joined.");
-		this.plugin.registerPlayerName(player.getName());
+		this.plugin.getConfigurationManager().registerPlayerName(player.getName());
 	}
 	
 	@Override

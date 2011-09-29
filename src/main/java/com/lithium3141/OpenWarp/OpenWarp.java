@@ -26,6 +26,8 @@ import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
+import com.lithium3141.OpenWarp.config.OWConfigurationManager;
+import com.lithium3141.OpenWarp.config.OWPlayerConfiguration;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
 import com.lithium3141.OpenWarp.util.MVConnector;
@@ -45,27 +47,8 @@ public class OpenWarp extends JavaPlugin {
 	public static final String LOG_PREFIX = "[OpenWarp] ";
     public static final Logger DEBUG_LOG = Logger.getLogger("OpenWarpDebug");
 	
-	// Global config filenames
-	public static final String MASTER_CONFIG_FILENAME = "config.yml";
-	public static final String PUBLIC_WARP_CONFIG_FILENAME = "warps.yml";
-	
-	// Config key names
-    public static final String PLAYER_NAMES_LIST_KEY = "players";
-    public static final String WARPS_LIST_KEY = "warps";
-    public static final String QUOTAS_KEY = "quotas";
-    public static final String QUOTA_PUBLIC_KEY = "public";
-    public static final String QUOTA_PRIVATE_KEY = "private";
-    public static final String HOME_KEY = "home";
-    public static final String BACK_KEY = "back";
-    public static final String STACK_KEY = "stack";
-    public static final String MULTIWORLD_HOMES_KEY = "multiworld_homes";
-    public static final String DEBUG_KEY = "debug";
-
 	// Global configuration variables
-	public Configuration configuration;
-	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>(); // player name => config
-	
-	public Configuration publicWarpsConfig;
+    private OWConfigurationManager configurationManager;
 	private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
 	private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
 	private Map<String, Map<String, Location>> homes = new HashMap<String, Map<String, Location>>(); // player name => (world name => home), world name == null implies "default" home
@@ -82,106 +65,13 @@ public class OpenWarp extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		this.saveAllConfigurations();
+		this.configurationManager.saveAllConfigurations();
 		
 		LOG.info(LOG_PREFIX + "Disabled!");
 	}
 	
-	/**
-	 * Save all configuration files currently loaded, including global
-	 * warp and quota configurations and configurations for each player.
-     * Calls #saveGlobalConfiguration() and #savePlayerConfiguration(String)
-     * internally.
-     *
-     * @see #saveGlobalConfiguration()
-     * @see #savePlayerConfiguration(String)
-	 */
-	public void saveAllConfigurations() {
-        DEBUG_LOG.fine("Writing ALL OpenWarp configuration files");
-	    if(this.configuration != null) {
-            this.saveGlobalConfiguration();
-            
-            // Save player-specific data
-            for(String playerName : this.playerConfigs.keySet()) {
-                this.savePlayerConfiguration(playerName);
-            }
-        }
-	}
-
-	/**
-     * Save global configuration data, including the files <tt>warps.yml</tt>
-     * and <tt>config.yml</tt> in the primary OpenWarp directory. Writes all
-     * YAML nodes into those files from current in-memory sets. Currently does
-     * no checking about whether a write is necessary.
-     */
-	public void saveGlobalConfiguration() {
-        DEBUG_LOG.fine("Writing OpenWarp global configuration file");
-
-	    if(this.configuration != null) {
-	        // Save overall configuration
-            DEBUG_LOG.fine("Writing global player name list with " + this.playerConfigs.keySet().size() + " elements");
-            this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
-            if(!this.configuration.save()) {
-                LOG.warning(LOG_PREFIX + "Couldn't save player list; continuing...");
-            }
-            
-            // Save public warps
-            Map<String, Object> warps = new HashMap<String, Object>();
-            for(Entry<String, Warp> entry : this.publicWarps.entrySet()) {
-                warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
-            }
-            
-            this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
-            if(!this.publicWarpsConfig.save()) {
-                LOG.warning(LOG_PREFIX + "Couldn't save public warp list; continuing...");
-            }
-            
-            // Save global quotas
-            this.configuration.setProperty(QUOTAS_KEY, this.quotaManager.getGlobalQuotaMap());
-
-            // Save flags
-            this.configuration.setProperty(MULTIWORLD_HOMES_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
-            this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
-	    }
-	}
-	
-    /**
-     * Save the player-specific configuration files for the given Player.
-     * Calls #savePlayerConfiguration(String) internally.
-     *
-     * @param player The Player for whom to save configuration data.
-     * @see #savePlayerConfiguration(String)
-     */
-    public void savePlayerConfiguration(Player player) {
-        this.savePlayerConfiguration(player.getName());
-    }
-
-    /**
-     * Save the player-specific configuration files for the given player.
-     * Writes files <tt>general.yml</tt>, <tt>quota.yml</tt>, and <tt>warps.yml</tt>
-     * into the OpenWarp subdirectory named for the player. Writes all YAML nodes
-     * into those files from current in-memory sets. Currently does no checking about
-     * whether such a write is necessary.
-     *
-     * @param playerName The name of the player for whom to save configuration data.
-     */
-	public void savePlayerConfiguration(String playerName) {
-        DEBUG_LOG.fine("Writing OpenWarp player configuration file (" + playerName + ")");
-
-	    if(this.configuration != null) {
-	        OWPlayerConfiguration config = this.playerConfigs.get(playerName);
-	        
-	        if(config != null && !config.save()) {
-                LOG.warning(LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
-            }
-	    }
-	}
-
 	@Override
 	public void onEnable() {
-		// Set up configuration folder if necessary
-		this.getDataFolder().mkdirs();
-
 		// Create overall permission
 		this.getServer().getPluginManager().addPermission(new Permission("openwarp.*", PermissionDefault.OP));
 		Permission wildcardPerm = this.getServer().getPluginManager().getPermission("*");
@@ -189,13 +79,9 @@ public class OpenWarp extends JavaPlugin {
 		    wildcardPerm.getChildren().put("openwarp.*", true);
 		    wildcardPerm.recalculatePermissibles();
 		}
-		
-		// Get configuration file (even if nonexistent)
-		this.configuration = new Configuration(new File(this.getDataFolder(), MASTER_CONFIG_FILENAME));
-		this.configuration.load();
-		
-		this.publicWarpsConfig = new Configuration(new File(this.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
-		this.publicWarpsConfig.load();
+
+        // Load configurations
+        this.configurationManager = new OWConfigurationManager(this);
 		
 		// Start location tracking
 		this.locationTracker = new OWLocationTracker(this);
@@ -204,20 +90,18 @@ public class OpenWarp extends JavaPlugin {
         this.setupDebugLog();
 		
 		// Read warp names
-        this.loadWarps(this.publicWarpsConfig, this.publicWarps);
+        this.configurationManager.loadPublicWarps(this.publicWarps);
         
         // Instantiate quota manager, permissions - need them for player configs
         this.quotaManager = new OWQuotaManager(this);
         this.permissionsHandler = new OWPermissionsHandler(this);
 
         // Read quotas
-        this.quotaManager.loadGlobalQuotas(this.configuration);
+        this.quotaManager.setGlobalPublicWarpQuota(this.configurationManager.readGlobalPublicWarpQuota());
+        this.quotaManager.setGlobalPrivateWarpQuota(this.configurationManager.readGlobalPrivateWarpQuota());
         
 		// Read player names and create configurations for each
-		List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
-		for(String playerName : playerNames) {
-			this.registerPlayerName(playerName);
-		}
+        this.configurationManager.loadPlayers();
 		
 		// Set up supported commands
 		this.loadCommands();
@@ -236,7 +120,7 @@ public class OpenWarp extends JavaPlugin {
 	}
 
     private void setupDebugLog() {
-        boolean useDebug = this.configuration.getBoolean(DEBUG_KEY, false);
+        boolean useDebug = this.configurationManager.readDebug();
         Level logLevel = (useDebug ? Level.FINEST : Level.OFF);
 
         DEBUG_LOG.setLevel(logLevel);
@@ -252,25 +136,6 @@ public class OpenWarp extends JavaPlugin {
         System.out.println("[OpenWarp] Found Multiverse 2, Support Enabled.");
     }
 
-    /**
-	 * Load warps listed at the given ConfigurationNode into the given warps
-	 * map. Mutates the `target` argument.
-	 * 
-	 * @param config The ConfigurationNode to search for warps. Must have the
-	 *               `warps` key.
-	 * @param target The map into which to load new Warp objects.
-	 */
-	public void loadWarps(ConfigurationNode config, Map<String, Warp> target) {
-	    List<String> keys = config.getKeys(WARPS_LIST_KEY);
-        if(keys != null) {
-            for(String key : keys) {
-                ConfigurationNode node = config.getNode(WARPS_LIST_KEY + "." + key);
-                Warp warp = new Warp(this, key, node);
-                target.put(warp.getName(), warp);
-            }
-        }
-	}
-	
 	/**
 	 * Create warp permission nodes for all loaded warps.
 	 */
@@ -389,22 +254,6 @@ public class OpenWarp extends JavaPlugin {
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
 	}
 	
-	/**
-	 * Register a player with the OpenWarp plugin. Create a new
-	 * OWPlayerConfiguration instance for the given Player if no such 
-	 * configuration exists yet.
-	 * 
-	 * @param playerName The player to register
-	 * @see OWPlayerConfiguration
-	 */
-	public void registerPlayerName(String playerName) {
-		if(this.playerConfigs.get(playerName) == null) {
-			OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this, playerName);
-			playerConfig.load();
-			this.playerConfigs.put(playerName, playerConfig);
-		}
-	}
-	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 		// Construct a trie key path from the command label and args
@@ -441,6 +290,10 @@ public class OpenWarp extends JavaPlugin {
 	public OWPermissionsHandler getPermissionsHandler() {
 	    return this.permissionsHandler;
 	}
+
+    public OWConfigurationManager getConfigurationManager() {
+        return this.configurationManager;
+    }
 
     /**
      * Get the Warp, if any, matching the given name for the given sender.
@@ -560,7 +413,7 @@ public class OpenWarp extends JavaPlugin {
      * is not using multiworld homes.
      */
     public Map<String, Location> getWorldHomes(String playerName) {
-        if(!this.usingMultiworldHomes()) {
+        if(!this.configurationManager.usingMultiworldHomes()) {
             return null;
         }
 
@@ -581,7 +434,7 @@ public class OpenWarp extends JavaPlugin {
      * @return A Location for the located home or null if no such home exists.
      */
     public Location getHome(String playerName, String worldName) {
-        if(this.usingMultiworldHomes()) {
+        if(this.configurationManager.usingMultiworldHomes()) {
             // Multiworld homes - get home for given world name
             DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
             this.debugHomes();
@@ -654,7 +507,7 @@ public class OpenWarp extends JavaPlugin {
      * @return The Location being replaced, if any; null otherwise.
      */
     public Location setHome(String playerName, String worldName, Location home) {
-        if(this.usingMultiworldHomes()) {
+        if(this.configurationManager.usingMultiworldHomes()) {
             // Multiworld homes - save home under world name key
             DEBUG_LOG.fine("Setting home for player '" + playerName + "' in world '" + worldName + "'");
 
@@ -698,17 +551,6 @@ public class OpenWarp extends JavaPlugin {
                 DEBUG_LOG.fine("        " + worldName + ": (" + home.getX() + "," + home.getY() + "," + home.getZ() + ")");
             }
         }
-    }
-
-    /**
-     * Check whether this instance of OpenWarp is configured to use multiworld
-     * homes. Multiworld homes allow users to set a home in each world, rather than
-     * one overall; this feature is configured in the plugin YAML file.
-     *
-     * @return True if OpenWarp is using multiworld homes; false otherwise.
-     */
-    public boolean usingMultiworldHomes() {
-        return this.configuration.getBoolean(MULTIWORLD_HOMES_KEY, false);
     }
 
 }

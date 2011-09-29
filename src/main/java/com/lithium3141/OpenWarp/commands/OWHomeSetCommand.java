@@ -42,7 +42,7 @@ public class OWHomeSetCommand extends OWCommand {
             this.getPlugin().setDefaultHome(player, player.getLocation());
         }
 
-        this.getPlugin().savePlayerConfiguration(player);
+        this.getPlugin().getConfigurationManager().savePlayerConfiguration(player);
         
         player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Set your home to your current location.");
         

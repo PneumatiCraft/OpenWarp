@@ -6,6 +6,8 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
+import com.lithium3141.OpenWarp.config.OWConfigurationManager;
+
 /**
  * Utility class to track quota information for players. Stores quotas for both
  * public and private warps for all players known to OpenWarp.
@@ -37,31 +39,6 @@ public class OWQuotaManager {
      */
     public OWQuotaManager(OpenWarp plugin) {
         this.plugin = plugin;
-    }
-    
-    /**
-     * Load global quota information from the given ConfigurationNode. Global quotas
-     * affect all players, and act as a sort of baseline for players whose quotas
-     * are undefined individually. Players may override global quotas by having their
-     * own individual quotas set.
-     * 
-     * @param configuration The ConfigurationNode instance to read information from.
-     */
-    public void loadGlobalQuotas(ConfigurationNode configuration) {
-        this.globalMaxPublicWarps = configuration.getInt(OpenWarp.QUOTAS_KEY + "." + OpenWarp.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED);
-        this.globalMaxPrivateWarps = configuration.getInt(OpenWarp.QUOTAS_KEY + "." + OpenWarp.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED);
-    }
-    
-    /**
-     * Load individual quotas for players registered with OpenWarp. These quotas, if
-     * set to a value (or the special "unlimited" value), will override global quotas.
-     *
-     * @param playerName The player for whom to load quota information.
-     * @param configuration The ConfigurationNode instance to read information from.
-     */
-    public void loadPrivateQuotas(String playerName, ConfigurationNode configuration) {
-        this.playerMaxPublicWarps.put(playerName, configuration.getInt(OpenWarp.QUOTAS_KEY + "." + OpenWarp.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED));
-        this.playerMaxPrivateWarps.put(playerName, configuration.getInt(OpenWarp.QUOTAS_KEY + "." + OpenWarp.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED));
     }
     
     /**
@@ -142,15 +119,15 @@ public class OWQuotaManager {
         Map<String, Object> result = new HashMap<String, Object>();
         
         if(this.playerMaxPublicWarps.containsKey(playerName)) {
-            result.put(OpenWarp.QUOTA_PUBLIC_KEY, this.playerMaxPublicWarps.get(playerName));
+            result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, this.playerMaxPublicWarps.get(playerName));
         } else {
-            result.put(OpenWarp.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED);
+            result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED);
         }
         
         if(this.playerMaxPrivateWarps.containsKey(playerName)) {
-            result.put(OpenWarp.QUOTA_PRIVATE_KEY, this.playerMaxPrivateWarps.get(playerName));
+            result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, this.playerMaxPrivateWarps.get(playerName));
         } else {
-            result.put(OpenWarp.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED);
+            result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED);
         }
         
         return result;
@@ -169,8 +146,8 @@ public class OWQuotaManager {
     public Map<String, Object> getGlobalQuotaMap() {
         Map<String, Object> result = new HashMap<String, Object>();
         
-        result.put(OpenWarp.QUOTA_PUBLIC_KEY, this.globalMaxPublicWarps);
-        result.put(OpenWarp.QUOTA_PRIVATE_KEY, this.globalMaxPrivateWarps);
+        result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, this.globalMaxPublicWarps);
+        result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, this.globalMaxPrivateWarps);
         
         return result;
     }
@@ -215,6 +192,8 @@ public class OWQuotaManager {
      * Get the individual public warp quotas for all players. The returned map
      * will have the actual quota value for each player name known to OpenWarp;
      * as such, the value set of this map may contain the value QUOTA_UNDEFINED.
+     * <p>
+     * This map may be mutated to update quota information.
      *
      * @return A map of player names to public warp quota values.
      */
@@ -226,6 +205,8 @@ public class OWQuotaManager {
      * Get the individual private warp quotas for all players. The returned map
      * will have the actual quota value for each player name known to OpenWarp;
      * as such, the value set of this map may contain the value QUOTA_UNDEFINED.
+     * <p>
+     * This map may be mutated to update quota information.
      *
      * @return A map of player names to private warp quota values.
      */

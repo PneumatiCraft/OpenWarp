@@ -1,4 +1,4 @@
-package com.lithium3141.OpenWarp;
+package com.lithium3141.OpenWarp.config;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +12,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
+
+import com.lithium3141.OpenWarp.OpenWarp;
+import com.lithium3141.OpenWarp.OWQuotaManager;
+import com.lithium3141.OpenWarp.Warp;
 
 /**
  * Configuration for a single player. Encapsulates all on-disk info
@@ -115,15 +119,15 @@ public class OWPlayerConfiguration {
 		if(this.plugin.getPrivateWarps().get(this.playerName) == null) {
 		    this.plugin.getPrivateWarps().put(this.playerName, new HashMap<String, Warp>());
 		}
-		this.plugin.loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
+		this.plugin.getConfigurationManager().loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 		
 		// Homes
-		ConfigurationNode homeNode = this.generalConfig.getNode(OpenWarp.HOME_KEY);
+		ConfigurationNode homeNode = this.generalConfig.getNode(OWConfigurationManager.HOME_KEY);
 		if(homeNode != null) {
             this.plugin.setDefaultHome(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
 		}
 
-        Map<String, ConfigurationNode> multiworldHomesMap = this.generalConfig.getNodes(OpenWarp.MULTIWORLD_HOMES_KEY);
+        Map<String, ConfigurationNode> multiworldHomesMap = this.generalConfig.getNodes(OWConfigurationManager.MULTIWORLD_HOMES_KEY);
         if(multiworldHomesMap != null) {
             for(String worldName : multiworldHomesMap.keySet()) {
                 this.plugin.setHome(this.playerName, worldName, new Warp(this.plugin, TEMP_HOME_NAME, multiworldHomesMap.get(worldName)).getLocation());
@@ -131,13 +135,13 @@ public class OWPlayerConfiguration {
         }
 		
 		// Back
-		ConfigurationNode backNode = this.generalConfig.getNode(OpenWarp.BACK_KEY);
+		ConfigurationNode backNode = this.generalConfig.getNode(OWConfigurationManager.BACK_KEY);
 		if(backNode != null) {
 		    this.plugin.getLocationTracker().setPreviousLocation(this.playerName, new Warp(this.plugin, TEMP_BACK_NAME, backNode).getLocation());
 		}
 		
 		// Stack
-		List<ConfigurationNode> warpStackNodes = this.generalConfig.getNodeList(OpenWarp.STACK_KEY, new ArrayList<ConfigurationNode>());
+		List<ConfigurationNode> warpStackNodes = this.generalConfig.getNodeList(OWConfigurationManager.STACK_KEY, new ArrayList<ConfigurationNode>());
 		if(warpStackNodes != null) {
             Stack<Location> warpStack = new Stack<Location>();
 		    for(ConfigurationNode node : warpStackNodes) {
@@ -147,7 +151,8 @@ public class OWPlayerConfiguration {
 		}
 		
 		// Quotas
-		this.plugin.getQuotaManager().loadPrivateQuotas(this.playerName, this.quotaConfig);
+        this.plugin.getQuotaManager().getPlayerMaxPublicWarps().put(this.playerName, this.quotaConfig.getInt(OWConfigurationManager.QUOTAS_KEY + "." + OWConfigurationManager.QUOTA_PUBLIC_KEY, OWQuotaManager.QUOTA_UNDEFINED));
+        this.plugin.getQuotaManager().getPlayerMaxPrivateWarps().put(this.playerName, this.quotaConfig.getInt(OWConfigurationManager.QUOTAS_KEY + "." + OWConfigurationManager.QUOTA_PRIVATE_KEY, OWQuotaManager.QUOTA_UNDEFINED));
 	}
 	
 	/**
@@ -164,13 +169,13 @@ public class OWPlayerConfiguration {
 	    for(Entry<String, Warp> entry : playerWarps.entrySet()) {
 	        configWarps.put(entry.getKey(), entry.getValue().getConfigurationMap());
 	    }
-	    this.warpConfig.setProperty(OpenWarp.WARPS_LIST_KEY, configWarps);
+	    this.warpConfig.setProperty(OWConfigurationManager.WARPS_LIST_KEY, configWarps);
 	    
 	    // Home
 	    if(this.plugin.getDefaultHome(this.playerName) != null) {
 	        Map<String, Object> homeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, this.plugin.getDefaultHome(this.playerName), this.playerName).getConfigurationMap();
 	        if(homeWarpConfig != null) {
-	            this.generalConfig.setProperty(OpenWarp.HOME_KEY, homeWarpConfig);
+	            this.generalConfig.setProperty(OWConfigurationManager.HOME_KEY, homeWarpConfig);
 	        } else {
 	            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to missing warp world");
 	            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in some data loss! Check the warp configuration for " + this.playerName);
@@ -183,7 +188,7 @@ public class OWPlayerConfiguration {
             for(String worldName : worldHomes.keySet()) {
                 if(worldName != null) {
                     Location worldHome = worldHomes.get(worldName);
-                    String yamlKey = OpenWarp.MULTIWORLD_HOMES_KEY + "." + worldName;
+                    String yamlKey = OWConfigurationManager.MULTIWORLD_HOMES_KEY + "." + worldName;
 
                     Map<String, Object> worldHomeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, worldHome, this.playerName).getConfigurationMap();
                     if(worldHomeWarpConfig != null) {
@@ -201,7 +206,7 @@ public class OWPlayerConfiguration {
 	    if(this.plugin.getLocationTracker().getPreviousLocation(this.playerName) != null) {
 	        Map<String, Object> backWarpConfig = new Warp(this.plugin, TEMP_BACK_NAME, this.plugin.getLocationTracker().getPreviousLocation(this.playerName), this.playerName).getConfigurationMap();
 	        if(backWarpConfig != null) {
-	            this.generalConfig.setProperty(OpenWarp.BACK_KEY, backWarpConfig);
+	            this.generalConfig.setProperty(OWConfigurationManager.BACK_KEY, backWarpConfig);
 	        }
 	    }
 	    
@@ -213,14 +218,14 @@ public class OWPlayerConfiguration {
 	            locationStackConfig.add(new Warp(this.plugin, TEMP_STACK_NAME, location, this.playerName).getConfigurationMap());
 	        }
 	        if(locationStackConfig.size() > 0) {
-	            this.generalConfig.setProperty(OpenWarp.STACK_KEY, locationStackConfig);
+	            this.generalConfig.setProperty(OWConfigurationManager.STACK_KEY, locationStackConfig);
 	        } else {
-	            this.generalConfig.setProperty(OpenWarp.STACK_KEY, null);
+	            this.generalConfig.setProperty(OWConfigurationManager.STACK_KEY, null);
 	        }
 	    }
 	    
 	    // Quotas
-	    this.quotaConfig.setProperty(OpenWarp.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));
+	    this.quotaConfig.setProperty(OWConfigurationManager.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));
 	    
 		return this.generalConfig.save() && this.warpConfig.save() && this.quotaConfig.save();
 	}

@@ -57,7 +57,7 @@ public class OWWarpSetCommand extends OWCommand {
         }
         
         // See if warp exists already - this affects quota checking
-        System.out.println("Checking for warp '" + args.get(0) + "' in " + warpType + " warps for player " + player.getName());
+        OpenWarp.DEBUG_LOG.fine("Checking for warp '" + args.get(0) + "' in " + warpType + " warps for player " + player.getName());
         boolean warpExists = false;
         if(warpType.equals("public")) {
             if(this.getPlugin().getPublicWarps().get(args.get(0)) != null) {
@@ -68,7 +68,7 @@ public class OWWarpSetCommand extends OWCommand {
                 warpExists = true;
             }
         }
-        System.out.println("warp exists: " + warpExists);
+        OpenWarp.DEBUG_LOG.fine("warp exists: " + warpExists);
 
         // Check quota
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
@@ -97,11 +97,11 @@ public class OWWarpSetCommand extends OWCommand {
         if(warpType.equals("public")) {
             this.getPlugin().getPublicWarps().put(warp.getName(), warp);
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " public warp '" + warp.getName() + "'");
-            this.getPlugin().saveGlobalConfiguration();
+            this.getPlugin().getConfigurationManager().saveGlobalConfiguration();
         } else if(warpType.equals("private")) {
             this.getPlugin().getPrivateWarps().get(player.getName()).put(warp.getName(), warp);
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " private warp '" + warp.getName() + "'");
-            this.getPlugin().savePlayerConfiguration(player.getName());
+            this.getPlugin().getConfigurationManager().savePlayerConfiguration(player.getName());
         }
         
         // Create permission for warp
