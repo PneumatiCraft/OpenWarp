@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.lithium3141.OpenWarp</groupId>
 	<artifactId>OpenWarp</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>OpenWarp</name>
 	<description>Open source warping goodness.</description>
 	<properties>
