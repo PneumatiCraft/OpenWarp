@@ -47,9 +47,8 @@
                         <configuration>
                             <sources>
                                 <!-- <source>${project.basedir}/lib/allpay/src</source> -->
-                                <source>${project.basedir}/lib/commandhandler/src</source>
-                                <source>${project.basedir}/lib/commandhandler/src</source>
-                                <source>${project.basedir}/lib/commandhandler/lib/ShellParser/src</source>
+                                <source>${project.basedir}/lib/CommandHandler/src</source>
+                                <source>${project.basedir}/lib/CommandHandler/lib/ShellParser/src</source>
                             </sources>
                         </configuration>
                     </execution>
