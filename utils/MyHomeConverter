@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# Converter for warps from the MyHome plugin to OpenWarp
+# Authored by NVX, 2011.10.10
+
+if [ ! -e $1/MyHome/homes.db ] ; then
+    echo "Usage: $0 <path to plugins>"
+    echo "Example: $0 /opt/minecraft/plugins"
+    exit 1
+fi
+
+for f in $1/OpenWarp/*/general.yml ] ; do
+    if [ -e "$f" ] ; then
+        echo "Warning one or more users have a general.yml. Running this conversion script on a non-clean OpenWarp install will require manual editing or you will be left with a broken config! Aborting."
+        exit 1
+    fi
+done
+
+echo -n Doing private warps...
+for home in `sqlite3 "$1/MyHome/homes.db" "SELECT name,world,x,y,z,yaw,pitch FROM homeTable"` ; do
+    nick=`echo $home | awk -F '|' '{ print $1 }'`
+    echo -n .
+    mkdir -p "$1/OpenWarp/$nick"
+    echo "$home" | awk -F '|' '{gsub("\x27", "", $0); print "home:\n    yaw: " $6 "\n    owner: " $1 "\n    pitch: " $7 "\n    z: " $5 "\n    world: " $2 "\n    y: " $4 "\n    x: " $3 }' >> "$1/OpenWarp/$nick/general.yml"
+done
+echo " Done."
