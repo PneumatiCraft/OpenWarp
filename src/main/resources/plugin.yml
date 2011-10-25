@@ -1,10 +1,13 @@
 name: OpenWarp
 main: com.lithium3141.OpenWarp.OpenWarp
 author: lithium3141
-version: 1.1-b@BUILD@ (rev @COMMIT@)
+version: 1.2-b@BUILD@ (rev @COMMIT@)
 database: false
 softdepend: [Multiverse-Core, MultiVerse]
 commands:
+    ow:
+        description: General OpenWarp command and namespace
+        usage: /<command>
     warp:
         description: Manipulate warp points
         usage: /<command>

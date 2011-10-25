@@ -41,12 +41,20 @@ public class OWConfigurationManager {
     public static final String STACK_KEY = "stack";
     public static final String MULTIWORLD_HOMES_KEY = "multiworld_homes";
     public static final String DEBUG_KEY = "debug";
+    public static final String NAMESPACE_KEY = "namespaced";
 
     // On-disk configurations
 	private Configuration configuration; // global config file (config.yml)
 	private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>(); // player name => config
 	private Configuration publicWarpsConfig; // global public warps config (warps.yml)
 
+    /**
+     * Create a new OWConfigurationManager backed by the given OpenWarp instance.
+     * Sets up data folders on-disk and loads (creating if necessary) the global
+     * configuration and public warp files.
+     *
+     * @param plugin The OpenWarp instance backing this OWConfigurationManager.
+     */
     public OWConfigurationManager(OpenWarp plugin) {
         this.plugin = plugin;
 
@@ -116,6 +124,7 @@ public class OWConfigurationManager {
             // Save flags
             this.configuration.setProperty(MULTIWORLD_HOMES_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
             this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
+            this.configuration.setProperty(NAMESPACE_KEY, this.configuration.getBoolean(NAMESPACE_KEY, false));
 	    }
 	}
 	
@@ -242,6 +251,20 @@ public class OWConfigurationManager {
      */
     public boolean usingMultiworldHomes() {
         return this.configuration.getBoolean(MULTIWORLD_HOMES_KEY, false);
+    }
+
+    /**
+     * Check whether this instance of OpenWarp is configured to place its
+     * commands in a namespace. Namespaced commands use a common prefix to avoid
+     * naming conflicts with other plugins; this can occur when using other plugins
+     * that define common words as commands, especially "warp" and "home." The
+     * prefix used is currently "ow," though it is subject to change or future
+     * configurability.
+     *
+     * @return True if OpenWarp namespaces its commands; false otherwise.
+     */
+    public boolean usingCommandNamespace() {
+        return this.configuration.getBoolean(NAMESPACE_KEY, false);
     }
 
 }
