@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -348,6 +350,30 @@ public class OpenWarp extends JavaPlugin {
                     }
                 }
             }
+        }
+
+        // If still no match, try to cast to coords
+        if(sender instanceof Player) {
+            Pattern coordPattern = Pattern.compile("(?:([a-zA-Z0-9_]+):)?(-?[0-9]+),(-?[0-9]+),(-?[0-9]+)"); // it burns us
+            Matcher coordMatcher = coordPattern.matcher(warpName);
+            if(coordMatcher.matches()) {
+                String worldName = coordMatcher.group(1);
+                int x = Integer.parseInt(coordMatcher.group(2));
+                int y = Integer.parseInt(coordMatcher.group(3));
+                int z = Integer.parseInt(coordMatcher.group(4));
+
+                World world;
+                if(worldName == null) {
+                    world = ((Player)sender).getWorld();
+                } else {
+                    world = this.getServer().getWorld(worldName);
+                }
+                System.out.println("DEBUG: warping exact to world " + world.getName());
+                if(world != null) {
+                    return new Warp(this, "_EXACT", new Location(world, (double)x, (double)y, (double)z), ((Player)sender).getName());
+                }
+            }
+            
         }
         
         // No match
