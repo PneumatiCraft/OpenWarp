@@ -19,7 +19,7 @@ public abstract class OWCommand extends Command {
      * The command namespace to use when configured. This namespace is
      * prefixed to every command key path.
      */
-    public static final String NAMESPACE_PREFIX = "ow ";
+    public static final String NAMESPACE_PREFIX = "ow";
     
     /**
      * Instantiate a command backed by the given plugin. The plugin is used
