@@ -26,6 +26,9 @@ commands:
     sethome:
         description: Mark current location as home
         usage: /<command>
+    tp:
+        description: Teleport to a particular player
+        usage: /<command>
     owwarp:
         description: Manipulate warp points
         usage: /<command>
@@ -46,4 +49,7 @@ commands:
         usage: /<command>
     owsethome:
         description: Mark current location as home
+        usage: /<command>
+    owtp:
+        description: Teleport to a particular player
         usage: /<command>
