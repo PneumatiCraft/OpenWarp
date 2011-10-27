@@ -8,42 +8,28 @@ commands:
     warp:
         description: Manipulate warp points
         usage: /<command>
+        aliases: owwarp
     top:
         description: Move to top block
         usage: /<command>
+        aliases: owtop
     j:
         description: Jump to targeted block
         usage: /<command>
+        aliases: owj
     jump:
         description: Jump to targeted block
         usage: /<command>
+        aliases: owjump
     back:
         description: Return to previous location
         usage: /<command>
+        aliases: owback
     home:
         description: Move to specified home
         usage: /<command>
+        aliases: owhome
     sethome:
         description: Mark current location as home
         usage: /<command>
-    owwarp:
-        description: Manipulate warp points
-        usage: /<command>
-    owtop:
-        description: Move to top block
-        usage: /<command>
-    owj:
-        description: Jump to targeted block
-        usage: /<command>
-    owjump:
-        description: Jump to targeted block
-        usage: /<command>
-    owback:
-        description: Return to previous location
-        usage: /<command>
-    owhome:
-        description: Move to specified home
-        usage: /<command>
-    owsethome:
-        description: Mark current location as home
-        usage: /<command>
+        aliases: owsethome

@@ -14,13 +14,6 @@ import com.pneumaticraft.commandhandler.Command;
  * CommandHandler's Command class.
  */
 public abstract class OWCommand extends Command {
-
-    /**
-     * The command namespace to use when configured. This namespace is
-     * prefixed to every command key path.
-     */
-    public static final String NAMESPACE_PREFIX = "ow";
-    
     /**
      * Instantiate a command backed by the given plugin. The plugin is used
      * in subclasses for various queries back into Bukkit.
@@ -64,19 +57,11 @@ public abstract class OWCommand extends Command {
 
     @Override
     public void addKey(String key) {
-        if(this.getPlugin().getConfigurationManager().usingCommandNamespace()) {
-            super.addKey(NAMESPACE_PREFIX + key);
-        } else {
-            super.addKey(key);
-        }
+        super.addKey(key);
     }
 
     @Override
     public void addKey(String key, int minArgs, int maxArgs) {
-        if(this.getPlugin().getConfigurationManager().usingCommandNamespace()) {
-            super.addKey(NAMESPACE_PREFIX + key, minArgs, maxArgs);
-        } else {
-            super.addKey(key, minArgs, maxArgs);
-        }
+        super.addKey(key, minArgs, maxArgs);
     }
 }
