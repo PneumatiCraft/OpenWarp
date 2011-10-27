@@ -29,6 +29,9 @@ commands:
     tp:
         description: Teleport to a particular player
         usage: /<command>
+    summon:
+        description: Summon a player
+        usage: /<command>
     owwarp:
         description: Manipulate warp points
         usage: /<command>
@@ -52,4 +55,7 @@ commands:
         usage: /<command>
     owtp:
         description: Teleport to a particular player
+        usage: /<command>
+    owsummon:
+        description: Summon a player
         usage: /<command>

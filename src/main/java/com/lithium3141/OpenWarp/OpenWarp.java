@@ -246,6 +246,7 @@ public class OpenWarp extends JavaPlugin {
 		this.commandHandler.registerCommand(new OWBackCommand(this));
 
         this.commandHandler.registerCommand(new OWTeleportCommand(this));
+        this.commandHandler.registerCommand(new OWSummonCommand(this));
 	}
 	
 	private void loadListeners() {

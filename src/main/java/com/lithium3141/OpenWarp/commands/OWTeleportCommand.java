@@ -1,5 +1,6 @@
 package com.lithium3141.OpenWarp.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -19,7 +20,11 @@ public class OWTeleportCommand extends OWCommand {
 
     public OWTeleportCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
+        this.setup();
+    }
+
+    protected void setup() {
         this.setName("Teleport");
         this.setArgRange(1, 2);
         this.setCommandUsage("/tp [player] {target player}");
@@ -31,34 +36,19 @@ public class OWTeleportCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) {
-            if(args.size() == 1) {
-                sender.sendMessage(ChatColor.RED + "You must specify both a source and target player.");
-                return;
-            }
-        }
+        if(!this.senderOK(sender, args)) return;
+        Player player = (sender instanceof Player ? (Player)sender : null);
 
         // Figure out who's going where
-        String sourceName;
-        String targetName;
-        if(args.size() == 1) {
-            sourceName = ((Player)sender).getName();
-            targetName = args.get(0);
-        } else {
-            sourceName = args.get(0);
-            targetName = args.get(1);
-        }
-
-        Player sourcePlayer = this.getPlugin().getServer().getPlayer(sourceName);
-        Player targetPlayer = this.getPlugin().getServer().getPlayer(targetName);
+        Player sourcePlayer = this.getSourcePlayer(player, args);
+        Player targetPlayer = this.getTargetPlayer(player, args);
 
         if(sourcePlayer == null) {
-            sender.sendMessage(ChatColor.RED + "Couldn't determine player to move");
-            sender.sendMessage(ChatColor.RED + "This could be a bug! File an issue on GitHub");
+            sender.sendMessage(ChatColor.RED + "Couldn't find player to move");
             return;
         }
         if(targetPlayer == null) {
-            sender.sendMessage(ChatColor.RED + "Couldn't find target player: " + targetName);
+            sender.sendMessage(ChatColor.RED + "Couldn't find target player");
             return;
         }
         
@@ -66,6 +56,26 @@ public class OWTeleportCommand extends OWCommand {
         if(!sourcePlayer.teleport(targetPlayer.getLocation())) {
             sourcePlayer.sendMessage(ChatColor.RED + "Error teleporting to player: " + targetPlayer.getName());
         }
+    }
+
+    protected boolean senderOK(CommandSender sender, List<String> args) {
+        if(!(sender instanceof Player) && args.size() == 1) {
+            sender.sendMessage(ChatColor.RED + "You must specify both a source and target player.");
+            return false;
+        }
+        return true;
+    }
+
+    protected Player getSourcePlayer(Player sender, List<String> args) {
+        if(args.size() == 1) {
+            return sender;
+        } else {
+            return this.getPlugin().getServer().getPlayer(args.get(0));
+        }
+    }
+
+    protected Player getTargetPlayer(Player sender, List<String> args) {
+        return this.getPlugin().getServer().getPlayer(args.get(args.size() - 1));
     }
 
 }
