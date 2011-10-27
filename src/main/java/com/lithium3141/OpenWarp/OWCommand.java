@@ -64,19 +64,13 @@ public abstract class OWCommand extends Command {
 
     @Override
     public void addKey(String key) {
-        if(this.getPlugin().getConfigurationManager().usingCommandNamespace()) {
-            super.addKey(NAMESPACE_PREFIX + key);
-        } else {
-            super.addKey(key);
-        }
+        super.addKey(NAMESPACE_PREFIX + key);
+        super.addKey(key);
     }
 
     @Override
     public void addKey(String key, int minArgs, int maxArgs) {
-        if(this.getPlugin().getConfigurationManager().usingCommandNamespace()) {
-            super.addKey(NAMESPACE_PREFIX + key, minArgs, maxArgs);
-        } else {
-            super.addKey(key, minArgs, maxArgs);
-        }
+        super.addKey(NAMESPACE_PREFIX + key, minArgs, maxArgs);
+        super.addKey(key, minArgs, maxArgs);
     }
 }
