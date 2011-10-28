@@ -261,9 +261,11 @@ public class OpenWarp extends JavaPlugin {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+        DEBUG_LOG.fine("Command received. Name:" + command.getName() + " label:" + command.getLabel() + " arglabel:" + commandLabel);
+
 		// Construct a trie key path from the command label and args
 		List<String> keyPath = new ArrayList<String>();
-		keyPath.add(commandLabel.toLowerCase());
+		keyPath.add(command.getLabel().toLowerCase());
 		for(int i = 0; i < args.length; i++) {
 			keyPath.add(args[i]);
 		}
