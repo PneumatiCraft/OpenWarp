@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.Warp;
-import com.onarandombox.utils.MVDestination;
+import com.onarandombox.MultiverseCore.api.MVDestination;
 
 /**
  * Multiverse 2 destination type for OpenWarp. Allows users of both Multiverse
@@ -21,7 +21,7 @@ public class OpenWarpDestination implements MVDestination {
     private String warpName;
 
     @Override
-    public String getIdentifer() {
+    public String getIdentifier() {
         return "ow";
     }
 

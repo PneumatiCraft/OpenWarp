@@ -19,7 +19,7 @@ public class MVConnector {
     public MVConnector(Plugin plugin) {
         if(plugin != null) {
             this.core = (MultiverseCore) plugin;
-            this.core.getDestinationFactory().registerDestinationType(OpenWarpDestination.class, "ow");
+            this.core.getDestFactory().registerDestinationType(OpenWarpDestination.class, "ow");
         }
     }
 }
