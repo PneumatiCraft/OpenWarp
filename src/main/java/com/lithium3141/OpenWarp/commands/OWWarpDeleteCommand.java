@@ -10,10 +10,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.Warp;
 
 /**
  * Deletes a warp owned by the player. Searches the player's public
- * warps first, then private warps.
+ * warps first, then private warps. Cannot delete shared warps (see
+ * the collection of sharing commands for that).
  */
 public class OWWarpDeleteCommand extends OWCommand {
 
@@ -24,7 +26,7 @@ public class OWWarpDeleteCommand extends OWCommand {
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp delete {NAME}");
         this.addCommandExample("/warp delete public");
-        this.setPermission("openwarp.warp.delete", "Remove an existing warp", PermissionDefault.OP);
+        this.setPermission("openwarp.warp.delete.use", "Remove an existing warp", PermissionDefault.OP);
         this.addKey("warp delete");
     }
 
@@ -35,6 +37,20 @@ public class OWWarpDeleteCommand extends OWCommand {
         
         // Remove warp
         if(this.getPlugin().getPublicWarps().containsKey(warpName)) {
+            // Get the delete permission in question
+            Warp warp = this.getPlugin().getPublicWarps().get(warpName);
+            String owner = warp.getOwner();
+            String permNode = "other";
+            if(sender instanceof Player && ((Player)sender).getName().equals(owner)) {
+                permNode = "self";
+            }
+
+            if(!sender.hasPermission("openwarp.warp.delete.public." + permNode)) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to delete that public warp");
+                return;
+            }
+
+            // Do the delete
             if(this.getPlugin().getPublicWarps().remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed public warp '" + warpName + "'");
                 permString = "openwarp.warp.access.public." + warpName;
@@ -47,6 +63,11 @@ public class OWWarpDeleteCommand extends OWCommand {
             
             Player player = (Player)sender;
             String playerName = player.getName();
+
+            if(!player.hasPermission("openwarp.warp.delete.private")) {
+                player.sendMessage(ChatColor.RED + "You do not have permission to delete that private warp");
+                return;
+            }
             
             if(this.getPlugin().getPrivateWarps(playerName).remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed private warp '" + warpName + "'");

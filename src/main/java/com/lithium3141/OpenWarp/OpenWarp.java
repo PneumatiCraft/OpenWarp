@@ -183,12 +183,29 @@ public class OpenWarp extends JavaPlugin {
 	    Map<String, Boolean> accessChildren = new HashMap<String, Boolean>() {{ put("openwarp.warp.access.public.*", true); put("openwarp.warp.access.private.*", true); }};
 	    Permission warpAccessPerm = new Permission("openwarp.warp.access.*", PermissionDefault.TRUE, accessChildren);
 	    pm.addPermission(warpAccessPerm);
-	    
-	    // Make the primary access perm a child of overall warp perms
+
+        // Also insert delete perms
+        Map<String, Boolean> deletePublicChildren = new HashMap<String, Boolean>() {{
+             put("openwarp.warp.delete.public.self", true);
+             put("openwarp.warp.delete.public.other", true);
+        }};
+        Permission deletePublicPerm = new Permission("openwarp.warp.delete.public.*", PermissionDefault.TRUE, deletePublicChildren);
+        pm.addPermission(deletePublicPerm);
+
+        // Add public & private children of delete perm (which should already exist)
+        Permission deletePerm = pm.getPermission("openwarp.warp.delete.*");
+        if(deletePerm != null) {
+            deletePerm.getChildren().put("openwarp.warp.delete.public.*", true);
+            deletePerm.getChildren().put("openwarp.warp.delete.private.*", true);
+            deletePerm.recalculatePermissibles();
+        }
+
+	    // Make the primary access & delete perms a child of overall warp perms
 	    Permission warpPerm = pm.getPermission("openwarp.warp.*");
 	    if(warpPerm != null) {
-	        pm.getPermission("openwarp.warp.*").getChildren().put("openwarp.warp.access.*", true);
-	        pm.getPermission("openwarp.warp.*").recalculatePermissibles();
+	        warpPerm.getChildren().put("openwarp.warp.access.*", true);
+	        warpPerm.getChildren().put("openwarp.warp.delete.*", true);
+	        warpPerm.recalculatePermissibles();
 	    } else {
 	        LOG.severe(LOG_PREFIX + "Error inserting warp access permissions. This is a bug!");
 	    }
