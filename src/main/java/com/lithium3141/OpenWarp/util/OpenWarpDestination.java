@@ -20,17 +20,16 @@ public class OpenWarpDestination implements MVDestination {
     private Warp warp;
     private String warpName;
 
+    public static final String IDENTIFIER = "ow";
+
     @Override
     public String getIdentifier() {
-        return "ow";
+        return IDENTIFIER;
     }
 
     @Override
     public boolean isThisType(JavaPlugin plugin, String dest) {
-        if (dest.split(":").length == 2) {
-            return true;
-        }
-        return false;
+        return Pattern.matches("^ow:([a-zA-Z0-9_]+)(?::([a-zA-Z0-9_]+))?$", dest);
     }
 
     @Override
@@ -54,8 +53,8 @@ public class OpenWarpDestination implements MVDestination {
         // If this class exists, then this plugin MUST exist!
         this.plugin = (OpenWarp) plugin.getServer().getPluginManager().getPlugin("OpenWarp");
         try {
-            this.warpName = dest.split(":")[1];
-        } catch (ArrayIndexOutOfBoundsException e) {
+            this.warpName = dest.substring(dest.indexOf(":") + 1);
+        } catch (IndexOutOfBoundsException e) {
             this.warpName = "";
         }
     }
