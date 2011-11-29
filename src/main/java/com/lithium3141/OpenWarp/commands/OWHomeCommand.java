@@ -13,8 +13,7 @@ import com.lithium3141.OpenWarp.OWCommand;
 
 /**
  * Command for moving to a player's home. Players set individual homes
- * using OWHomeSetCommand; at present, a player may only have one home
- * overall, rather than one per world.
+ * using OWHomeSetCommand; these homes may be global (all worlds) or per-world.
  */
 public class OWHomeCommand extends OWCommand {
     
@@ -36,6 +35,7 @@ public class OWHomeCommand extends OWCommand {
         
         Location home = null;
         if(args.size() == 0) {
+            // Accessing the player's home - no perms check necessary
             home = this.getPlugin().getHome(player, player.getLocation().getWorld());
         } else if(args.size() == 1) {
             // Accessing a specific home - check perms if necessary
