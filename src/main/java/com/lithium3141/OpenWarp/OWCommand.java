@@ -28,10 +28,10 @@ public abstract class OWCommand extends Command {
      * @param plugin The plugin used for Bukkit calls in concrete command
      * subclasses.
      */
-	public OWCommand(JavaPlugin plugin) {
+    public OWCommand(JavaPlugin plugin) {
         super(plugin);
     }
-	
+    
     /**
      * Get this OWCommand's plugin. Casts the plugin passed in the constructor
      * to an instance of OpenWarp.
@@ -40,10 +40,10 @@ public abstract class OWCommand extends Command {
      *
      * @return The OpenWarp plugin instance handling this OWCommand.
      */
-	public OpenWarp getPlugin() {
-	    return (OpenWarp)this.plugin;
-	}
-	
+    public OpenWarp getPlugin() {
+        return (OpenWarp)this.plugin;
+    }
+    
     /**
      * Check if the sender of this OWCommand is a Player. If the sender is not a
      * Player, send an error message back.
@@ -51,16 +51,16 @@ public abstract class OWCommand extends Command {
      * @param sender The CommandSender to check.
      * @return true if the sender is a Player; false otherwise.
      */
-	public boolean checkPlayerSender(CommandSender sender) {
-	    if(sender instanceof ConsoleCommandSender) {
+    public boolean checkPlayerSender(CommandSender sender) {
+        if(sender instanceof ConsoleCommandSender) {
             sender.sendMessage(ChatColor.RED + "Command must be run in-game!");
             return false;
         } else if(!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Cannot verify command's sender!");
             return false;
         }
-	    return true;
-	}
+        return true;
+    }
 
     @Override
     public void addKey(String key) {

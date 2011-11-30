@@ -37,66 +37,66 @@ public class Warp {
     /**
      * The name of this Warp.
      */
-	protected String name;
+    protected String name;
 
     /**
      * The target Location of this Warp.
      */
-	protected Location location;
+    protected Location location;
 
     /**
      * The name of the owner of this Warp. Stored as a String since the owning Player
      * may not be logged in at any given time; this is especially a concern for public
      * warps.
      */
-	protected String owner;
+    protected String owner;
 
     /**
      * The names of players invited to this Warp. Only truly applicable for private
      * warps.
      */
     protected List<String> invitees;
-	
+    
     /**
      * Configuration key for the World component of this Warp's Location.
      */
-	public static final String WORLD_KEY = "world";
+    public static final String WORLD_KEY = "world";
 
     /**
      * Configuration key for the x-component of this Warp's Location.
      */
-	public static final String X_KEY = "x";
+    public static final String X_KEY = "x";
 
     /**
      * Configuration key for the y-component of this Warp's Location.
      */
-	public static final String Y_KEY = "y";
+    public static final String Y_KEY = "y";
 
     /**
      * Configuration key for the z-component of this Warp's Location.
      */
-	public static final String Z_KEY = "z";
+    public static final String Z_KEY = "z";
 
     /**
      * Configuration key for the pitch component of this Warp's Location.
      */
-	public static final String PITCH_KEY = "pitch";
+    public static final String PITCH_KEY = "pitch";
 
     /**
      * Configuration key for the yaw component of this Warp's Location.
      */
-	public static final String YAW_KEY = "yaw";
+    public static final String YAW_KEY = "yaw";
 
     /**
      * Configuration key for the owner name of this Warp.
      */
-	public static final String OWNER_KEY = "owner";
+    public static final String OWNER_KEY = "owner";
 
     /**
      * Configuration key for the invitee list of this Warp.
      */
     public static final String INVITEES_KEY = "invitees";
-	
+    
     /**
      * Create a new Warp with the given name, deriving Location data from the given
      * ConfigurationNode. Will read configuration information using the static keys
@@ -107,13 +107,13 @@ public class Warp {
      * @param name The name of this Warp.
      * @param node The ConfigurationNode from which to pull Location information.
      */
-	public Warp(OpenWarp plugin, String name, ConfigurationNode node) {
-	    this.plugin = plugin;
-		this.name = name;
-		
-		this.parseConfiguration(node);
-	}
-	
+    public Warp(OpenWarp plugin, String name, ConfigurationNode node) {
+        this.plugin = plugin;
+        this.name = name;
+        
+        this.parseConfiguration(node);
+    }
+    
     /**
      * Create a new warp with the given name, Location, and owner. Does no validation
      * on whether the given Location or owner string are valid.
@@ -123,14 +123,14 @@ public class Warp {
      * @param location The Location destination of this Warp.
      * @param owner The name of the Player owner of this Warp.
      */
-	public Warp(OpenWarp plugin, String name, Location location, String owner) {
-	    this.plugin = plugin;
-	    this.name = name;
-	    this.location = location;
-	    this.owner = owner;
+    public Warp(OpenWarp plugin, String name, Location location, String owner) {
+        this.plugin = plugin;
+        this.name = name;
+        this.location = location;
+        this.owner = owner;
         this.invitees = new ArrayList<String>();
-	}
-	
+    }
+    
     /**
      * Read Location and owner information from the given ConfigurationNode. Does basic
      * validation on the World named in the node. Uses the static keys defined in this
@@ -141,8 +141,8 @@ public class Warp {
      *
      * @param node The ConfigurationNode from which to read information.
      */
-	private void parseConfiguration(ConfigurationNode node) {
-	    String worldName = node.getString(WORLD_KEY);
+    private void parseConfiguration(ConfigurationNode node) {
+        String worldName = node.getString(WORLD_KEY);
         if(worldName == null) {
             worldName = this.plugin.getServer().getWorlds().get(0).getName();
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
@@ -163,26 +163,26 @@ public class Warp {
         
         this.owner = node.getString(OWNER_KEY, "");
         this.invitees = node.getStringList(INVITEES_KEY, new ArrayList<String>());
-	}
-	
+    }
+    
     /**
      * Get the name of this Warp.
      *
      * @return The name of this Warp.
      */
-	public String getName() {
-		return this.name;
-	}
-	
+    public String getName() {
+        return this.name;
+    }
+    
     /**
      * Get the destination Location of this Warp.
      *
      * @return The destination Location of this Warp.
      */
-	public Location getLocation() {
-	    return this.location;
-	}
-	
+    public Location getLocation() {
+        return this.location;
+    }
+    
     /**
      * Check if this Warp is a public warp. A public warp is available to all
      * players with the relevant permissions currently on the server. A Warp is
@@ -191,10 +191,10 @@ public class Warp {
      *
      * @return True if this warp is public; false otherwise.
      */
-	public boolean isPublic() {
-	    return this.plugin.getPublicWarps().values().contains(this);
-	}
-	
+    public boolean isPublic() {
+        return this.plugin.getPublicWarps().values().contains(this);
+    }
+    
     /**
      * Check if this Warp is a private warp. A private warp is only available to
      * its owner (the Player with the same name as this Warp's owner string). A Warp 
@@ -203,27 +203,27 @@ public class Warp {
      *
      * @return True if this warp is private; false otherwise.
      */
-	public boolean isPrivate() {
-	    return this.plugin.getPrivateWarps().get(this.getOwner()).values().contains(this);
-	}
-	
+    public boolean isPrivate() {
+        return this.plugin.getPrivateWarps().get(this.getOwner()).values().contains(this);
+    }
+    
     /**
      * Get information about this Warp in a readable format.
      *
      * @return A String detailing this Warp's information.
      */
-	public String getDetailString() {
-	    return "(" + this.location.getX() + ", " + this.location.getY() + ", " + this.location.getZ() + ") in world " + this.location.getWorld().getName();
-	}
-	
+    public String getDetailString() {
+        return "(" + this.location.getX() + ", " + this.location.getY() + ", " + this.location.getZ() + ") in world " + this.location.getWorld().getName();
+    }
+    
     /**
      * Get the name of the Player owner of this Warp.
      *
      * @return The name of this Warp's owner.
      */
-	public String getOwner() {
-	    return this.owner;
-	}
+    public String getOwner() {
+        return this.owner;
+    }
 
     /**
      * Get the list of people invited to this Warp. Only applicable for private warps;
@@ -298,7 +298,7 @@ public class Warp {
     public void removeInvitee(String playerName) {
         this.invitees.remove(playerName);
     }
-	
+    
     /**
      * Get a Map suitable for writing to a configuration file that represents
      * this Warp. The map is populated using the static keys defined in this 
@@ -308,28 +308,28 @@ public class Warp {
      * @return A Map containing the details of this Warp in a format suitable
      * for writing to a Configuration YAML file.
      */
-	public Map<String, Object> getConfigurationMap() {
-	    Map<String, Object> result = new HashMap<String, Object>();
-	    
-	    result.put(X_KEY, this.location.getX());
-	    result.put(Y_KEY, this.location.getY());
-	    result.put(Z_KEY, this.location.getZ());
-	    result.put(PITCH_KEY, this.location.getPitch());
-	    result.put(YAW_KEY, this.location.getYaw());
-	    
-	    if(this.location.getWorld() == null) {
-	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Target world is null; this is a bug!");
-	        OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "See https://github.com/PneumatiCraft/OpenWarp/issues/22");
-	        return result;
-	    }
-	    
-	    result.put(WORLD_KEY, this.location.getWorld().getName());
-	    
-	    result.put(OWNER_KEY, this.owner);
+    public Map<String, Object> getConfigurationMap() {
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put(X_KEY, this.location.getX());
+        result.put(Y_KEY, this.location.getY());
+        result.put(Z_KEY, this.location.getZ());
+        result.put(PITCH_KEY, this.location.getPitch());
+        result.put(YAW_KEY, this.location.getYaw());
+        
+        if(this.location.getWorld() == null) {
+            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Target world is null; this is a bug!");
+            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "See https://github.com/PneumatiCraft/OpenWarp/issues/22");
+            return result;
+        }
+        
+        result.put(WORLD_KEY, this.location.getWorld().getName());
+        
+        result.put(OWNER_KEY, this.owner);
         result.put(INVITEES_KEY, this.invitees);
-	    
-	    return result;
-	}
+        
+        return result;
+    }
 
     /**
      * Check whether to use the Multiverse safe teleporter when moving to this
