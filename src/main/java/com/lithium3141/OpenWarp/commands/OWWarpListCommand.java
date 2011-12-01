@@ -21,7 +21,7 @@ public class OWWarpListCommand extends OWCommand {
 
     public OWWarpListCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Warp set");
         this.setArgRange(0, 3);
         this.setCommandUsage("/warp list [public] [private] [invited]");
@@ -36,17 +36,17 @@ public class OWWarpListCommand extends OWCommand {
         boolean sendPublic = (args.size() == 0 || args.contains("public"));
         boolean sendPrivate = (args.size() == 0 || args.contains("private"));
         boolean sendInvited = (args.size() == 0 || args.contains("invited"));
-        
+
         if(sendPublic) this.sendPublicWarpsList(sender);
         if(sendPrivate) this.sendPrivateWarpsList(sender);
         if(sendInvited) this.sendInvitedWarpsList(sender);
     }
-    
+
     private void sendPublicWarpsList(CommandSender sender) {
         Map<String, Warp> publics = this.getPlugin().getPublicWarps();
         sender.sendMessage(ChatColor.GREEN + "Public:" + ChatColor.WHITE + this.formatWarpsList(publics));
     }
-    
+
     private void sendPrivateWarpsList(CommandSender sender) {
         if(sender instanceof Player) {
             Player player = (Player)sender;
@@ -54,7 +54,7 @@ public class OWWarpListCommand extends OWCommand {
             sender.sendMessage(ChatColor.AQUA + "Private:" + ChatColor.WHITE + this.formatWarpsList(privates));
         } else {
             sender.sendMessage(ChatColor.AQUA + "Private:");
-            
+
             for(Entry<String, Map<String, Warp>> entry : this.getPlugin().getPrivateWarps().entrySet()) {
                 sender.sendMessage("    " + ChatColor.LIGHT_PURPLE + entry.getKey() + ":" + ChatColor.WHITE + this.formatWarpsList(entry.getValue()));
             }
@@ -84,7 +84,7 @@ public class OWWarpListCommand extends OWCommand {
             sender.sendMessage(ChatColor.GOLD + "Invited:" + ChatColor.WHITE + this.formatInvitedWarpsList(invitedWarps));
         }
     }
-    
+
     private String formatWarpsList(Map<String, Warp> list) {
         String result = "";
         if(list.size() > 0) {

@@ -42,12 +42,12 @@ public class OWWarpShareCommand extends OWCommand {
         }
 
         warp.addInvitee(sharePlayerName);
-        
+
         Player sharePlayer = this.getPlugin().getServer().getPlayer(sharePlayerName);
         if(sharePlayer != null) {
             sharePlayer.sendMessage(ChatColor.GOLD + player.getName() + " has shared warp '" + warpName + "' with you!");
             sharePlayer.sendMessage(ChatColor.GOLD + "Access via: /warp " + player.getName() + ":" + warpName);
         }
     }
-    
+
 }

@@ -20,7 +20,7 @@ public class OWQuotaShowCommand extends OWCommand {
 
     public OWQuotaShowCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Quota show");
         this.setArgRange(0, 0);
         this.setCommandUsage("/warp quota show");
@@ -32,29 +32,29 @@ public class OWQuotaShowCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
-        
+
         if(sender instanceof Player) {
             Player player = (Player)sender;
             sender.sendMessage(ChatColor.AQUA + "Quotas: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getPublicWarpQuota(player), quotaManager.getPrivateWarpQuota(player)));
         } else {
             sender.sendMessage(ChatColor.GREEN + "Global: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getGlobalPublicWarpQuota(), quotaManager.getGlobalPrivateWarpQuota()));
             sender.sendMessage(ChatColor.AQUA + "Players:");
-            
+
             Set<String> quotadPlayers = new HashSet<String>();
             quotadPlayers.addAll(quotaManager.getPlayerMaxPublicWarps().keySet());
             quotadPlayers.addAll(quotaManager.getPlayerMaxPrivateWarps().keySet());
-            
+
             for(String playerName : quotadPlayers) {
                 String quotas = this.formatQuotaPair(quotaManager.getPlayerMaxPublicWarps().get(playerName), quotaManager.getPlayerMaxPrivateWarps().get(playerName));
                 sender.sendMessage("    " + ChatColor.LIGHT_PURPLE + playerName + ": " + ChatColor.WHITE + quotas);
             }
         }
     }
-    
+
     private String formatQuotaPair(int publicQuota, int privateQuota) {
         return this.formatQuota(publicQuota, "public") + ", " + this.formatQuota(privateQuota, "private");
     }
-    
+
     private String formatQuota(int quota, String label) {
         switch(quota) {
         case OWQuotaManager.QUOTA_UNDEFINED: return label + " quota undefined";

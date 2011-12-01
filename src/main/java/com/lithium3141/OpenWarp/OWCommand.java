@@ -20,7 +20,7 @@ public abstract class OWCommand extends Command {
      * prefixed to every command key path.
      */
     public static final String NAMESPACE_PREFIX = "ow";
-    
+
     /**
      * Instantiate a command backed by the given plugin. The plugin is used
      * in subclasses for various queries back into Bukkit.
@@ -31,7 +31,7 @@ public abstract class OWCommand extends Command {
     public OWCommand(JavaPlugin plugin) {
         super(plugin);
     }
-    
+
     /**
      * Get this OWCommand's plugin. Casts the plugin passed in the constructor
      * to an instance of OpenWarp.
@@ -43,7 +43,7 @@ public abstract class OWCommand extends Command {
     public OpenWarp getPlugin() {
         return (OpenWarp)this.plugin;
     }
-    
+
     /**
      * Check if the sender of this OWCommand is a Player. If the sender is not a
      * Player, send an error message back.

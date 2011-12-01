@@ -26,7 +26,7 @@ public class OWWarpSetCommand extends OWCommand {
 
     public OWWarpSetCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Warp set");
         this.setArgRange(1, 2);
         this.setCommandUsage("/warp set {NAME} [public|private]");
@@ -39,11 +39,11 @@ public class OWWarpSetCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
-        
+
         // Grab player info
         Player player = (Player)sender;
         Location playerLoc = player.getLocation();
-        
+
         // Find warp type
         String warpType;
         if(args.size() >= 2) {
@@ -51,12 +51,12 @@ public class OWWarpSetCommand extends OWCommand {
         } else {
             warpType = "private";
         }
-        
+
         if(!warpType.equals("public") && !warpType.equals("private")) {
             player.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
-        
+
         // See if warp exists already - this affects quota checking
         OpenWarp.DEBUG_LOG.fine("Checking for warp '" + args.get(0) + "' in " + warpType + " warps for player " + player.getName());
         boolean warpExists = false;
@@ -91,7 +91,7 @@ public class OWWarpSetCommand extends OWCommand {
                 return;
             }
         }
-        
+
         // Create and set warp
         Warp warp = new Warp(this.getPlugin(), args.get(0), playerLoc, player.getName());
         String successMsg = (warpExists ? "Moved" : "Created new");
@@ -104,7 +104,7 @@ public class OWWarpSetCommand extends OWCommand {
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " private warp '" + warp.getName() + "'");
             this.getPlugin().getConfigurationManager().savePlayerConfiguration(player.getName());
         }
-        
+
         // Create permission for warp
         String permString = "";
         if(warpType.equals("public")) {

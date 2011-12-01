@@ -25,11 +25,11 @@ import com.lithium3141.OpenWarp.Warp;
 public class OWConfigurationManager {
 
     private OpenWarp plugin;
-    
+
     // Global config filenames
     public static final String MASTER_CONFIG_FILENAME = "config.yml";
     public static final String PUBLIC_WARP_CONFIG_FILENAME = "warps.yml";
-    
+
     // Config key names
     public static final String PLAYER_NAMES_LIST_KEY = "players";
     public static final String WARPS_LIST_KEY = "warps";
@@ -63,7 +63,7 @@ public class OWConfigurationManager {
         // Get configuration file (even if nonexistent)
         this.configuration = new Configuration(new File(this.plugin.getDataFolder(), MASTER_CONFIG_FILENAME));
         this.configuration.load();
-        
+
         this.publicWarpsConfig = new Configuration(new File(this.plugin.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
         this.publicWarpsConfig.load();
     }
@@ -81,7 +81,7 @@ public class OWConfigurationManager {
         OpenWarp.DEBUG_LOG.fine("Writing ALL OpenWarp configuration files");
         if(this.configuration != null) {
             this.saveGlobalConfiguration();
-            
+
             // Save player-specific data
             for(String playerName : this.playerConfigs.keySet()) {
                 this.savePlayerConfiguration(playerName);
@@ -105,18 +105,18 @@ public class OWConfigurationManager {
             if(!this.configuration.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save player list; continuing...");
             }
-            
+
             // Save public warps
             Map<String, Object> warps = new HashMap<String, Object>();
             for(Entry<String, Warp> entry : this.plugin.getPublicWarps().entrySet()) {
                 warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
             }
-            
+
             this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
             if(!this.publicWarpsConfig.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save public warp list; continuing...");
             }
-            
+
             // Save global quotas
             this.configuration.setProperty(QUOTAS_KEY, this.plugin.getQuotaManager().getGlobalQuotaMap());
 
@@ -125,7 +125,7 @@ public class OWConfigurationManager {
             this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
         }
     }
-    
+
     /**
      * Save the player-specific configuration files for the given Player.
      * Calls #savePlayerConfiguration(String) internally.
@@ -151,17 +151,17 @@ public class OWConfigurationManager {
 
         if(this.configuration != null) {
             OWPlayerConfiguration config = this.playerConfigs.get(playerName);
-            
+
             if(config != null && !config.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
             }
         }
     }
 
-   
+
     /**
      * Load public warps into the given map. Mutates the `target` argument.
-     * 
+     *
      * @param target The map into which to load new Warp objects.
      */
     public void loadPublicWarps(Map<String, Warp> target) {
@@ -185,12 +185,12 @@ public class OWConfigurationManager {
             }
         }
     }
-    
+
     /**
      * Register a player with the OpenWarp plugin. Create a new
-     * OWPlayerConfiguration instance for the given Player if no such 
+     * OWPlayerConfiguration instance for the given Player if no such
      * configuration exists yet.
-     * 
+     *
      * @param playerName The player to register
      * @see OWPlayerConfiguration
      */
@@ -201,7 +201,7 @@ public class OWConfigurationManager {
             this.playerConfigs.put(playerName, playerConfig);
         }
     }
-    
+
     /**
      * Load player information from disk, creating OWPlayerConfiguration instances
      * for each.

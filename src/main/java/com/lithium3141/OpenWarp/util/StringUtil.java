@@ -24,7 +24,7 @@ public class StringUtil {
         }
         return false;
     }
-    
+
     /**
      * Trim the contents of one String array from the beginning of another. Iteratively
      * removes elements in <code>trim</code> from the array <code>value</code>, stopping
@@ -42,15 +42,15 @@ public class StringUtil {
                 break;
             }
         }
-        
+
         String[] result = new String[value.length - idx];
         for(int i = 0; i < result.length; i++) {
             result[i] = value[i + idx];
         }
-        
+
         return result;
     }
-    
+
     /**
      * Join an array of Strings into a single String, separated by a given delimiter.
      *
@@ -63,15 +63,15 @@ public class StringUtil {
         if(array.length == 0) {
             return "";
         }
-        
+
         String result = array[0];
         for(int i = 1; i < array.length; i++) {
             result += delim + array[i];
         }
-        
+
         return result;
     }
-    
+
     /**
      * Join an array of Strings into a single String, separated by a space.
      *
@@ -83,7 +83,7 @@ public class StringUtil {
     public static String arrayJoin(String[] array) {
         return arrayJoin(array, " ");
     }
-    
+
     /**
      * Trim the contents of one String List from the beginning of another. Iteratively
      * removes elements in <code>trim</code> from the array <code>value</code>, stopping
@@ -96,13 +96,13 @@ public class StringUtil {
      */
     public static List<String> trimListLeft(List<String> value, List<String> trim) {
         List<String> result = new ArrayList<String>();
-        
+
         boolean trimming = true;
         for(int i = 0; i < value.size(); i++) {
             if(i == trim.size()) {
                 trimming = false;
             }
-            
+
             if(trimming && value.get(i).equals(trim.get(i))) {
                 continue;
             } else {
@@ -110,7 +110,7 @@ public class StringUtil {
                 result.add(value.get(i));
             }
         }
-        
+
         return result;
     }
 }

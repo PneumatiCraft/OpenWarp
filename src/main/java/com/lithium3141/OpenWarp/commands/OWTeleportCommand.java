@@ -51,7 +51,7 @@ public class OWTeleportCommand extends OWCommand {
             sender.sendMessage(ChatColor.RED + "Couldn't find target player");
             return;
         }
-        
+
         // Move people
         if(!sourcePlayer.teleport(targetPlayer.getLocation())) {
             sourcePlayer.sendMessage(ChatColor.RED + "Error teleporting to player: " + targetPlayer.getName());

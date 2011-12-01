@@ -13,13 +13,13 @@ import com.lithium3141.OpenWarp.config.OWConfigurationManager;
  * public and private warps for all players known to OpenWarp.
  */
 public class OWQuotaManager {
-    
+
     private int globalMaxPublicWarps;
     private int globalMaxPrivateWarps;
 
     private Map<String, Integer> playerMaxPublicWarps = new HashMap<String, Integer>();
     private Map<String, Integer> playerMaxPrivateWarps = new HashMap<String, Integer>();
-    
+
     /**
      * Special value indicating an unlimited number of warps allowed.
      */
@@ -29,9 +29,9 @@ public class OWQuotaManager {
      * Special value indicating an undefined quota.
      */
     public static final int QUOTA_UNDEFINED = -2;
-    
+
     private OpenWarp plugin;
-    
+
     /**
      * Create a new quota manager backed by the given OpenWarp instance.
      *
@@ -40,7 +40,7 @@ public class OWQuotaManager {
     public OWQuotaManager(OpenWarp plugin) {
         this.plugin = plugin;
     }
-    
+
     /**
      * Get the public warp quota for the given player. Calculates the public quota
      * based on both global and individual quotas.
@@ -53,16 +53,16 @@ public class OWQuotaManager {
      */
     public int getPublicWarpQuota(String playerName) {
         int quota = this.globalMaxPublicWarps;
-        
+
         if(this.playerMaxPublicWarps.containsKey(playerName) && this.playerMaxPublicWarps.get(playerName) != QUOTA_UNDEFINED) {
             quota = this.playerMaxPublicWarps.get(playerName);
         }
-        
+
         return (quota == QUOTA_UNDEFINED ? QUOTA_UNLIMITED : quota);
     }
-    
+
     /**
-     * Get the public warp quota for the given Player. 
+     * Get the public warp quota for the given Player.
      *
      * @param player The Player for whom to calculate a public warp quota.
      * @return The public warp quota for the given Player.
@@ -71,7 +71,7 @@ public class OWQuotaManager {
     public int getPublicWarpQuota(Player player) {
         return this.getPublicWarpQuota(player.getName());
     }
-    
+
     /**
      * Get the private warp quota for the given player. Calculates the private quota
      * based on both global and individual quotas.
@@ -84,16 +84,16 @@ public class OWQuotaManager {
      */
     public int getPrivateWarpQuota(String playerName) {
         int quota = this.globalMaxPrivateWarps;
-        
+
         if(this.playerMaxPrivateWarps.containsKey(playerName) && this.playerMaxPrivateWarps.get(playerName) != QUOTA_UNDEFINED) {
             quota = this.playerMaxPrivateWarps.get(playerName);
         }
-        
+
         return (quota == QUOTA_UNDEFINED ? QUOTA_UNLIMITED : quota);
     }
-    
+
     /**
-     * Get the private warp quota for the given Player. 
+     * Get the private warp quota for the given Player.
      *
      * @param player The Player for whom to calculate a private warp quota.
      * @return The private warp quota for the given Player.
@@ -117,22 +117,22 @@ public class OWQuotaManager {
      */
     public Map<String, Object> getPlayerQuotaMap(String playerName) {
         Map<String, Object> result = new HashMap<String, Object>();
-        
+
         if(this.playerMaxPublicWarps.containsKey(playerName)) {
             result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, this.playerMaxPublicWarps.get(playerName));
         } else {
             result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED);
         }
-        
+
         if(this.playerMaxPrivateWarps.containsKey(playerName)) {
             result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, this.playerMaxPrivateWarps.get(playerName));
         } else {
             result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED);
         }
-        
+
         return result;
     }
-    
+
     /**
      * Get the raw global quota map. This map is in a format suitable for writing
      * to a Configuration for output to a YAML file; it casts all values into
@@ -145,10 +145,10 @@ public class OWQuotaManager {
      */
     public Map<String, Object> getGlobalQuotaMap() {
         Map<String, Object> result = new HashMap<String, Object>();
-        
+
         result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, this.globalMaxPublicWarps);
         result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, this.globalMaxPrivateWarps);
-        
+
         return result;
     }
 
@@ -160,7 +160,7 @@ public class OWQuotaManager {
     public int getGlobalPublicWarpQuota() {
         return this.globalMaxPublicWarps;
     }
-    
+
     /**
      * Get the global private warp quota.
      *
@@ -169,7 +169,7 @@ public class OWQuotaManager {
     public int getGlobalPrivateWarpQuota() {
         return this.globalMaxPrivateWarps;
     }
-    
+
     /**
      * Set the global public warp quota.
      *
@@ -178,7 +178,7 @@ public class OWQuotaManager {
     public void setGlobalPublicWarpQuota(int quota) {
         this.globalMaxPublicWarps = quota;
     }
-    
+
     /**
      * Set the global private warp quota.
      *
@@ -187,7 +187,7 @@ public class OWQuotaManager {
     public void setGlobalPrivateWarpQuota(int quota) {
         this.globalMaxPrivateWarps = quota;
     }
-    
+
     /**
      * Get the individual public warp quotas for all players. The returned map
      * will have the actual quota value for each player name known to OpenWarp;
@@ -213,7 +213,7 @@ public class OWQuotaManager {
     public Map<String, Integer> getPlayerMaxPrivateWarps() {
         return this.playerMaxPrivateWarps;
     }
-    
+
     /**
      * Get the number of public warps owned by the given player. The number of
      * public warps is calculated by finding the number of warps in OpenWarp's
@@ -242,7 +242,7 @@ public class OWQuotaManager {
     public int getPublicWarpCount(Player player) {
         return this.getPublicWarpCount(player.getName());
     }
-    
+
     /**
      * Get the number of private warps owned by the given player. The number of
      * private warps is calculated by finding the number of warps in OpenWarp's

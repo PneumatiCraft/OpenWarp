@@ -35,9 +35,9 @@ public class OWStackPrintCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
-        
+
         Stack<Location> locations = this.getPlugin().getLocationTracker().getLocationStack(player);
-        
+
         if(locations.size() == 0) {
             sender.sendMessage(ChatColor.YELLOW + "Your warp stack is currently empty.");
             return;
@@ -47,7 +47,7 @@ public class OWStackPrintCommand extends OWCommand {
             sender.sendMessage(this.formatLocation(player, location));
         }
     }
-    
+
     protected String formatLocation(Player player, Location location) {
         Warp matchingWarp = this.getPlugin().getWarp(player, location);
         if(matchingWarp != null) {

@@ -10,7 +10,7 @@ public class OWPermissionException extends Exception {
     public OWPermissionException() {
         super();
     }
-    
+
     /**
      * Create a new OWPermissionException with the given message.
      *

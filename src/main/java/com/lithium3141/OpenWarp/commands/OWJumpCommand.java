@@ -22,7 +22,7 @@ public class OWJumpCommand extends OWCommand {
 
     public OWJumpCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Jump");
         this.setArgRange(0, 0);
         this.setCommandUsage("/jump");
@@ -31,7 +31,7 @@ public class OWJumpCommand extends OWCommand {
         this.addKey("jump");
         this.addKey("j");
     }
-    
+
     /**
      * Error message displayed when failing to find a target block.
      */
@@ -40,9 +40,9 @@ public class OWJumpCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
-        
+
         Player player = (Player)sender;
-        
+
         // Get target block and info
         List<Block> blocks = null;
         try {
@@ -51,17 +51,17 @@ public class OWJumpCommand extends OWCommand {
             sender.sendMessage(ChatColor.RED + JUMP_ERROR);
             return;
         }
-        
+
         if(blocks == null) {
             sender.sendMessage(ChatColor.RED + JUMP_ERROR);
             return;
         }
-        
+
         Block targetBlock = blocks.get(blocks.size() - 1);
         Location loc = BlockSafety.safeNextUpFrom(targetBlock);
         loc.setPitch(player.getLocation().getPitch());
         loc.setYaw(player.getLocation().getYaw());
-        
+
         // Transport player
         if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to target block!");

@@ -14,7 +14,7 @@ import com.lithium3141.OpenWarp.OpenWarp;
  */
 public class OWEntityListener extends EntityListener {
     private OpenWarp plugin;
-    
+
     /**
      * Create a new OWEntityListener backed by the given OpenWarp instance.
      *
@@ -23,7 +23,7 @@ public class OWEntityListener extends EntityListener {
     public OWEntityListener(OpenWarp plugin) {
         this.plugin = plugin;
     }
-    
+
     @Override
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {

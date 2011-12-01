@@ -23,7 +23,7 @@ public class OWStackPopCommand extends OWCommand {
 
         this.setup();
     }
-    
+
     protected void setup() {
         this.setName("Stack pop");
         this.setArgRange(0, 0);
@@ -37,7 +37,7 @@ public class OWStackPopCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
-        
+
         Location target = this.getLocation(player);
         if(target != null) {
             if(!player.teleport(target)) {
@@ -47,7 +47,7 @@ public class OWStackPopCommand extends OWCommand {
             player.sendMessage(ChatColor.RED + "Your warp stack is empty.");
         }
     }
-    
+
     protected Location getLocation(Player player) {
         try {
             return this.getPlugin().getLocationTracker().getLocationStack(player).pop();

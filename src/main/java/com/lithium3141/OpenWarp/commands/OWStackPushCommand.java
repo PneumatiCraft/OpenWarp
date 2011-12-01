@@ -20,7 +20,7 @@ public class OWStackPushCommand extends OWCommand {
 
     public OWStackPushCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Stack push");
         this.setArgRange(0, 1);
         this.setCommandUsage("/warp stack push [NAME]");
@@ -33,18 +33,18 @@ public class OWStackPushCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
-        
+
         if(args.size() == 0) {
             this.getPlugin().getLocationTracker().getLocationStack(player).push(player.getLocation());
         } else {
             String warpName = args.get(0);
-            
+
             Warp target = this.getPlugin().getWarp(player, warpName);
             if(target == null) {
                 sender.sendMessage(ChatColor.RED + "No warp found matching name: " + warpName);
                 return;
             }
-            
+
             String permString = "openwarp.warp.access.*";
             if(target.isPublic()) {
                 permString ="openwarp.warp.access.public." + warpName;
@@ -55,9 +55,9 @@ public class OWStackPushCommand extends OWCommand {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
                 return;
             }
-            
+
             this.getPlugin().getLocationTracker().getLocationStack(player).push(target.getLocation());
-            
+
             if(!player.teleport(target.getLocation())) {
                 player.sendMessage(ChatColor.RED + "Error teleporting to warp '" + warpName + "'");
             }

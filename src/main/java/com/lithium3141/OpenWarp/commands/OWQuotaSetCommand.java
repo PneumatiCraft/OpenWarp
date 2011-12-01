@@ -21,7 +21,7 @@ public class OWQuotaSetCommand extends OWCommand {
 
     public OWQuotaSetCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Quota set");
         this.setArgRange(2, 3);
         this.setCommandUsage("/warp quota set {public|private} {unlimited|VALUE} [PLAYER NAME]");
@@ -37,7 +37,7 @@ public class OWQuotaSetCommand extends OWCommand {
             sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
-        
+
         String value = args.get(1);
         int quota = OWQuotaManager.QUOTA_UNDEFINED;
         if(!value.equals("unlimited") && !(Integer.parseInt(value) + "").equals(value)) {
@@ -48,14 +48,14 @@ public class OWQuotaSetCommand extends OWCommand {
         } else {
             quota = Integer.parseInt(value);
         }
-        
+
         String playerName = null;
         if(args.size() > 2) {
             playerName = args.get(2);
         }
-        
+
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
-        
+
         if(playerName == null) {
             // Setting global quota
             if(type.equals("public")) {
@@ -73,7 +73,7 @@ public class OWQuotaSetCommand extends OWCommand {
             } else if(type.equals("private")) {
                 quotaMap = quotaManager.getPlayerMaxPrivateWarps();
             }
-            
+
             OpenWarp.DEBUG_LOG.fine("Setting warp quota for " + playerName + " to " + quota);
             if(quotaMap != null) {
                 quotaMap.put(playerName, quota);
@@ -81,7 +81,7 @@ public class OWQuotaSetCommand extends OWCommand {
             } else {
                 sender.sendMessage(ChatColor.RED + "Unknown error setting quota! Please report a bug.");
             }
-            
+
             this.getPlugin().getConfigurationManager().savePlayerConfiguration(playerName);
         }
     }

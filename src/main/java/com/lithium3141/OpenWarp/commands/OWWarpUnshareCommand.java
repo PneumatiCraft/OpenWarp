@@ -42,11 +42,11 @@ public class OWWarpUnshareCommand extends OWCommand {
         }
 
         warp.removeInvitee(sharePlayerName);
-        
+
         Player sharePlayer = this.getPlugin().getServer().getPlayer(sharePlayerName);
         if(sharePlayer != null) {
             sharePlayer.sendMessage(ChatColor.GOLD + player.getName() + " has stopped sharing warp '" + warpName + "' with you.");
         }
     }
-    
+
 }

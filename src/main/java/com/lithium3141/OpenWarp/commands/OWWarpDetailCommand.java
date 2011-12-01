@@ -17,7 +17,7 @@ public class OWWarpDetailCommand extends OWCommand {
 
     public OWWarpDetailCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Warp detail");
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp detail {NAME}");
@@ -32,9 +32,9 @@ public class OWWarpDetailCommand extends OWCommand {
             sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
-        
+
         String warpName = args.get(0);
-        
+
         Warp warp = this.getPlugin().getWarp(sender, warpName);
         if(warp == null) {
             sender.sendMessage(ChatColor.RED + warpName + ":" + ChatColor.WHITE + " No such warp");

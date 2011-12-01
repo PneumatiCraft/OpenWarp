@@ -17,7 +17,7 @@ public class OWDebugHandler extends Handler {
     public OWDebugHandler(String filename) {
         this(new File(filename));
     }
-    
+
     public OWDebugHandler(File file) {
         super();
 

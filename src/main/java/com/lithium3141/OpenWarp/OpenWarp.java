@@ -39,39 +39,39 @@ import com.pneumaticraft.commandhandler.CommandHandler;
 /**
  * Main plugin class. Responsible for setting up plugin and handling
  * overall configs and player info.
- * 
+ *
  * @author lithium3141
  */
 public class OpenWarp extends JavaPlugin {
-    
+
     // Logging info
     public static final Logger LOG = Logger.getLogger("Minecraft");
     public static final String LOG_PREFIX = "[OpenWarp] ";
     public static final Logger DEBUG_LOG = Logger.getLogger("OpenWarpDebug");
-    
+
     // Global configuration variables
     private OWConfigurationManager configurationManager;
     private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
     private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
     private Map<String, Map<String, Location>> homes = new HashMap<String, Map<String, Location>>(); // player name => (world name => home), world name == null implies "default" home
-    
+
     private OWQuotaManager quotaManager;
-    
+
     private OWPermissionsHandler permissionsHandler;
 
     // Supported commands
     private CommandHandler commandHandler;
-    
+
     // Per-player data
     private OWLocationTracker locationTracker;
 
     @Override
     public void onDisable() {
         this.configurationManager.saveAllConfigurations();
-        
+
         LOG.info(LOG_PREFIX + "Disabled!");
     }
-    
+
     @Override
     public void onEnable() {
         // Create overall permission
@@ -84,16 +84,16 @@ public class OpenWarp extends JavaPlugin {
 
         // Load configurations
         this.configurationManager = new OWConfigurationManager(this);
-        
+
         // Start location tracking
         this.locationTracker = new OWLocationTracker(this);
-        
+
         // Initialize debug log
         this.setupDebugLog();
-        
+
         // Read warp names
         this.configurationManager.loadPublicWarps(this.publicWarps);
-        
+
         // Instantiate quota manager, permissions - need them for player configs
         this.quotaManager = new OWQuotaManager(this);
         this.permissionsHandler = new OWPermissionsHandler(this);
@@ -101,23 +101,23 @@ public class OpenWarp extends JavaPlugin {
         // Read quotas
         this.quotaManager.setGlobalPublicWarpQuota(this.configurationManager.readGlobalPublicWarpQuota());
         this.quotaManager.setGlobalPrivateWarpQuota(this.configurationManager.readGlobalPrivateWarpQuota());
-        
+
         // Read player names and create configurations for each
         this.configurationManager.loadPlayers();
-        
+
         // Set up supported commands
         this.loadCommands();
-        
+
         // Instantiate permission nodes for all relevant objects
         this.loadWarpPermissions();
         this.loadHomePermissions();
-        
+
         // Start listening for events
         this.loadListeners();
-        
+
         // Enable Multiverse Support
         this.enableMultiverseSupport();
-        
+
         LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
     }
 
@@ -148,7 +148,7 @@ public class OpenWarp extends JavaPlugin {
      */
     public void loadWarpPermissions() {
         PluginManager pm = this.getServer().getPluginManager();
-        
+
         // Finagle a new permission for public warps
         Map<String, Boolean> publicWarpChildren = new HashMap<String, Boolean>();
         for(Warp publicWarp : this.getPublicWarps().values()) {
@@ -159,13 +159,13 @@ public class OpenWarp extends JavaPlugin {
         }
         Permission warpAccessPublicPerm = new Permission("openwarp.warp.access.public.*", PermissionDefault.TRUE, publicWarpChildren);
         pm.addPermission(warpAccessPublicPerm);
-        
+
         // The same, for private warps
         Map<String, Boolean> privateWarpChildren = new HashMap<String, Boolean>();
         for(String playerName : this.getPrivateWarps().keySet()) {
             String permPrefix = "openwarp.warp.access.private." + playerName;
             privateWarpChildren.put(permPrefix + ".*", true);
-            
+
             Map<String, Boolean> privateWarpSubchildren = new HashMap<String, Boolean>();
             for(Warp privateWarp : this.getPrivateWarps(playerName).values()) {
                 String permString = permPrefix + "." + privateWarp.getName();
@@ -178,7 +178,7 @@ public class OpenWarp extends JavaPlugin {
         }
         Permission warpAccessPrivatePerm = new Permission("openwarp.warp.access.private.*", PermissionDefault.TRUE, privateWarpChildren);
         pm.addPermission(warpAccessPrivatePerm);
-        
+
         // Put the actual access perms in
         Map<String, Boolean> accessChildren = new HashMap<String, Boolean>() {{ put("openwarp.warp.access.public.*", true); put("openwarp.warp.access.private.*", true); }};
         Permission warpAccessPerm = new Permission("openwarp.warp.access.*", PermissionDefault.TRUE, accessChildren);
@@ -210,27 +210,27 @@ public class OpenWarp extends JavaPlugin {
             LOG.severe(LOG_PREFIX + "Error inserting warp access permissions. This is a bug!");
         }
     }
-    
+
     /**
      * Create home permission nodes for all loaded homes.
      */
     public void loadHomePermissions() {
         PluginManager pm = this.getServer().getPluginManager();
-        
+
         Map<String, Boolean> homeAccessChildren = new HashMap<String, Boolean>();
         for(String playerName : this.homes.keySet()) {
             String permString = "openwarp.home.access." + playerName;
-            
+
             Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
             homeAccessChildren.put(permString, true);
-            
+
             pm.addPermission(homeAccessPerm);
         }
-        
+
         Permission homeAccessPerm = new Permission("openwarp.home.access.*", PermissionDefault.OP, homeAccessChildren);
         pm.addPermission(homeAccessPerm);
         homeAccessPerm.recalculatePermissibles();
-        
+
         Permission homePerm = pm.getPermission("openwarp.home.*");
         if(homePerm != null) {
             homePerm.getChildren().put("openwarp.home.access.*", true);
@@ -239,10 +239,10 @@ public class OpenWarp extends JavaPlugin {
             LOG.severe(LOG_PREFIX + "Could not locate master home permission node. This is a bug.");
         }
     }
-    
+
     private void loadCommands() {
         this.commandHandler = new CommandHandler(this, this.permissionsHandler);
-        
+
         this.commandHandler.registerCommand(new OWWarpCommand(this));
         this.commandHandler.registerCommand(new OWWarpListCommand(this));
         this.commandHandler.registerCommand(new OWWarpDetailCommand(this));
@@ -250,19 +250,19 @@ public class OpenWarp extends JavaPlugin {
         this.commandHandler.registerCommand(new OWWarpDeleteCommand(this));
         this.commandHandler.registerCommand(new OWWarpShareCommand(this));
         this.commandHandler.registerCommand(new OWWarpUnshareCommand(this));
-        
+
         this.commandHandler.registerCommand(new OWHomeCommand(this));
         this.commandHandler.registerCommand(new OWHomeSetCommand(this));
-        
+
         this.commandHandler.registerCommand(new OWQuotaShowCommand(this));
         this.commandHandler.registerCommand(new OWQuotaUsageCommand(this));
         this.commandHandler.registerCommand(new OWQuotaSetCommand(this));
-        
+
         this.commandHandler.registerCommand(new OWStackPushCommand(this));
         this.commandHandler.registerCommand(new OWStackPopCommand(this));
         this.commandHandler.registerCommand(new OWStackPeekCommand(this));
         this.commandHandler.registerCommand(new OWStackPrintCommand(this));
-        
+
         this.commandHandler.registerCommand(new OWTopCommand(this));
         this.commandHandler.registerCommand(new OWJumpCommand(this));
         this.commandHandler.registerCommand(new OWBackCommand(this));
@@ -270,17 +270,17 @@ public class OpenWarp extends JavaPlugin {
         this.commandHandler.registerCommand(new OWTeleportCommand(this));
         this.commandHandler.registerCommand(new OWSummonCommand(this));
     }
-    
+
     private void loadListeners() {
         OWPlayerListener playerListener = new OWPlayerListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
-        
+
         OWEntityListener entityListener = new OWEntityListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         DEBUG_LOG.fine("Command received. Name:" + command.getName() + " label:" + command.getLabel() + " arglabel:" + commandLabel);
@@ -291,31 +291,31 @@ public class OpenWarp extends JavaPlugin {
         for(int i = 0; i < args.length; i++) {
             keyPath.add(args[i]);
         }
-        
+
         // Locate and run the best matching command from the key path
         return this.commandHandler.locateAndRunCommand(sender, keyPath);
     }
-    
+
     public Map<String, Warp> getPublicWarps() {
         return this.publicWarps;
     }
-    
+
     public Map<String, Map<String, Warp>> getPrivateWarps() {
         return this.privateWarps;
     }
-    
+
     public Map<String, Warp> getPrivateWarps(String playerName) {
         return this.getPrivateWarps().get(playerName);
     }
-    
+
     public OWLocationTracker getLocationTracker() {
         return this.locationTracker;
     }
-    
+
     public OWQuotaManager getQuotaManager() {
         return this.quotaManager;
     }
-    
+
     public OWPermissionsHandler getPermissionsHandler() {
         return this.permissionsHandler;
     }
@@ -326,7 +326,7 @@ public class OpenWarp extends JavaPlugin {
 
     /**
      * Get the Warp, if any, matching the given name for the given sender.
-     * 
+     *
      * @param sender The sender for whom to check for warps
      * @param warpName The name of the warp to find
      * @return In order of precedence: (1) the public warp with the given
@@ -345,7 +345,7 @@ public class OpenWarp extends JavaPlugin {
                 return entry.getValue();
             }
         }
-        
+
         // If no match, check private warps
         if(sender instanceof Player) {
             Player player = (Player)sender;
@@ -400,16 +400,16 @@ public class OpenWarp extends JavaPlugin {
                     return new Warp(this, "_EXACT", new Location(world, (double)x, (double)y, (double)z), ((Player)sender).getName());
                 }
             }
-            
+
         }
-        
+
         // No match
         return null;
     }
-    
+
     /**
      * Get the Warp, if any, matching the given Location for the given sender.
-     * 
+     *
      * @param sender The sender for whom to check for warps
      * @param location The location of the warp to find
      * @return The matching warp, if found
@@ -423,7 +423,7 @@ public class OpenWarp extends JavaPlugin {
                 return entry.getValue();
             }
         }
-        
+
         // If no match, check private warps
         if(sender instanceof Player) {
             Player player = (Player)sender;
@@ -491,7 +491,7 @@ public class OpenWarp extends JavaPlugin {
             // Multiworld homes - get home for given world name
             DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
             this.debugHomes();
-            
+
             if(!this.homes.containsKey(playerName)) {
                 DEBUG_LOG.finer("    ...no such player");
                 return null;

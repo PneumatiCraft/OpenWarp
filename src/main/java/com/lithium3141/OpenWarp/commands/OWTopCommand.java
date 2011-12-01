@@ -19,7 +19,7 @@ public class OWTopCommand extends OWCommand {
 
     public OWTopCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Top");
         this.setArgRange(0, 0);
         this.setCommandUsage("/top");
@@ -31,10 +31,10 @@ public class OWTopCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
-        
+
         Player player = (Player)sender;
         Location loc = player.getLocation();
-        
+
         if(!player.teleport(BlockSafety.safeTopFrom(loc))) {
             player.sendMessage(ChatColor.RED + "Error teleporting to top block!");
         }

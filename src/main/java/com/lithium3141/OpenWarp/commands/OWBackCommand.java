@@ -22,7 +22,7 @@ public class OWBackCommand extends OWCommand {
 
     public OWBackCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Back");
         this.setArgRange(0, 0);
         this.setCommandUsage("/back");
@@ -34,15 +34,15 @@ public class OWBackCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
-        
+
         Player player = (Player)sender;
         Location loc = this.getPlugin().getLocationTracker().getPreviousLocation(player);
-        
+
         if(loc == null) {
             player.sendMessage(ChatColor.RED + "You do not currently have a previous location!");
             return;
         }
-        
+
         if(!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error returning to previous location!");
         }
