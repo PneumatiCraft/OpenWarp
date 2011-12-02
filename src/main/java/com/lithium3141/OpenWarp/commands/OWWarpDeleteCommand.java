@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
+import com.lithium3141.OpenWarp.OWPermissionsHandler;
 import com.lithium3141.OpenWarp.Warp;
 
 /**
@@ -34,7 +35,9 @@ public class OWWarpDeleteCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         String warpName = args.get(0);
         String permString = null;
-        
+
+        OWPermissionsHandler permissionsHandler = this.getPlugin().getPermissionsHandler();
+
         // Remove warp
         if(this.getPlugin().getPublicWarps().containsKey(warpName)) {
             // Get the delete permission in question
@@ -45,7 +48,7 @@ public class OWWarpDeleteCommand extends OWCommand {
                 permNode = "self";
             }
 
-            if(!sender.hasPermission("openwarp.warp.delete.public." + permNode)) {
+            if(!permissionsHandler.hasPermission(sender, "openwarp.warp.delete.public." + permNode, false)) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to delete that public warp");
                 return;
             }
@@ -64,7 +67,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             Player player = (Player)sender;
             String playerName = player.getName();
 
-            if(!player.hasPermission("openwarp.warp.delete.private")) {
+            if(!permissionsHandler.hasPermission(player, "openwarp.warp.delete.private", false)) {
                 player.sendMessage(ChatColor.RED + "You do not have permission to delete that private warp");
                 return;
             }
