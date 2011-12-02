@@ -3,11 +3,15 @@
     "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
     "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
+<!-- Future reference: valid severity values are 'ignore', 'info', 'warning', 'error' -->
+
 <module name="Checker">
     <module name="JavadocPackage">
         <property name="allowLegacy" value="true"/>
     </module>
-    <module name="NewlineAtEndOfFile"/>
+    <module name="NewlineAtEndOfFile">
+        <property name="severity" value="info"/>
+    </module>
     <module name="Translation"/>
     <module name="FileLength"/>
     <module name="FileTabCharacter">
@@ -36,7 +40,9 @@
         <module name="ParameterName"/>
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
-        <module name="AvoidStarImport"/>
+        <module name="AvoidStarImport">
+            <property name="severity" value="warning"/>
+        </module>
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
@@ -49,8 +55,12 @@
         <module name="OperatorWrap"/>
         <module name="ParenPad"/>
         <module name="TypecastParenPad"/>
-        <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
+        <module name="WhitespaceAfter">
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="WhitespaceAround">
+            <property name="severity" value="warning"/>
+        </module>
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
         <module name="AvoidNestedBlocks"/>
