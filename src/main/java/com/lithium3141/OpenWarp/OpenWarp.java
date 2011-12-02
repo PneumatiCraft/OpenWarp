@@ -24,12 +24,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
 
 import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.config.OWConfigurationManager;
-import com.lithium3141.OpenWarp.config.OWPlayerConfiguration;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
 import com.lithium3141.OpenWarp.util.MVConnector;
