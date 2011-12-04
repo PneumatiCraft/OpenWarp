@@ -20,6 +20,8 @@ public class OWStackPopCommand extends OWCommand {
 
     /**
      * Construct a new instance of the stack pop command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWStackPopCommand(JavaPlugin plugin) {
         super(plugin);
@@ -30,7 +32,7 @@ public class OWStackPopCommand extends OWCommand {
     /**
      * Set up this command instance. Instantiates things like the command name,
      * keys for CommandHandler, examples, usage description, and permissions.
-     * 
+     *
      * Normally, these functions are done by the constructor (and this function
      * is in fact called by the constructor); however, in this case, it is
      * refactored out for extensibility by the OWStackPeekCommand class.

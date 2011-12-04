@@ -26,6 +26,8 @@ public class OWWarpSetCommand extends OWCommand {
 
     /**
      * Create a new instance of the warp set command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWWarpSetCommand(JavaPlugin plugin) {
         super(plugin);

@@ -20,6 +20,8 @@ public class OWStackPushCommand extends OWCommand {
 
     /**
      * Create a new instance of the stack push command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWStackPushCommand(JavaPlugin plugin) {
         super(plugin);

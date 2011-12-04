@@ -22,6 +22,8 @@ public class OWJumpCommand extends OWCommand {
 
     /**
      * Create a new instance of the jump command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWJumpCommand(JavaPlugin plugin) {
         super(plugin);

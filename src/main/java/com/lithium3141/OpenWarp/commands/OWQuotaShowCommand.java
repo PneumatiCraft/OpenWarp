@@ -20,6 +20,8 @@ public class OWQuotaShowCommand extends OWCommand {
 
     /**
      * Create a new instance of the quota show command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWQuotaShowCommand(JavaPlugin plugin) {
         super(plugin);

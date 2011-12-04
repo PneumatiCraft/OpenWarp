@@ -19,6 +19,8 @@ public class OWTopCommand extends OWCommand {
 
     /**
      * Create a new instance of the top command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWTopCommand(JavaPlugin plugin) {
         super(plugin);

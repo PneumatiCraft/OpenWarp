@@ -17,6 +17,8 @@ public class OWTeleportCommand extends OWCommand {
 
     /**
      * Create a new instance of the teleport command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWTeleportCommand(JavaPlugin plugin) {
         super(plugin);
@@ -27,7 +29,7 @@ public class OWTeleportCommand extends OWCommand {
     /**
      * Set up this command instance. Instantiates things like the command name,
      * keys for CommandHandler, examples, usage description, and permissions.
-     * 
+     *
      * Normally, these functions are done by the constructor (and this function
      * is in fact called by the constructor); however, in this case, it is
      * refactored out for extensibility by the OWSummonCommand class.
@@ -92,7 +94,7 @@ public class OWTeleportCommand extends OWCommand {
      * Find the "source" Player involved in this command. The source player is the
      * one that will move as a result of the command.
      *
-     * @param player The Player responsible for invoking this command, or null.
+     * @param sender The Player responsible for invoking this command, or null.
      * @param args The arguments passed with this command.
      * @return The Player that will move as a result of this command.
      */
@@ -109,7 +111,7 @@ public class OWTeleportCommand extends OWCommand {
      * one that will remain stationary after this command, and will serve as a
      * destination for the source player.
      *
-     * @param player The Player responsible for invoking this command, or null.
+     * @param sender The Player responsible for invoking this command, or null.
      * @param args The arguments passed with this command.
      * @return The Player that will remain stationary through this command.
      */

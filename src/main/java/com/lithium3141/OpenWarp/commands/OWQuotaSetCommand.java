@@ -21,6 +21,8 @@ public class OWQuotaSetCommand extends OWCommand {
 
     /**
      * Create a new instance of the quota set command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWQuotaSetCommand(JavaPlugin plugin) {
         super(plugin);

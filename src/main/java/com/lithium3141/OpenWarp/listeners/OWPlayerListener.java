@@ -70,7 +70,7 @@ public class OWPlayerListener extends PlayerListener {
 
     /**
      * Check whether two locations are within a given distance of one another.
-     * 
+     *
      * @param l1 The first Location.
      * @param l2 The second Location.
      * @param fuzz The maximum distance between the two locations.

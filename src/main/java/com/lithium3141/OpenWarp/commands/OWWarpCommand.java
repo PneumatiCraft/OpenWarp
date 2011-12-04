@@ -21,6 +21,8 @@ public class OWWarpCommand extends OWCommand {
 
     /**
      * Create a new instance of the warp command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWWarpCommand(JavaPlugin plugin) {
         super(plugin);

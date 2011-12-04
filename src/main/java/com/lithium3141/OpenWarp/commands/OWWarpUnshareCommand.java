@@ -18,6 +18,8 @@ public class OWWarpUnshareCommand extends OWCommand {
 
     /**
      * Create a new instance of the warp unshare command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWWarpUnshareCommand(JavaPlugin plugin) {
         super(plugin);

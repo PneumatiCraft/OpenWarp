@@ -22,6 +22,8 @@ public class OWBackCommand extends OWCommand {
 
     /**
      * Create a new instance of the back command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWBackCommand(JavaPlugin plugin) {
         super(plugin);

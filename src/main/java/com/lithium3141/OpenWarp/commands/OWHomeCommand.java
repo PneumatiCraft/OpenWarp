@@ -19,6 +19,8 @@ public class OWHomeCommand extends OWCommand {
 
     /**
      * Create a new instance of the home command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWHomeCommand(JavaPlugin plugin) {
         super(plugin);

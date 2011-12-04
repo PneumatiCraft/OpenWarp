@@ -15,6 +15,8 @@ public class OWStackPeekCommand extends OWStackPopCommand {
 
     /**
      * Construct a new instance of the stack peek command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWStackPeekCommand(JavaPlugin plugin) {
         super(plugin);

@@ -21,6 +21,8 @@ public class OWWarpDeleteCommand extends OWCommand {
 
     /**
      * Create a new instance of the warp delete command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWWarpDeleteCommand(JavaPlugin plugin) {
         super(plugin);

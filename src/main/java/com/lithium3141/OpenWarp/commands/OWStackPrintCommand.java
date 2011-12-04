@@ -22,6 +22,8 @@ public class OWStackPrintCommand extends OWCommand {
 
     /**
      * Construct a new instance of the stack print command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWStackPrintCommand(JavaPlugin plugin) {
         super(plugin);

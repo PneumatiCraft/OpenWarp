@@ -15,6 +15,8 @@ public class OWSummonCommand extends OWTeleportCommand {
 
     /**
      * Create a new instance of the summon command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
      */
     public OWSummonCommand(JavaPlugin plugin) {
         super(plugin);
