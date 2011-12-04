@@ -20,6 +20,9 @@ import com.lithium3141.OpenWarp.util.BlockSafety;
  */
 public class OWJumpCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the jump command. Used in command registration.
+     */
     public OWJumpCommand(JavaPlugin plugin) {
         super(plugin);
 

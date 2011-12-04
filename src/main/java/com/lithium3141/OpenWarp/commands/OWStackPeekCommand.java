@@ -13,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class OWStackPeekCommand extends OWStackPopCommand {
 
+    /**
+     * Construct a new instance of the stack peek command. Used in command registration.
+     */
     public OWStackPeekCommand(JavaPlugin plugin) {
         super(plugin);
     }

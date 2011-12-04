@@ -12,12 +12,27 @@ import java.util.logging.LogRecord;
  */
 public class OWDebugHandler extends Handler {
 
+    /**
+     * Output stream for printing debug information.
+     */
     private PrintWriter out;
 
+    /**
+     * Construct a new debug logging handler that writes to the specified file.
+     *
+     * @param filename The file to open for writing debug information. Existing
+     *                 file contents may be cleared, if the file exists already.
+     */
     public OWDebugHandler(String filename) {
         this(new File(filename));
     }
 
+    /**
+     * Construct a new debug logging handler that writes to the specified file.
+     *
+     * @param file The File object to write to. Existing file contents may be
+     *             cleared, if the file exists already.
+     */
     public OWDebugHandler(File file) {
         super();
 

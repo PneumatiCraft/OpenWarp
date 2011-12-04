@@ -15,12 +15,23 @@ import com.lithium3141.OpenWarp.OWCommand;
  */
 public class OWTeleportCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the teleport command. Used in command registration.
+     */
     public OWTeleportCommand(JavaPlugin plugin) {
         super(plugin);
 
         this.setup();
     }
 
+    /**
+     * Set up this command instance. Instantiates things like the command name,
+     * keys for CommandHandler, examples, usage description, and permissions.
+     * 
+     * Normally, these functions are done by the constructor (and this function
+     * is in fact called by the constructor); however, in this case, it is
+     * refactored out for extensibility by the OWSummonCommand class.
+     */
     protected void setup() {
         this.setName("Teleport");
         this.setArgRange(1, 2);
@@ -55,6 +66,20 @@ public class OWTeleportCommand extends OWCommand {
         }
     }
 
+    /**
+     * Check whether the sender and argument list together provide enough information
+     * to complete the command. Generally, in order to teleport (or summon), the command
+     * instance must find both a source and target player; if the command is being issued
+     * as a player, then one can be inferred and the args can specify the other. However,
+     * on the console (or in a situation with more specificity), both players can be listed
+     * in the arguments. This method checks that the command can find both players needed
+     * to complete the teleport/summon.
+     *
+     * @param sender The CommandSender invoking this command.
+     * @param args The list of arguments passed in with this command.
+     * @return True if both source and target players can be inferred from the sender
+     *         and arguments given; false otherwise.
+     */
     protected boolean senderOK(CommandSender sender, List<String> args) {
         if(!(sender instanceof Player) && args.size() == 1) {
             sender.sendMessage(ChatColor.RED + "You must specify both a source and target player.");
@@ -63,6 +88,14 @@ public class OWTeleportCommand extends OWCommand {
         return true;
     }
 
+    /**
+     * Find the "source" Player involved in this command. The source player is the
+     * one that will move as a result of the command.
+     *
+     * @param player The Player responsible for invoking this command, or null.
+     * @param args The arguments passed with this command.
+     * @return The Player that will move as a result of this command.
+     */
     protected Player getSourcePlayer(Player sender, List<String> args) {
         if(args.size() == 1) {
             return sender;
@@ -71,6 +104,15 @@ public class OWTeleportCommand extends OWCommand {
         }
     }
 
+    /**
+     * Find the "target" Player involved in this command. The target player is the
+     * one that will remain stationary after this command, and will serve as a
+     * destination for the source player.
+     *
+     * @param player The Player responsible for invoking this command, or null.
+     * @param args The arguments passed with this command.
+     * @return The Player that will remain stationary through this command.
+     */
     protected Player getTargetPlayer(Player sender, List<String> args) {
         return this.getPlugin().getServer().getPlayer(args.get(args.size() - 1));
     }

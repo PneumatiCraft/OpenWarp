@@ -17,6 +17,9 @@ import com.lithium3141.OpenWarp.util.BlockSafety;
  */
 public class OWTopCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the top command. Used in command registration.
+     */
     public OWTopCommand(JavaPlugin plugin) {
         super(plugin);
 

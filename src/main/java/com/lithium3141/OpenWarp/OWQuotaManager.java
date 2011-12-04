@@ -13,10 +13,24 @@ import com.lithium3141.OpenWarp.config.OWConfigurationManager;
  */
 public class OWQuotaManager {
 
+    /**
+     * The maximum number of public warps allowed per player.
+     */
     private int globalMaxPublicWarps;
+
+    /**
+     * The maximum number of private warps allowed per player.
+     */
     private int globalMaxPrivateWarps;
 
+    /**
+     * Individual public warp limits. Maps a player's name to their specific limit.
+     */
     private Map<String, Integer> playerMaxPublicWarps = new HashMap<String, Integer>();
+
+    /**
+     * Individual private warp limits. Maps a player's name to their specific limit.
+     */
     private Map<String, Integer> playerMaxPrivateWarps = new HashMap<String, Integer>();
 
     /**
@@ -29,6 +43,9 @@ public class OWQuotaManager {
      */
     public static final int QUOTA_UNDEFINED = -2;
 
+    /**
+     * The OpenWarp instance backing this quota manager.
+     */
     private OpenWarp plugin;
 
     /**

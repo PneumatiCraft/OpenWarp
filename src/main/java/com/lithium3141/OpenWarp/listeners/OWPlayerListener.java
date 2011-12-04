@@ -15,6 +15,10 @@ import com.lithium3141.OpenWarp.OpenWarp;
  * command.
  */
 public class OWPlayerListener extends PlayerListener {
+
+    /**
+     * The OpenWarp instance backing this player listener.
+     */
     private OpenWarp plugin;
 
     /**
@@ -54,10 +58,24 @@ public class OWPlayerListener extends PlayerListener {
         OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "'respawned.");
     }
 
+    /**
+     * Format a Location instance into a human-readable String.
+     *
+     * @param loc The Location to format.
+     * @return A String containing a readable representation of the given Location.
+     */
     private String prettyLocation(Location loc) {
         return loc.getWorld().getName() + "(" + loc.getX() + "," + loc.getY() + "," + loc.getZ() + ")";
     }
 
+    /**
+     * Check whether two locations are within a given distance of one another.
+     * 
+     * @param l1 The first Location.
+     * @param l2 The second Location.
+     * @param fuzz The maximum distance between the two locations.
+     * @return True if the distance between l1 and l2 is less than fuzz; false otherwise.
+     */
     private boolean locationsWithin(Location l1, Location l2, double fuzz) {
         try {
             return l1.distance(l2) < fuzz;

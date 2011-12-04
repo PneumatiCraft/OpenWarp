@@ -19,6 +19,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp command. Used in command registration.
+     */
     public OWWarpCommand(JavaPlugin plugin) {
         super(plugin);
 

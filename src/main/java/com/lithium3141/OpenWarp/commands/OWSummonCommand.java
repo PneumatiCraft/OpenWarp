@@ -13,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class OWSummonCommand extends OWTeleportCommand {
 
+    /**
+     * Create a new instance of the summon command. Used in command registration.
+     */
     public OWSummonCommand(JavaPlugin plugin) {
         super(plugin);
     }

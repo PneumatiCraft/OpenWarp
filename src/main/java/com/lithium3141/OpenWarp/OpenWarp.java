@@ -42,24 +42,70 @@ import com.pneumaticraft.commandhandler.CommandHandler;
 public class OpenWarp extends JavaPlugin {
 
     // Logging info
+
+    /**
+     * Logger object for all Minecraft-based messages.
+     */
     public static final Logger LOG = Logger.getLogger("Minecraft");
+
+    /**
+     * Prefix string for every log message output by this plugin.
+     */
     public static final String LOG_PREFIX = "[OpenWarp] ";
+
+    /**
+     * Logger object for debug-level messages not sent to general Minecraft logging.
+     */
     public static final Logger DEBUG_LOG = Logger.getLogger("OpenWarpDebug");
 
     // Global configuration variables
-    private OWConfigurationManager configurationManager;
-    private Map<String, Warp> publicWarps = new HashMap<String, Warp>(); // warp name => warp
-    private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>(); // player name => (warp name => warp)
-    private Map<String, Map<String, Location>> homes = new HashMap<String, Map<String, Location>>(); // player name => (world name => home), world name == null implies "default" home
 
+    /**
+     * Object managing plugin configuration files and player information.
+     */
+    private OWConfigurationManager configurationManager;
+
+    /**
+     * Public warps tracked by this plugin. Maps warp names to their corresponding
+     * Warp objects.
+     */
+    private Map<String, Warp> publicWarps = new HashMap<String, Warp>();
+
+    /**
+     * Private warps tracked by this plugin. Maps warp names to their corresponding
+     * Warp objects for each player name.
+     */
+    private Map<String, Map<String, Warp>> privateWarps = new HashMap<String, Map<String, Warp>>();
+
+    /**
+     * Homes tracked by this plugin. Maps world names to their corresponding home
+     * Location objects for each player name.
+     */
+    private Map<String, Map<String, Location>> homes = new HashMap<String, Map<String, Location>>();
+
+    /**
+     * Object managing warp quota information for this plugin.
+     */
     private OWQuotaManager quotaManager;
 
+    /**
+     * Object managing permissions calls for this plugin. Handles both SuperPerms
+     * and Permissions 2.x/3.x checks.
+     */
     private OWPermissionsHandler permissionsHandler;
 
     // Supported commands
+
+    /**
+     * Object managing commands and action dispatch for this plugin.
+     */
     private CommandHandler commandHandler;
 
     // Per-player data
+
+    /**
+     * Object tracking individual player locations for history purposes.
+     */
     private OWLocationTracker locationTracker;
 
     @Override
@@ -118,6 +164,11 @@ public class OpenWarp extends JavaPlugin {
         LOG.info(LOG_PREFIX + "Enabled version " + this.getDescription().getVersion());
     }
 
+    /**
+     * Initialize the debugging log for output. The debug log is used for finer-grained
+     * messages that do not need to go to the general output, and is generally written
+     * to a File.
+     */
     private void setupDebugLog() {
         boolean useDebug = this.configurationManager.readDebug();
         Level logLevel = (useDebug ? Level.FINEST : Level.OFF);
@@ -130,6 +181,11 @@ public class OpenWarp extends JavaPlugin {
         DEBUG_LOG.fine("Enabled debug log at " + (new Date()).toString());
     }
 
+    /**
+     * Check for the Multiverse plugin, and if it exists, enable support for accessing
+     * OpenWarp locations as Multiverse destinations. See
+     * {@link http://github.com/Multiverse/Multiverse-Core/wiki/Destinations}.
+     */
     private void enableMultiverseSupport() {
         try {
             new MVConnector(this.getServer().getPluginManager().getPlugin("Multiverse-Core"));
@@ -237,6 +293,11 @@ public class OpenWarp extends JavaPlugin {
         }
     }
 
+    /**
+     * Initialize individual commands to be used by users of this plugin. An instance
+     * of each command object must be created and registered with this plugin's
+     * CommandHandler before it will have messages dispatched to it.
+     */
     private void loadCommands() {
         this.commandHandler = new CommandHandler(this, this.permissionsHandler);
 
@@ -268,6 +329,11 @@ public class OpenWarp extends JavaPlugin {
         this.commandHandler.registerCommand(new OWSummonCommand(this));
     }
 
+    /**
+     * Initialize listeners for in-game actions. An instance of each listener object
+     * must be created and registered with the Bukkit server before it will respond
+     * to events.
+     */
     private void loadListeners() {
         OWPlayerListener playerListener = new OWPlayerListener(this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
@@ -293,30 +359,67 @@ public class OpenWarp extends JavaPlugin {
         return this.commandHandler.locateAndRunCommand(sender, keyPath);
     }
 
+    /**
+     * Get all public warps known to this plugin.
+     *
+     * @return A map of warp names to their corresponding Warp objects.
+     */
     public Map<String, Warp> getPublicWarps() {
         return this.publicWarps;
     }
 
+    /**
+     * Get all private warps known to this plugin.
+     *
+     * @return A map of player names to a map of warp names to their corresponding Warp objects.
+     */
     public Map<String, Map<String, Warp>> getPrivateWarps() {
         return this.privateWarps;
     }
 
+    /**
+     * Get private warps for a particular player.
+     *
+     * @param playerName The name of the player for which to get public warps.
+     * @return A map of warp names to their corresponding Warp objects, or null if the given
+     *         player is not known to this plugin.
+     */
     public Map<String, Warp> getPrivateWarps(String playerName) {
         return this.getPrivateWarps().get(playerName);
     }
 
+    /**
+     * Get the location tracker for this plugin.
+     *
+     * @return The OWLocationTracker instance watching players for this plugin.
+     */
     public OWLocationTracker getLocationTracker() {
         return this.locationTracker;
     }
 
+    /**
+     * Get the quota manager for this plugin.
+     *
+     * @return The OWQuotaManager instance handling quota information for this plugin.
+     */
     public OWQuotaManager getQuotaManager() {
         return this.quotaManager;
     }
 
+    /**
+     * Get the permissions handler for this plugin.
+     *
+     * @return The OWPermissionsHandler instance managing permissions checks for this plugin.
+     */
     public OWPermissionsHandler getPermissionsHandler() {
         return this.permissionsHandler;
     }
 
+    /**
+     * Get the configuration handler for this plugin.
+     *
+     * @return The OWConfigurationManager instance handling on-disk configuration info for this plugin.
+     */
     public OWConfigurationManager getConfigurationManager() {
         return this.configurationManager;
     }
@@ -328,7 +431,8 @@ public class OpenWarp extends JavaPlugin {
      * @param warpName The name of the warp to find
      * @return In order of precedence: (1) the public warp with the given
      *          name, (2) the private warp belonging to the given sender,
-     *          or (3) null.
+     *          (3) the shared warp belonging to the given owner with the
+     *          specified name, or (4) null.
      */
     public Warp getWarp(CommandSender sender, String warpName) {
         if(sender instanceof Player) {
@@ -522,14 +626,38 @@ public class OpenWarp extends JavaPlugin {
         }
     }
 
+    /**
+     * Get the home for the given player in the given world.
+     *
+     * @param player The player for whom to fetch a home.
+     * @param worldName The world within which to search for the player's home.
+     * @return A Location for the located home or null if no such home exists.
+     * @see #getHome(String, String)
+     */
     public Location getHome(Player player, String worldName) {
         return this.getHome(player.getName(), worldName);
     }
 
+    /**
+     * Get the home for the given player in the given world.
+     *
+     * @param playerName The player for whom to fetch a home.
+     * @param world The world within which to search for the player's home.
+     * @return A Location for the located home or null if no such home exists.
+     * @see #getHome(String, String)
+     */
     public Location getHome(String playerName, World world) {
         return this.getHome(playerName, world.getName());
     }
 
+    /**
+     * Get the home for the given player in the given world.
+     *
+     * @param player The player for whom to fetch a home.
+     * @param world The world within which to search for the player's home.
+     * @return A Location for the located home or null if no such home exists.
+     * @see #getHome(String, String)
+     */
     public Location getHome(Player player, World world) {
         return this.getHome(player.getName(), world.getName());
     }
@@ -539,17 +667,29 @@ public class OpenWarp extends JavaPlugin {
      *
      * @param playerName The player for whom to fetch a home.
      * @return The default home for the player, or null if none is set.
+     * @see #getHome(String, String)
      */
     public Location getDefaultHome(String playerName) {
         return this.getHome(playerName, (String)null);
     }
 
+    /**
+     * Get the default home for the given player.
+     *
+     * @param player The player for whom to fetch a home.
+     * @return The default home for the player, or null if none is set.
+     * @see #getHome(String, String)
+     */
     public Location getDefaultHome(Player player) {
         return this.getDefaultHome(player.getName());
     }
 
     /**
-     * Set the home for the given player in the given world. TODO finish this doc.
+     * Set the home for the given player in the given world. If multiworld homes are
+     * enabled in the configuration, then the new home will be saved for the world
+     * supplied; in addition, if this is the first home this player has specified,
+     * the player's default home will be set as well. On the other hand, if multiworld
+     * homes are not enabled, only the default home will be set.
      *
      * @param playerName The player for whom to set the home.
      * @param worldName The world in which to set the home; use null for default.
@@ -579,14 +719,39 @@ public class OpenWarp extends JavaPlugin {
         }
     }
 
+    /**
+     * Set the home for the given player in the given world.
+     *
+     * @param player The player for whom to set the home.
+     * @param world The world in which to set the home; use null for default.
+     * @param home The new Location to use for the home.
+     * @return The Location being replaced, if any; null otherwise.
+     * @see #setHome(String, String, Location)
+     */
     public Location setHome(Player player, World world, Location home) {
         return this.setHome(player.getName(), world.getName(), home);
     }
 
+    /**
+     * Set the default home for the given player in the given world.
+     *
+     * @param playerName The player for whom to set the home.
+     * @param home The new Location to use for the home.
+     * @return The Location being replaced, if any; null otherwise.
+     * @see #setHome(String, String, Location)
+     */
     public Location setDefaultHome(String playerName, Location home) {
         return this.setHome(playerName, null, home);
     }
 
+    /**
+     * Set the default home for the given player in the given world.
+     *
+     * @param player The player for whom to set the home.
+     * @param home The new Location to use for the home.
+     * @return The Location being replaced, if any; null otherwise.
+     * @see #setHome(String, String, Location)
+     */
     public Location setDefaultHome(Player player, Location home) {
         return this.setDefaultHome(player.getName(), home);
     }

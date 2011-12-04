@@ -19,6 +19,9 @@ import com.lithium3141.OpenWarp.OWQuotaManager;
  */
 public class OWQuotaSetCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the quota set command. Used in command registration.
+     */
     public OWQuotaSetCommand(JavaPlugin plugin) {
         super(plugin);
 

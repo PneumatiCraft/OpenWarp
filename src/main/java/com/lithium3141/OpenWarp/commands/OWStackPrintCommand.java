@@ -20,6 +20,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWStackPrintCommand extends OWCommand {
 
+    /**
+     * Construct a new instance of the stack print command. Used in command registration.
+     */
     public OWStackPrintCommand(JavaPlugin plugin) {
         super(plugin);
 
@@ -48,6 +51,17 @@ public class OWStackPrintCommand extends OWCommand {
         }
     }
 
+    /**
+     * Format a location into a human-readable String. Converts Location instances
+     * into Warp objects where possible, using the name of the warp to simplify
+     * the location display; otherwise, provides exact coordinates within a World.
+     *
+     * @param player The Player whose Warp instances are checked for Location matches
+     *               (generally, the sender of this command).
+     * @param location The Location instance to format.
+     * @return A String representing the given Location that can be displayed nicely
+     *         to the given Player.
+     */
     protected String formatLocation(Player player, Location location) {
         Warp matchingWarp = this.getPlugin().getWarp(player, location);
         if(matchingWarp != null) {

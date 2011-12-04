@@ -24,28 +24,85 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWConfigurationManager {
 
+    /**
+     * The OpenWarp instance backing this configuration manager.
+     */
     private OpenWarp plugin;
 
-    // Global config filenames
+    /**
+     * The filename to use for global plugin configuration.
+     */
     public static final String MASTER_CONFIG_FILENAME = "config.yml";
+
+    /**
+     * The filename to use for public warps.
+     */
     public static final String PUBLIC_WARP_CONFIG_FILENAME = "warps.yml";
 
-    // Config key names
+    /**
+     * The YAML key for lists of player names.
+     */
     public static final String PLAYER_NAMES_LIST_KEY = "players";
+
+    /**
+     * The YAML key for lists of warps.
+     */
     public static final String WARPS_LIST_KEY = "warps";
+
+    /**
+     * The YAML key for warp quotas.
+     */
     public static final String QUOTAS_KEY = "quotas";
+
+    /**
+     * The YAML key for a public warp quota.
+     */
     public static final String QUOTA_PUBLIC_KEY = "public";
+
+    /**
+     * The YAML key for a private warp quota.
+     */
     public static final String QUOTA_PRIVATE_KEY = "private";
+
+    /**
+     * The YAML key for a player's home location.
+     */
     public static final String HOME_KEY = "home";
+
+    /**
+     * The YAML key for a player's previous location.
+     */
     public static final String BACK_KEY = "back";
+
+    /**
+     * The YAML key for a player's location stack.
+     */
     public static final String STACK_KEY = "stack";
+
+    /**
+     * The YAML key for whether multiworld homes are enabled.
+     */
     public static final String MULTIWORLD_HOMES_KEY = "multiworld_homes";
+
+    /**
+     * The YAML key for debug information.
+     */
     public static final String DEBUG_KEY = "debug";
 
-    // On-disk configurations
-    private Configuration configuration; // global config file (config.yml)
-    private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>(); // player name => config
-    private Configuration publicWarpsConfig; // global public warps config (warps.yml)
+    /**
+     * The Configuration object representing global plugin configuration.
+     */
+    private Configuration configuration;
+
+    /**
+     * The set of player configuration objects, mapped to by player names.
+     */
+    private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
+
+    /**
+     * The Configuration object representing public warp information.
+     */
+    private Configuration publicWarpsConfig;
 
     /**
      * Create a new OWConfigurationManager backed by the given OpenWarp instance.

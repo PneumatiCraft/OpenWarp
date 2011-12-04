@@ -18,6 +18,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWStackPushCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the stack push command. Used in command registration.
+     */
     public OWStackPushCommand(JavaPlugin plugin) {
         super(plugin);
 

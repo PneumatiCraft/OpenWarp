@@ -20,6 +20,9 @@ import com.lithium3141.OpenWarp.OWQuotaManager;
  */
 public class OWQuotaUsageCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the quota usage command. Used in command registration.
+     */
     public OWQuotaUsageCommand(JavaPlugin plugin) {
         super(plugin);
 
@@ -67,6 +70,16 @@ public class OWQuotaUsageCommand extends OWCommand {
         }
     }
 
+    /**
+     * Get a particular quota usage in a human-readable format. Converts a
+     * labeled usage (warps used of total quota) to a String suitable for
+     * display on the console or in chat.
+     *
+     * @param used The number of warps used.
+     * @param quota The warp quota being applied.
+     * @param label A String describing the quota (e.g. "public").
+     * @return A human-readable String describing quota usage.
+     */
     private String formatUsage(int used, int quota, String label) {
         if(quota < 0) {
             return "unlimited " + label + " (" + used + " created)";

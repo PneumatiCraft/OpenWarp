@@ -19,6 +19,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpDeleteCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp delete command. Used in command registration.
+     */
     public OWWarpDeleteCommand(JavaPlugin plugin) {
         super(plugin);
 

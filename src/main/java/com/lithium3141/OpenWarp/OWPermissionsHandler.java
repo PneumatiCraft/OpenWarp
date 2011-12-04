@@ -18,8 +18,15 @@ import com.pneumaticraft.commandhandler.PermissionsInterface;
  */
 public class OWPermissionsHandler implements PermissionsInterface {
 
+    /**
+     * OpenWarp instance backing this permissions handler.
+     */
     private OpenWarp plugin;
 
+    /**
+     * Yeti Permissions 2.x or 3.x permissions handler object. Used when available,
+     * replacing Bukkit SuperPerms-style plugins.
+     */
     private PermissionHandler permissionHandler;
 
     /**

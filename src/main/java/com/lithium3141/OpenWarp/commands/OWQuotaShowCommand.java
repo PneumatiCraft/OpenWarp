@@ -18,6 +18,9 @@ import com.lithium3141.OpenWarp.OWQuotaManager;
  */
 public class OWQuotaShowCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the quota show command. Used in command registration.
+     */
     public OWQuotaShowCommand(JavaPlugin plugin) {
         super(plugin);
 
@@ -51,10 +54,24 @@ public class OWQuotaShowCommand extends OWCommand {
         }
     }
 
+    /**
+     * Format a public/private quota pair for display to a user.
+     *
+     * @param publicQuota The public warp quota to display.
+     * @param privateQuota The private warp quota to display.
+     * @return A String showing the public and private quotas in a user-friendly manner.
+     */
     private String formatQuotaPair(int publicQuota, int privateQuota) {
         return this.formatQuota(publicQuota, "public") + ", " + this.formatQuota(privateQuota, "private");
     }
 
+    /**
+     * Format a particular quota with the given label.
+     *
+     * @param quota The quota to format.
+     * @param label The label to apply to the quota.
+     * @return A String showing the given quota in a user-friendly manner.
+     */
     private String formatQuota(int quota, String label) {
         switch(quota) {
         case OWQuotaManager.QUOTA_UNDEFINED: return label + " quota undefined";

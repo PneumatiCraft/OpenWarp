@@ -13,6 +13,10 @@ import com.lithium3141.OpenWarp.OpenWarp;
  * command.
  */
 public class OWEntityListener extends EntityListener {
+
+    /**
+     * The OpenWarp instance backing this entity listener.
+     */
     private OpenWarp plugin;
 
     /**

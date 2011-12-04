@@ -20,6 +20,9 @@ import com.lithium3141.OpenWarp.OWCommand;
  */
 public class OWBackCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the back command. Used in command registration.
+     */
     public OWBackCommand(JavaPlugin plugin) {
         super(plugin);
 

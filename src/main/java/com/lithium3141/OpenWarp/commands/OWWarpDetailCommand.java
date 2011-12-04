@@ -15,6 +15,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpDetailCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp detail command. Used in command registration.
+     */
     public OWWarpDetailCommand(JavaPlugin plugin) {
         super(plugin);
 

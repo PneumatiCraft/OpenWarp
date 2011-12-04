@@ -19,6 +19,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpListCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp list command. Used in command registration.
+     */
     public OWWarpListCommand(JavaPlugin plugin) {
         super(plugin);
 
@@ -42,11 +45,23 @@ public class OWWarpListCommand extends OWCommand {
         if(sendInvited) this.sendInvitedWarpsList(sender);
     }
 
+    /**
+     * Send the list of public warps to the given command sender.
+     *
+     * @param sender The CommandSender that will receive chat messages with the
+     *               public warp list.
+     */
     private void sendPublicWarpsList(CommandSender sender) {
         Map<String, Warp> publics = this.getPlugin().getPublicWarps();
         sender.sendMessage(ChatColor.GREEN + "Public:" + ChatColor.WHITE + this.formatWarpsList(publics));
     }
 
+    /**
+     * Send the list of private warps to the given command sender.
+     *
+     * @param sender The CommandSender that will receive chat messages with the
+     *               private warp list.
+     */
     private void sendPrivateWarpsList(CommandSender sender) {
         if(sender instanceof Player) {
             Player player = (Player)sender;
@@ -61,6 +76,12 @@ public class OWWarpListCommand extends OWCommand {
         }
     }
 
+    /**
+     * Send the list of invited warps to the given command sender.
+     *
+     * @param sender The CommandSender that will receive chat messages with the
+     *               invited warp list.
+     */
     private void sendInvitedWarpsList(CommandSender sender) {
         if(sender instanceof Player) {
             Player player = (Player)sender;
@@ -85,6 +106,12 @@ public class OWWarpListCommand extends OWCommand {
         }
     }
 
+    /**
+     * Format the given set of Warp instances into a human-readable String.
+     *
+     * @param list A map of warp names to Warp instances that will be listed.
+     * @return A color-alternated list of warp names suitable for display to people.
+     */
     private String formatWarpsList(Map<String, Warp> list) {
         String result = "";
         if(list.size() > 0) {
@@ -97,6 +124,14 @@ public class OWWarpListCommand extends OWCommand {
         return result;
     }
 
+    /**
+     * Format the given set of invited Warp instances into a human-readable String.
+     * Use this method instead of #formatWarpsList when dealing with only warps
+     * shared between players.
+     *
+     * @param list A list of Warp instances that will be listed.
+     * @return A color-alternated list of warp names suitable for display to people.
+     */
     private String formatInvitedWarpsList(List<Warp> list) {
         String result = "";
         if(list.size() > 0) {

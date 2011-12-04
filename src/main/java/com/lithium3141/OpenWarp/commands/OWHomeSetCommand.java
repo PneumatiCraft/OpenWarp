@@ -19,6 +19,9 @@ import com.lithium3141.OpenWarp.OWCommand;
  */
 public class OWHomeSetCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the home set command. Used in command registration.
+     */
     public OWHomeSetCommand(JavaPlugin plugin) {
         super(plugin);
 

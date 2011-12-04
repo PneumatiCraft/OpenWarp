@@ -16,6 +16,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpShareCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp share command. Used in command registration.
+     */
     public OWWarpShareCommand(JavaPlugin plugin) {
         super(plugin);
 

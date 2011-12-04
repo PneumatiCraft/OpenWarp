@@ -56,14 +56,34 @@ public class OWPlayerConfiguration {
      */
     public static final String TEMP_STACK_NAME = "_STACK";
 
-    // Instance variables
+    /**
+     * The OpenWarp instance backing this player configuration.
+     */
     private OpenWarp plugin;
+
+    /**
+     * The player name for whom this object holds configuration data.
+     */
     private String playerName;
 
-    // Active configuration information
+    /**
+     * The directory holding configuration data for this object.
+     */
     private File configFolder;
+
+    /**
+     * The Configuration object containing general player info.
+     */
     private Configuration generalConfig;
+
+    /**
+     * The Configuration object containing player-specific warp info.
+     */
     private Configuration warpConfig;
+
+    /**
+     * The Configuration object containing player-specific quota info.
+     */
     private Configuration quotaConfig;
 
     /**

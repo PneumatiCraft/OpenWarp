@@ -16,6 +16,9 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpUnshareCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp unshare command. Used in command registration.
+     */
     public OWWarpUnshareCommand(JavaPlugin plugin) {
         super(plugin);
 

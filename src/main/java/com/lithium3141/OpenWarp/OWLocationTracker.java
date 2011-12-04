@@ -23,9 +23,19 @@ import org.bukkit.entity.Player;
  * rather than implicitly by teleportation or death events.
  */
 public class OWLocationTracker {
+    /**
+     * Previous locations for each player. Maps a player's name to a single Location.
+     */
     private Map<String, Location> previousLocations = new HashMap<String, Location>();
+
+    /**
+     * Location stacks for each player. Maps a player's name to a Stack of Location objects.
+     */
     private Map<String, Stack<Location>> locationStacks = new HashMap<String, Stack<Location>>();
 
+    /**
+     * OpenWarp instance backing this location tracker.
+     */
     private OpenWarp plugin;
 
     /**
