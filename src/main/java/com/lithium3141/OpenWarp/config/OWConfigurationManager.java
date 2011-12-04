@@ -109,10 +109,10 @@ public class OWConfigurationManager {
      * Sets up data folders on-disk and loads (creating if necessary) the global
      * configuration and public warp files.
      *
-     * @param plugin The OpenWarp instance backing this OWConfigurationManager.
+     * @param ow The OpenWarp instance backing this OWConfigurationManager.
      */
-    public OWConfigurationManager(OpenWarp plugin) {
-        this.plugin = plugin;
+    public OWConfigurationManager(OpenWarp ow) {
+        this.plugin = ow;
 
         // Set up configuration folder if necessary
         this.plugin.getDataFolder().mkdirs();

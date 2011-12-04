@@ -44,7 +44,7 @@ public class OpenWarpDestination implements MVDestination {
     }
 
     @Override
-    public boolean isThisType(JavaPlugin plugin, String dest) {
+    public boolean isThisType(JavaPlugin owningPlugin, String dest) {
         return Pattern.matches("^ow:([a-zA-Z0-9_]+)(?::([a-zA-Z0-9_]+))?$", dest);
     }
 
@@ -65,7 +65,7 @@ public class OpenWarpDestination implements MVDestination {
     }
 
     @Override
-    public void setDestination(JavaPlugin plugin, String dest) {
+    public void setDestination(JavaPlugin owningPlugin, String dest) {
         // If this class exists, then this plugin MUST exist!
         this.plugin = (OpenWarp) plugin.getServer().getPluginManager().getPlugin("OpenWarp");
         try {

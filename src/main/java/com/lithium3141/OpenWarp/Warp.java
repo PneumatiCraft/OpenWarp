@@ -103,13 +103,13 @@ public class Warp {
      * defined in this class from the node; expects to find a complete Location as
      * well as an owner string.
      *
-     * @param plugin The OpenWarp instance to use in public/private queries.
-     * @param name The name of this Warp.
+     * @param ow The OpenWarp instance to use in public/private queries.
+     * @param warpName The name of this Warp.
      * @param node The ConfigurationNode from which to pull Location information.
      */
-    public Warp(OpenWarp plugin, String name, ConfigurationNode node) {
-        this.plugin = plugin;
-        this.name = name;
+    public Warp(OpenWarp ow, String warpName, ConfigurationNode node) {
+        this.plugin = ow;
+        this.name = warpName;
 
         this.parseConfiguration(node);
     }
@@ -118,16 +118,16 @@ public class Warp {
      * Create a new warp with the given name, Location, and owner. Does no validation
      * on whether the given Location or owner string are valid.
      *
-     * @param plugin The OpenWarp instance to use in public/private queries.
-     * @param name The name of this Warp.
-     * @param location The Location destination of this Warp.
-     * @param owner The name of the Player owner of this Warp.
+     * @param ow The OpenWarp instance to use in public/private queries.
+     * @param warpName The name of this Warp.
+     * @param warpLoc The Location destination of this Warp.
+     * @param warpOwner The name of the Player owner of this Warp.
      */
-    public Warp(OpenWarp plugin, String name, Location location, String owner) {
-        this.plugin = plugin;
-        this.name = name;
-        this.location = location;
-        this.owner = owner;
+    public Warp(OpenWarp ow, String warpName, Location warpLoc, String warpOwner) {
+        this.plugin = ow;
+        this.name = warpName;
+        this.location = warpLoc;
+        this.owner = warpOwner;
         this.invitees = new ArrayList<String>();
     }
 

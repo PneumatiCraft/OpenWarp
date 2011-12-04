@@ -32,10 +32,10 @@ public class OWPermissionsHandler implements PermissionsInterface {
     /**
      * Create a new permissions handler for the given OpenWarp instance.
      *
-     * @param plugin The OpenWarp instance for which to handle permissions.
+     * @param ow The OpenWarp instance for which to handle permissions.
      */
-    public OWPermissionsHandler(OpenWarp plugin) {
-        this.plugin = plugin;
+    public OWPermissionsHandler(OpenWarp ow) {
+        this.plugin = ow;
 
         Plugin permissions = this.plugin.getServer().getPluginManager().getPlugin("Permissions");
         if(permissions != null) {

@@ -22,10 +22,10 @@ public class OWEntityListener extends EntityListener {
     /**
      * Create a new OWEntityListener backed by the given OpenWarp instance.
      *
-     * @param plugin The OpenWarp instance used for various Bukkit queries.
+     * @param ow The OpenWarp instance used for various Bukkit queries.
      */
-    public OWEntityListener(OpenWarp plugin) {
-        this.plugin = plugin;
+    public OWEntityListener(OpenWarp ow) {
+        this.plugin = ow;
     }
 
     @Override

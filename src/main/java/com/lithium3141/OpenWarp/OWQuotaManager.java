@@ -51,10 +51,10 @@ public class OWQuotaManager {
     /**
      * Create a new quota manager backed by the given OpenWarp instance.
      *
-     * @param plugin The OpenWarp instance to use for various Bukkit queries.
+     * @param ow The OpenWarp instance to use for various Bukkit queries.
      */
-    public OWQuotaManager(OpenWarp plugin) {
-        this.plugin = plugin;
+    public OWQuotaManager(OpenWarp ow) {
+        this.plugin = ow;
     }
 
     /**

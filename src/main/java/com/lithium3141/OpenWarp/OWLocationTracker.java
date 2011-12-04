@@ -41,10 +41,10 @@ public class OWLocationTracker {
     /**
      * Create a new location tracker for the given OpenWarp instance.
      *
-     * @param plugin The OpenWarp instance for which to track player locations.
+     * @param ow The OpenWarp instance for which to track player locations.
      */
-    public OWLocationTracker(OpenWarp plugin) {
-        this.plugin = plugin;
+    public OWLocationTracker(OpenWarp ow) {
+        this.plugin = ow;
     }
 
     /**

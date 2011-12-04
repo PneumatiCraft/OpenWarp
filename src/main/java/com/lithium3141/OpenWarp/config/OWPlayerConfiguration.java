@@ -89,22 +89,22 @@ public class OWPlayerConfiguration {
     /**
      * Construct a new player configuration for the given player name.
      *
-     * @param plugin The OpenWarp instance handling this player configuration
-     * @param playerName The player to handle configuration for
+     * @param ow The OpenWarp instance handling this player configuration
+     * @param name The player to handle configuration for
      */
-    public OWPlayerConfiguration(OpenWarp plugin, String playerName) {
-        this.plugin = plugin;
-        this.playerName = playerName;
+    public OWPlayerConfiguration(OpenWarp ow, String name) {
+        this.plugin = ow;
+        this.playerName = name;
     }
 
     /**
      * Construct a new player configuration for the given player.
      *
-     * @param plugin The OpenWarp instance handling this player configuration
+     * @param ow The OpenWarp instance handling this player configuration
      * @param player The player to handle configuration for
      */
-    public OWPlayerConfiguration(OpenWarp plugin, Player player) {
-        this.plugin = plugin;
+    public OWPlayerConfiguration(OpenWarp ow, Player player) {
+        this.plugin = ow;
         this.playerName = player.getName();
     }
 
