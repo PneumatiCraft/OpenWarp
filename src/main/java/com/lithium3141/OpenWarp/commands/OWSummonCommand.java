@@ -9,7 +9,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Summon a player to your current location
+ * Summon a player to your current location.
  */
 public class OWSummonCommand extends OWTeleportCommand {
 
