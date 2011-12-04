@@ -17,6 +17,22 @@ the following:
 3. Run Maven to build:
    `mvn clean package`
 
+## Developing
+
+OpenWarp welcomes contributions to the wiki, issue reports, and pull requests.
+If you feel like hacking on OpenWarp, just fork the repo and start work, or
+file an issue with your feature request and ideas for implementation.
+
+If you do decide to code yourself, please remember that we try to adhere to 
+Sun coding style (for the most part). You can use the Maven mojo 
+`checkstyle:checkstyle` to check that your addition introduces no new style 
+errors.
+
+Part of proper style is proper Javadoc. You can generate the existing docs
+with the mojo `javadoc:javadoc`, and it should be thorough enough to help
+you in any code additions or modifications you may choose to make. Try to
+keep it that way!
+
 ## License
 
 Copyright (c) 2011, Tim Ekl
