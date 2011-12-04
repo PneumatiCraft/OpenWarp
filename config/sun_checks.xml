@@ -32,7 +32,11 @@
         <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
         <module name="ConstantName"/>
+
+        <!-- Don't like errors for `final` missing
         <module name="LocalFinalVariableName"/>
+        -->
+
         <module name="LocalVariableName"/>
         <module name="MemberName"/>
         <module name="MethodName"/>
@@ -81,12 +85,20 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="DesignForExtension"/>
+
+        <!-- Don't like errors for `final` missing
         <module name="FinalClass"/>
+        -->
+
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
         <module name="ArrayTypeStyle"/>
+
+        <!-- Don't like errors for `final` missing
         <module name="FinalParameters"/>
+        -->
+
         <module name="TodoComment"/>
         <module name="UpperEll"/>
     </module>
