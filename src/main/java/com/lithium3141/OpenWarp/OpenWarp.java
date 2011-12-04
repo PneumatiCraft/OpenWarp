@@ -591,7 +591,6 @@ public class OpenWarp extends JavaPlugin {
         if(this.configurationManager.usingMultiworldHomes()) {
             // Multiworld homes - get home for given world name
             DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
-            this.debugHomes();
 
             if(!this.homes.containsKey(playerName)) {
                 DEBUG_LOG.finer("    ...no such player");
@@ -754,18 +753,6 @@ public class OpenWarp extends JavaPlugin {
      */
     public Location setDefaultHome(Player player, Location home) {
         return this.setDefaultHome(player.getName(), home);
-    }
-
-    // TODO this method should go away.
-    private void debugHomes() {
-        DEBUG_LOG.fine("Homes:");
-        for(String playerName : this.homes.keySet()) {
-            DEBUG_LOG.fine("    " + playerName + ":");
-            for(String worldName : this.homes.get(playerName).keySet()) {
-                Location home = this.homes.get(playerName).get(worldName);
-                DEBUG_LOG.fine("        " + worldName + ": (" + home.getX() + "," + home.getY() + "," + home.getZ() + ")");
-            }
-        }
     }
 
 }
