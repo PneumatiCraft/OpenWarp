@@ -19,9 +19,14 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWWarpCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Warp");
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp {NAME}");
@@ -34,7 +39,7 @@ public class OWWarpCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
-        
+
         // Locate the warp
         String warpName = args.get(0);
         Warp target = this.getPlugin().getWarp(sender, warpName);
@@ -42,7 +47,7 @@ public class OWWarpCommand extends OWCommand {
             sender.sendMessage(ChatColor.RED + "No warp found matching name: " + warpName);
             return;
         }
-        
+
         // Verify actual permission to access the warp
         if(target.getOwner().equalsIgnoreCase(player.getName()) || target.isPublic()) {
             String permString = "openwarp.warp.access.*";
@@ -63,12 +68,12 @@ public class OWWarpCommand extends OWCommand {
                 return;
             }
         }
-        
+
         // Move to warp
         if(target.getLocation().getWorld() == null) {
             sender.sendMessage(ChatColor.RED + "The target location's world is null - this is a bug!");
         }
-        
+
         if(!player.teleport(target.getLocation())) {
             player.sendMessage(ChatColor.RED + "Error teleporting to warp: " + warpName);
         }

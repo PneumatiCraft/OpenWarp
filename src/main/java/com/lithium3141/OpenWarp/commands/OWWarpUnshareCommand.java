@@ -16,6 +16,11 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpUnshareCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp unshare command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWWarpUnshareCommand(JavaPlugin plugin) {
         super(plugin);
 
@@ -42,11 +47,11 @@ public class OWWarpUnshareCommand extends OWCommand {
         }
 
         warp.removeInvitee(sharePlayerName);
-        
+
         Player sharePlayer = this.getPlugin().getServer().getPlayer(sharePlayerName);
         if(sharePlayer != null) {
             sharePlayer.sendMessage(ChatColor.GOLD + player.getName() + " has stopped sharing warp '" + warpName + "' with you.");
         }
     }
-    
+
 }

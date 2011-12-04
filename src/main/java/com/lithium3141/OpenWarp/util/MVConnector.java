@@ -9,6 +9,10 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
  * for the necessary interfaces.
  */
 public class MVConnector {
+
+    /**
+     * The instance of the Multiverse-Core plugin to which this object connects.
+     */
     private MultiverseCore core;
 
     /**

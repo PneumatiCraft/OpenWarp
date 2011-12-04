@@ -23,11 +23,21 @@ import org.bukkit.entity.Player;
  * rather than implicitly by teleportation or death events.
  */
 public class OWLocationTracker {
+    /**
+     * Previous locations for each player. Maps a player's name to a single Location.
+     */
     private Map<String, Location> previousLocations = new HashMap<String, Location>();
+
+    /**
+     * Location stacks for each player. Maps a player's name to a Stack of Location objects.
+     */
     private Map<String, Stack<Location>> locationStacks = new HashMap<String, Stack<Location>>();
-    
+
+    /**
+     * OpenWarp instance backing this location tracker.
+     */
     private OpenWarp plugin;
-    
+
     /**
      * Create a new location tracker for the given OpenWarp instance.
      *
@@ -36,7 +46,7 @@ public class OWLocationTracker {
     public OWLocationTracker(OpenWarp plugin) {
         this.plugin = plugin;
     }
-    
+
     /**
      * Get the last recorded location of the given Player. This location is updated
      * whenever the Player teleports or dies. Calls #getPreviousLocation(String)
@@ -50,7 +60,7 @@ public class OWLocationTracker {
     public Location getPreviousLocation(Player player) {
         return this.getPreviousLocation(player.getName());
     }
-    
+
     /**
      * Get the last recorded location of the player with the given name. This location
      * is updated whenever the player teleports or dies.
@@ -60,14 +70,14 @@ public class OWLocationTracker {
      * teleport or death, or <code>null</code> if no such location is known.
      */
     public Location getPreviousLocation(String playerName) {
-        Location loc = this.previousLocations.get(playerName); 
+        Location loc = this.previousLocations.get(playerName);
         if(loc != null) {
             return loc;
         } else {
             return null;
         }
     }
-    
+
     /**
      * Set the last recorded location of the given Player. Calls
      * #setPreviousLocation(String, Location) internally.
@@ -78,7 +88,7 @@ public class OWLocationTracker {
     public void setPreviousLocation(Player player, Location location) {
         this.setPreviousLocation(player.getName(), location);
     }
-    
+
     /**
      * Set the last recorded location of the given player.
      *
@@ -90,7 +100,7 @@ public class OWLocationTracker {
         this.previousLocations.put(playerName, location);
         this.plugin.getConfigurationManager().savePlayerConfiguration(playerName);
     }
-    
+
     /**
      * Remove the last known location for the given Player. Calls
      * #clearPreviousLocation(String) internally.
@@ -100,7 +110,7 @@ public class OWLocationTracker {
     public void clearPreviousLocation(Player player) {
         this.clearPreviousLocation(player.getName());
     }
-    
+
     /**
      * Remove the last known location for the given player.
      *
@@ -109,7 +119,7 @@ public class OWLocationTracker {
     public void clearPreviousLocation(String playerName) {
         this.previousLocations.remove(playerName);
     }
-    
+
     /**
      * Get the location stack for the given Player. Calls #getLocationStack(String)
      * internally.
@@ -120,7 +130,7 @@ public class OWLocationTracker {
     public Stack<Location> getLocationStack(Player player) {
         return this.getLocationStack(player.getName());
     }
-    
+
     /**
      * Get the location stack for the given Player.
      *

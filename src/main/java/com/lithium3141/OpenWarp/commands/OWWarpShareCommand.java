@@ -16,6 +16,11 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpShareCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp share command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWWarpShareCommand(JavaPlugin plugin) {
         super(plugin);
 
@@ -42,12 +47,12 @@ public class OWWarpShareCommand extends OWCommand {
         }
 
         warp.addInvitee(sharePlayerName);
-        
+
         Player sharePlayer = this.getPlugin().getServer().getPlayer(sharePlayerName);
         if(sharePlayer != null) {
             sharePlayer.sendMessage(ChatColor.GOLD + player.getName() + " has shared warp '" + warpName + "' with you!");
             sharePlayer.sendMessage(ChatColor.GOLD + "Access via: /warp " + player.getName() + ":" + warpName);
         }
     }
-    
+
 }

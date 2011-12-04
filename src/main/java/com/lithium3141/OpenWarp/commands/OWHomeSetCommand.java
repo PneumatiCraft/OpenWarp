@@ -19,9 +19,14 @@ import com.lithium3141.OpenWarp.OWCommand;
  */
 public class OWHomeSetCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the home set command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWHomeSetCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Set home");
         this.setArgRange(0, 1);
         this.setCommandUsage("/home set [default]");
@@ -35,7 +40,7 @@ public class OWHomeSetCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
-        
+
         if(args.size() == 0) {
             this.getPlugin().setHome(player, player.getLocation().getWorld(), player.getLocation());
         } else {
@@ -43,16 +48,16 @@ public class OWHomeSetCommand extends OWCommand {
         }
 
         this.getPlugin().getConfigurationManager().savePlayerConfiguration(player);
-        
+
         player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "Set your home to your current location.");
-        
+
         String permString = "openwarp.home.access." + player.getName();
-        
+
         PluginManager pm = this.getPlugin().getServer().getPluginManager();
         if(pm.getPermission(permString) == null) {
             Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
             pm.addPermission(homeAccessPerm);
-            
+
             Permission allHomePerm = pm.getPermission("openwarp.home.access.*");
             allHomePerm.getChildren().put(permString, true);
             allHomePerm.recalculatePermissibles();

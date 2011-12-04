@@ -18,10 +18,24 @@ import com.onarandombox.MultiverseCore.api.MVDestination;
  */
 public class OpenWarpDestination implements MVDestination {
 
+    /**
+     * The OpenWarp instance backing this destination.
+     */
     private OpenWarp plugin;
+
+    /**
+     * The Warp represented by this destination.
+     */
     private Warp warp;
+
+    /**
+     * The name of the Warp represented by this destination.
+     */
     private String warpName;
 
+    /**
+     * The identifier used by Multiverse's destination labeling system for OpenWarp warps.
+     */
     public static final String IDENTIFIER = "ow";
 
     @Override

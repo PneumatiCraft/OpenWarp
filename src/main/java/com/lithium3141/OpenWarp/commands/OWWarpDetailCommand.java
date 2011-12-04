@@ -15,9 +15,14 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpDetailCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp detail command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWWarpDetailCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Warp detail");
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp detail {NAME}");
@@ -32,9 +37,9 @@ public class OWWarpDetailCommand extends OWCommand {
             sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
-        
+
         String warpName = args.get(0);
-        
+
         Warp warp = this.getPlugin().getWarp(sender, warpName);
         if(warp == null) {
             sender.sendMessage(ChatColor.RED + warpName + ":" + ChatColor.WHITE + " No such warp");

@@ -13,10 +13,15 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class OWStackPeekCommand extends OWStackPopCommand {
 
+    /**
+     * Construct a new instance of the stack peek command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWStackPeekCommand(JavaPlugin plugin) {
         super(plugin);
     }
-    
+
     @Override
     protected void setup() {
         this.setName("Stack peek");
@@ -26,7 +31,7 @@ public class OWStackPeekCommand extends OWStackPopCommand {
         this.setPermission("openwarp.warp.stack.peek", "Show the last location on the stack", PermissionDefault.TRUE);
         this.addKey("warp stack peek");
     }
-    
+
     @Override
     protected Location getLocation(Player player) {
         try {

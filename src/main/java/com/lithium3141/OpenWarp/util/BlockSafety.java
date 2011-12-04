@@ -23,13 +23,13 @@ public class BlockSafety {
      */
     public static Location safeNextUpFrom(Block block) {
         if(block == null) return null;
-        
+
         Location loc = block.getLocation();
-        
+
         int x = loc.getBlockX();
         int y = loc.getBlockY();
         int z = loc.getBlockZ();
-        
+
         // Find the next highest block from requested target that has air above it
         Material last = (new Location(loc.getWorld(), x, y + 1, z)).getBlock().getType();
         Material last2 = (new Location(loc.getWorld(), x, y + 2, z)).getBlock().getType();
@@ -45,18 +45,18 @@ public class BlockSafety {
                 last = m;
             }
         }
-        
+
         // If the found block is air, move down
         if(world.getBlockAt(x, ny - 1, z).getType().equals(Material.AIR)) {
             ny = safeNextDownFrom(world.getBlockAt(x, ny, z)).getBlockY();
         }
-        
+
         Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 1), loc.getZ());
         result.setPitch(loc.getPitch());
         result.setYaw(loc.getYaw());
         return result;
     }
-    
+
     /**
      * Find the next safe block down from the given block. Searches in the negative
      * Y-direction down to Y=0.
@@ -66,13 +66,13 @@ public class BlockSafety {
      */
     public static Location safeNextDownFrom(Block block) {
         if(block == null) return null;
-        
+
         Location loc = block.getLocation();
-        
+
         int x = loc.getBlockX();
         int y = loc.getBlockY();
         int z = loc.getBlockZ();
-        
+
         // Find the next lowest block from requested target that has air above it
         Material last = (new Location(loc.getWorld(), x, y + 1, z)).getBlock().getType();
         Material last2 = (new Location(loc.getWorld(), x, y + 2, z)).getBlock().getType();
@@ -88,18 +88,18 @@ public class BlockSafety {
                 last = m;
             }
         }
-        
+
         // If the found block doesn't have air, move up
         if(!world.getBlockAt(x, ny + 1, z).getType().equals(Material.AIR)) {
             ny = safeNextUpFrom(world.getBlockAt(x, ny, z)).getBlockY();
         }
-        
+
         Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 2), loc.getZ());
         result.setPitch(loc.getPitch());
         result.setYaw(loc.getYaw());
         return result;
     }
-    
+
     /**
      * Find the safe block closest to the top of the world from the given Location.
      * Searches in the negative Y-direction starting at Y=127 down to the given location.
@@ -111,7 +111,7 @@ public class BlockSafety {
         int x = loc.getBlockX();
         int y = loc.getBlockY();
         int z = loc.getBlockZ();
-        
+
         // Find the highest block from requested target that is solid with air above it
         Block block = loc.getBlock();
         Material last2 = Material.BEDROCK;
@@ -128,7 +128,7 @@ public class BlockSafety {
                 last = m;
             }
         }
-        
+
         Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 1), loc.getZ());
         result.setPitch(loc.getPitch());
         result.setYaw(loc.getYaw());

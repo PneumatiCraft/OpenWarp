@@ -17,9 +17,14 @@ import com.lithium3141.OpenWarp.util.BlockSafety;
  */
 public class OWTopCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the top command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWTopCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Top");
         this.setArgRange(0, 0);
         this.setCommandUsage("/top");
@@ -31,10 +36,10 @@ public class OWTopCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
-        
+
         Player player = (Player)sender;
         Location loc = player.getLocation();
-        
+
         if(!player.teleport(BlockSafety.safeTopFrom(loc))) {
             player.sendMessage(ChatColor.RED + "Error teleporting to top block!");
         }

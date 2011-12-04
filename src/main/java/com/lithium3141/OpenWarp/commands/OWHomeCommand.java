@@ -16,10 +16,15 @@ import com.lithium3141.OpenWarp.OWCommand;
  * using OWHomeSetCommand; these homes may be global (all worlds) or per-world.
  */
 public class OWHomeCommand extends OWCommand {
-    
+
+    /**
+     * Create a new instance of the home command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWHomeCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Home");
         this.setArgRange(0, 1);
         this.setCommandUsage("/home [player]");
@@ -32,7 +37,7 @@ public class OWHomeCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if(!this.checkPlayerSender(sender)) return;
         Player player = (Player)sender;
-        
+
         Location home = null;
         if(args.size() == 0) {
             // Accessing the player's home - no perms check necessary
@@ -46,10 +51,10 @@ public class OWHomeCommand extends OWCommand {
                     return;
                 }
             }
-            
+
             home = this.getPlugin().getHome(args.get(0), player.getLocation().getWorld());
         }
-        
+
         if(home == null) {
             if(args.size() == 0 || args.get(0).equals(player.getName())) {
                 player.sendMessage(ChatColor.RED + "Error: You must first set a home using /home set");

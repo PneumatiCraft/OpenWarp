@@ -24,28 +24,85 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWConfigurationManager {
 
+    /**
+     * The OpenWarp instance backing this configuration manager.
+     */
     private OpenWarp plugin;
-    
-    // Global config filenames
+
+    /**
+     * The filename to use for global plugin configuration.
+     */
     public static final String MASTER_CONFIG_FILENAME = "config.yml";
+
+    /**
+     * The filename to use for public warps.
+     */
     public static final String PUBLIC_WARP_CONFIG_FILENAME = "warps.yml";
-    
-    // Config key names
+
+    /**
+     * The YAML key for lists of player names.
+     */
     public static final String PLAYER_NAMES_LIST_KEY = "players";
+
+    /**
+     * The YAML key for lists of warps.
+     */
     public static final String WARPS_LIST_KEY = "warps";
+
+    /**
+     * The YAML key for warp quotas.
+     */
     public static final String QUOTAS_KEY = "quotas";
+
+    /**
+     * The YAML key for a public warp quota.
+     */
     public static final String QUOTA_PUBLIC_KEY = "public";
+
+    /**
+     * The YAML key for a private warp quota.
+     */
     public static final String QUOTA_PRIVATE_KEY = "private";
+
+    /**
+     * The YAML key for a player's home location.
+     */
     public static final String HOME_KEY = "home";
+
+    /**
+     * The YAML key for a player's previous location.
+     */
     public static final String BACK_KEY = "back";
+
+    /**
+     * The YAML key for a player's location stack.
+     */
     public static final String STACK_KEY = "stack";
+
+    /**
+     * The YAML key for whether multiworld homes are enabled.
+     */
     public static final String MULTIWORLD_HOMES_KEY = "multiworld_homes";
+
+    /**
+     * The YAML key for debug information.
+     */
     public static final String DEBUG_KEY = "debug";
 
-    // On-disk configurations
-    private Configuration configuration; // global config file (config.yml)
-    private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>(); // player name => config
-    private Configuration publicWarpsConfig; // global public warps config (warps.yml)
+    /**
+     * The Configuration object representing global plugin configuration.
+     */
+    private Configuration configuration;
+
+    /**
+     * The set of player configuration objects, mapped to by player names.
+     */
+    private Map<String, OWPlayerConfiguration> playerConfigs = new HashMap<String, OWPlayerConfiguration>();
+
+    /**
+     * The Configuration object representing public warp information.
+     */
+    private Configuration publicWarpsConfig;
 
     /**
      * Create a new OWConfigurationManager backed by the given OpenWarp instance.
@@ -63,7 +120,7 @@ public class OWConfigurationManager {
         // Get configuration file (even if nonexistent)
         this.configuration = new Configuration(new File(this.plugin.getDataFolder(), MASTER_CONFIG_FILENAME));
         this.configuration.load();
-        
+
         this.publicWarpsConfig = new Configuration(new File(this.plugin.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
         this.publicWarpsConfig.load();
     }
@@ -81,7 +138,7 @@ public class OWConfigurationManager {
         OpenWarp.DEBUG_LOG.fine("Writing ALL OpenWarp configuration files");
         if(this.configuration != null) {
             this.saveGlobalConfiguration();
-            
+
             // Save player-specific data
             for(String playerName : this.playerConfigs.keySet()) {
                 this.savePlayerConfiguration(playerName);
@@ -105,18 +162,18 @@ public class OWConfigurationManager {
             if(!this.configuration.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save player list; continuing...");
             }
-            
+
             // Save public warps
             Map<String, Object> warps = new HashMap<String, Object>();
             for(Entry<String, Warp> entry : this.plugin.getPublicWarps().entrySet()) {
                 warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
             }
-            
+
             this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
             if(!this.publicWarpsConfig.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save public warp list; continuing...");
             }
-            
+
             // Save global quotas
             this.configuration.setProperty(QUOTAS_KEY, this.plugin.getQuotaManager().getGlobalQuotaMap());
 
@@ -125,7 +182,7 @@ public class OWConfigurationManager {
             this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
         }
     }
-    
+
     /**
      * Save the player-specific configuration files for the given Player.
      * Calls #savePlayerConfiguration(String) internally.
@@ -151,17 +208,17 @@ public class OWConfigurationManager {
 
         if(this.configuration != null) {
             OWPlayerConfiguration config = this.playerConfigs.get(playerName);
-            
+
             if(config != null && !config.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
             }
         }
     }
 
-   
+
     /**
      * Load public warps into the given map. Mutates the `target` argument.
-     * 
+     *
      * @param target The map into which to load new Warp objects.
      */
     public void loadPublicWarps(Map<String, Warp> target) {
@@ -185,12 +242,12 @@ public class OWConfigurationManager {
             }
         }
     }
-    
+
     /**
      * Register a player with the OpenWarp plugin. Create a new
-     * OWPlayerConfiguration instance for the given Player if no such 
+     * OWPlayerConfiguration instance for the given Player if no such
      * configuration exists yet.
-     * 
+     *
      * @param playerName The player to register
      * @see OWPlayerConfiguration
      */
@@ -201,7 +258,7 @@ public class OWConfigurationManager {
             this.playerConfigs.put(playerName, playerConfig);
         }
     }
-    
+
     /**
      * Load player information from disk, creating OWPlayerConfiguration instances
      * for each.

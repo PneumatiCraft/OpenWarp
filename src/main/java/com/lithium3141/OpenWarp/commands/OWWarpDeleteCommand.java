@@ -20,9 +20,14 @@ import com.lithium3141.OpenWarp.Warp;
  */
 public class OWWarpDeleteCommand extends OWCommand {
 
+    /**
+     * Create a new instance of the warp delete command. Used in command registration.
+     *
+     * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
+     */
     public OWWarpDeleteCommand(JavaPlugin plugin) {
         super(plugin);
-        
+
         this.setName("Warp delete");
         this.setArgRange(1, 1);
         this.setCommandUsage("/warp delete {NAME}");
@@ -63,7 +68,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             }
         } else {
             if(!this.checkPlayerSender(sender)) return;
-            
+
             Player player = (Player)sender;
             String playerName = player.getName();
 
@@ -71,7 +76,7 @@ public class OWWarpDeleteCommand extends OWCommand {
                 player.sendMessage(ChatColor.RED + "You do not have permission to delete that private warp");
                 return;
             }
-            
+
             if(this.getPlugin().getPrivateWarps(playerName).remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed private warp '" + warpName + "'");
                 permString = "openwarp.warp.access.private." + playerName + "." + warpName;
@@ -81,7 +86,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             }
 
         }
-        
+
         // Remove permission
         if(permString != null) {
             PluginManager pm = this.getPlugin().getServer().getPluginManager();

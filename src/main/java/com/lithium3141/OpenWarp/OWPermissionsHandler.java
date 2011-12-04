@@ -17,11 +17,18 @@ import com.pneumaticraft.commandhandler.PermissionsInterface;
  * Permissions plugins.
  */
 public class OWPermissionsHandler implements PermissionsInterface {
-    
+
+    /**
+     * OpenWarp instance backing this permissions handler.
+     */
     private OpenWarp plugin;
-    
+
+    /**
+     * Yeti Permissions 2.x or 3.x permissions handler object. Used when available,
+     * replacing Bukkit SuperPerms-style plugins.
+     */
     private PermissionHandler permissionHandler;
-    
+
     /**
      * Create a new permissions handler for the given OpenWarp instance.
      *
@@ -29,13 +36,13 @@ public class OWPermissionsHandler implements PermissionsInterface {
      */
     public OWPermissionsHandler(OpenWarp plugin) {
         this.plugin = plugin;
-        
+
         Plugin permissions = this.plugin.getServer().getPluginManager().getPlugin("Permissions");
         if(permissions != null) {
-            this.permissionHandler = ((Permissions)permissions).getHandler();   
+            this.permissionHandler = ((Permissions)permissions).getHandler();
             this.plugin.getServer().getLogger().info(OpenWarp.LOG_PREFIX + "Hooked into Permissions " + permissions.getDescription().getVersion());
         }
-        
+
     }
 
     @Override
@@ -75,5 +82,5 @@ public class OWPermissionsHandler implements PermissionsInterface {
         }
         return true;
     }
-    
+
 }
