@@ -487,8 +487,8 @@ public class OpenWarp extends JavaPlugin {
             if(coordMatcher.matches()) {
                 String worldName = coordMatcher.group(1);
                 int x = Integer.parseInt(coordMatcher.group(2));
-                int y = Integer.parseInt(coordMatcher.group(3));
-                int z = Integer.parseInt(coordMatcher.group(4));
+                int y = Integer.parseInt(coordMatcher.group(3)); // SUPPRESS CHECKSTYLE MagicNumberCheck
+                int z = Integer.parseInt(coordMatcher.group(4)); // SUPPRESS CHECKSTYLE MagicNumberCheck
 
                 World world;
                 if(worldName == null) {
