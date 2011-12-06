@@ -171,7 +171,7 @@ public class OpenWarp extends JavaPlugin {
      */
     private void setupDebugLog() {
         boolean useDebug = this.configurationManager.readDebug();
-        Level logLevel = (useDebug ? Level.FINEST : Level.OFF);
+        Level logLevel = (useDebug ? Level.FINEST : Level.OFF); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
         DEBUG_LOG.setLevel(logLevel);
         OWDebugHandler debugHandler = new OWDebugHandler(new File(this.getDataFolder(), "debug.log"));

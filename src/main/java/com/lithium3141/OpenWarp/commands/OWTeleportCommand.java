@@ -46,8 +46,8 @@ public class OWTeleportCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.senderOK(sender, args)) return;
-        Player player = (sender instanceof Player ? (Player)sender : null);
+        if(!this.senderOK(sender, args)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        Player player = (sender instanceof Player ? (Player)sender : null); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
         // Figure out who's going where
         Player sourcePlayer = this.getSourcePlayer(player, args);

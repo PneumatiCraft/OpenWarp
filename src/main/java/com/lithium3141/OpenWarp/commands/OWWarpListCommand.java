@@ -28,7 +28,7 @@ public class OWWarpListCommand extends OWCommand {
         super(plugin);
 
         this.setName("Warp set");
-        this.setArgRange(0, 3);
+        this.setArgRange(0, 3); // SUPPRESS CHECKSTYLE MagicNumberCheck
         this.setCommandUsage("/warp list [public] [private] [invited]");
         this.addCommandExample("/warp list public");
         this.setPermission("openwarp.warp.list", "Show warps", PermissionDefault.TRUE);
@@ -42,9 +42,9 @@ public class OWWarpListCommand extends OWCommand {
         boolean sendPrivate = (args.size() == 0 || args.contains("private"));
         boolean sendInvited = (args.size() == 0 || args.contains("invited"));
 
-        if(sendPublic) this.sendPublicWarpsList(sender);
-        if(sendPrivate) this.sendPrivateWarpsList(sender);
-        if(sendInvited) this.sendInvitedWarpsList(sender);
+        if(sendPublic) this.sendPublicWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if(sendPrivate) this.sendPrivateWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if(sendInvited) this.sendInvitedWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
     }
 
     /**
@@ -119,7 +119,7 @@ public class OWWarpListCommand extends OWCommand {
         if(list.size() > 0) {
             boolean even = false;
             for(String key : list.keySet()) {
-                result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + key;
+                result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + key; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
                 even = !even;
             }
         }
@@ -139,7 +139,7 @@ public class OWWarpListCommand extends OWCommand {
         if(list.size() > 0) {
             boolean even = false;
             for(Warp warp : list) {
-                result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + warp.getOwner() + ":" + warp.getName();
+                result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + warp.getOwner() + ":" + warp.getName(); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
                 even = !even;
             }
         }

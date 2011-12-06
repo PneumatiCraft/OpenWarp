@@ -44,7 +44,7 @@ public class OWWarpDetailCommand extends OWCommand {
         if(warp == null) {
             sender.sendMessage(ChatColor.RED + warpName + ":" + ChatColor.WHITE + " No such warp");
         } else {
-            ChatColor color = (warp.isPublic() ? ChatColor.GREEN : ChatColor.BLUE);
+            ChatColor color = (warp.isPublic() ? ChatColor.GREEN : ChatColor.BLUE); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
             sender.sendMessage(color + warpName + ":" + ChatColor.WHITE + " " + warp.getDetailString());
         }
     }

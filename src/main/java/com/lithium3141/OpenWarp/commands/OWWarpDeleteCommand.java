@@ -67,7 +67,7 @@ public class OWWarpDeleteCommand extends OWCommand {
                 sender.sendMessage(ChatColor.RED + "No such public warp: " + warpName);
             }
         } else {
-            if(!this.checkPlayerSender(sender)) return;
+            if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
             Player player = (Player)sender;
             String playerName = player.getName();

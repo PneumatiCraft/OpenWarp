@@ -43,7 +43,7 @@ public class OWWarpSetCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return;
+        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         // Grab player info
         Player player = (Player)sender;
@@ -99,7 +99,7 @@ public class OWWarpSetCommand extends OWCommand {
 
         // Create and set warp
         Warp warp = new Warp(this.getPlugin(), args.get(0), playerLoc, player.getName());
-        String successMsg = (warpExists ? "Moved" : "Created new");
+        String successMsg = (warpExists ? "Moved" : "Created new"); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
         if(warpType.equals("public")) {
             this.getPlugin().getPublicWarps().put(warp.getName(), warp);
             player.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + successMsg + " public warp '" + warp.getName() + "'");

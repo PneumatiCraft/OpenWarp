@@ -21,6 +21,11 @@ import com.lithium3141.OpenWarp.util.BlockSafety;
 public class OWJumpCommand extends OWCommand {
 
     /**
+     * The maximum distance to be checked for a jump target block.
+     */
+    public static final int MAX_VIEW_DISTANCE = 100;
+
+    /**
      * Create a new instance of the jump command. Used in command registration.
      *
      * @param plugin The plugin (generally an instance of OpenWarp) backing this command.
@@ -51,7 +56,7 @@ public class OWJumpCommand extends OWCommand {
         // Get target block and info
         List<Block> blocks = null;
         try {
-            blocks = player.getLastTwoTargetBlocks(null, 100);
+            blocks = player.getLastTwoTargetBlocks(null, MAX_VIEW_DISTANCE);
         } catch(IllegalStateException e) {
             sender.sendMessage(ChatColor.RED + JUMP_ERROR);
             return;

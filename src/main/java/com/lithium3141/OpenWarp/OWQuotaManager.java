@@ -74,7 +74,7 @@ public class OWQuotaManager {
             quota = this.playerMaxPublicWarps.get(playerName);
         }
 
-        return (quota == QUOTA_UNDEFINED ? QUOTA_UNLIMITED : quota);
+        return (quota == QUOTA_UNDEFINED ? QUOTA_UNLIMITED : quota); // CHECKSTYLE SUPPRESS AvoidInlineConditionalsCheck
     }
 
     /**
@@ -105,7 +105,7 @@ public class OWQuotaManager {
             quota = this.playerMaxPrivateWarps.get(playerName);
         }
 
-        return (quota == QUOTA_UNDEFINED ? QUOTA_UNLIMITED : quota);
+        return (quota == QUOTA_UNDEFINED ? QUOTA_UNLIMITED : quota); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
     }
 
     /**

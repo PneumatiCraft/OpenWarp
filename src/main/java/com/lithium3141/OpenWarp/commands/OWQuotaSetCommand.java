@@ -28,7 +28,7 @@ public class OWQuotaSetCommand extends OWCommand {
         super(plugin);
 
         this.setName("Quota set");
-        this.setArgRange(2, 3);
+        this.setArgRange(2, 3); // SUPPRESS CHECKSTYLE MagicNumberCheck
         this.setCommandUsage("/warp quota set {public|private} {unlimited|VALUE} [PLAYER NAME]");
         this.addCommandExample("/warp quota set public 3 Bob");
         this.setPermission("openwarp.warp.quota.set", "Create a new warp", PermissionDefault.OP);
