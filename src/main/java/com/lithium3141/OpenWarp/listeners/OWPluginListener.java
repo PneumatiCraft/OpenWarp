@@ -4,7 +4,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
-import com.lithium3141.OpenWarp.util.MVConnector;
+import com.lithium3141.OpenWarp.OpenWarp;
 
 /**
  * Plugin listener for OpenWarp. Listens for plugin enable events
@@ -16,8 +16,7 @@ public class OWPluginListener extends ServerListener {
     public void onPluginEnable(PluginEnableEvent event) {
         Plugin p = event.getPlugin();
         if(p.getDescription().getName().equalsIgnoreCase("Multiverse-Core")) {
-            new MVConnector(p);
-            System.out.println("[OpenWarp] Found Multiverse 2, Support Enabled.");
+            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Multiverse detected, but this build of OpenWarp doesn't support it.");
         }
     }
 }

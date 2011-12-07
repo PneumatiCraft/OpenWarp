@@ -29,7 +29,6 @@ import com.lithium3141.OpenWarp.commands.*;
 import com.lithium3141.OpenWarp.config.OWConfigurationManager;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
-import com.lithium3141.OpenWarp.util.MVConnector;
 import com.lithium3141.OpenWarp.util.StringUtil;
 import com.pneumaticraft.commandhandler.CommandHandler;
 
@@ -187,13 +186,7 @@ public class OpenWarp extends JavaPlugin {
      * {@link http://github.com/Multiverse/Multiverse-Core/wiki/Destinations}.
      */
     private void enableMultiverseSupport() {
-        try {
-            new MVConnector(this.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-            LOG.info(LOG_PREFIX + "Found Multiverse 2; `ow:` destination type support enabled.");
-        } catch(Exception e) {
-            LOG.warning(LOG_PREFIX + "Failed to enable Multiverse support!");
-            LOG.warning(LOG_PREFIX + "You will be unable to use the Multiverse `ow:` destination type!");
-        }
+        LOG.warning(LOG_PREFIX + "This build of OpenWarp does not support Multiverse destinations!");
     }
 
     /**

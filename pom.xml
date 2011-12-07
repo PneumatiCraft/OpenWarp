@@ -118,15 +118,6 @@
         </dependency>
 
         <!-- Bukkit Dependency -->
-        <!-- Multiverse 2 Dependency -->
-        <dependency>
-            <groupId>com.onarandombox.multiversecore</groupId>
-            <artifactId>Multiverse-Core</artifactId>
-            <version>2.2</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Multiverse 2 Dependency -->
         <!-- Start of Economy Dependencies -->
         <!-- AllPay Dependencies -->
         <!-- <dependency> <groupId>cosine.boseconomy</groupId> <artifactId>BOSEconomy</artifactId> 
@@ -154,7 +145,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit</groupId>
+            <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
         </dependency>
