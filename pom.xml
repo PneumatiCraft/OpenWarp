@@ -160,4 +160,10 @@
         </dependency>
         <!-- End of Permissions Dependencies -->
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>opencraft</id>
+            <url>http://pneumaticsystem.com:25578/nexus/content/repositories/opencraft</url>
+        </repository>
+    </distributionManagement>
 </project>
