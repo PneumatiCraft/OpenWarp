@@ -52,9 +52,9 @@ public class OWStackPushCommand extends OWCommand {
 
             String permString = "openwarp.warp.access.*";
             if (target.isPublic()) {
-                permString ="openwarp.warp.access.public." + warpName;
+                permString = "openwarp.warp.access.public." + warpName;
             } else {
-                permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
+                permString = "openwarp.warp.access.private." + target.getOwner() + "." + warpName;
             }
             if (!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);

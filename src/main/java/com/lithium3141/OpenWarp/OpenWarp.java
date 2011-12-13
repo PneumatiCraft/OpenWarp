@@ -233,7 +233,10 @@ public class OpenWarp extends JavaPlugin {
         pm.addPermission(warpAccessPrivatePerm);
 
         // Put the actual access perms in
-        Map<String, Boolean> accessChildren = new HashMap<String, Boolean>() {{ put("openwarp.warp.access.public.*", true); put("openwarp.warp.access.private.*", true); }};
+        Map<String, Boolean> accessChildren = new HashMap<String, Boolean>() {{
+            put("openwarp.warp.access.public.*", true);
+            put("openwarp.warp.access.private.*", true);
+        }};
         Permission warpAccessPerm = new Permission("openwarp.warp.access.*", PermissionDefault.TRUE, accessChildren);
         pm.addPermission(warpAccessPerm);
 
