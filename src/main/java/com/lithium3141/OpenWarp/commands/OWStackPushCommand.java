@@ -37,7 +37,7 @@ public class OWStackPushCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         if (args.size() == 0) {
             this.getPlugin().getLocationTracker().getLocationStack(player).push(player.getLocation());

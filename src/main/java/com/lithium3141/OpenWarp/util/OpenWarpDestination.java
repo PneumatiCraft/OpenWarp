@@ -51,7 +51,7 @@ public class OpenWarpDestination implements MVDestination {
     @Override
     public Location getLocation(Entity e) {
         if (e instanceof CommandSender) {
-            Warp w = this.plugin.getWarp((CommandSender)e, this.warpName);
+            Warp w = this.plugin.getWarp((CommandSender) e, this.warpName);
             if (w != null) {
                 return w.getLocation();
             }

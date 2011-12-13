@@ -66,7 +66,7 @@ public class OWWarpListCommand extends OWCommand {
      */
     private void sendPrivateWarpsList(CommandSender sender) {
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             Map<String, Warp> privates = this.getPlugin().getPrivateWarps().get(player.getName());
             sender.sendMessage(ChatColor.AQUA + "Private:" + ChatColor.WHITE + this.formatWarpsList(privates));
         } else {
@@ -86,7 +86,7 @@ public class OWWarpListCommand extends OWCommand {
      */
     private void sendInvitedWarpsList(CommandSender sender) {
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             List<Warp> invitedWarps = new ArrayList<Warp>();
 
             for (Entry<String, Map<String, Warp>> mapEntry : this.getPlugin().getPrivateWarps().entrySet()) {

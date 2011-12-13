@@ -64,7 +64,7 @@ public class BlockSafety {
             ny = safeNextDownFrom(world.getBlockAt(x, ny, z)).getBlockY();
         }
 
-        Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 1), loc.getZ());
+        Location result = new Location(loc.getWorld(), loc.getX(), (double) (ny + 1), loc.getZ());
         result.setPitch(loc.getPitch());
         result.setYaw(loc.getYaw());
         return result;
@@ -107,7 +107,7 @@ public class BlockSafety {
             ny = safeNextUpFrom(world.getBlockAt(x, ny, z)).getBlockY();
         }
 
-        Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 2), loc.getZ());
+        Location result = new Location(loc.getWorld(), loc.getX(), (double) (ny + 2), loc.getZ());
         result.setPitch(loc.getPitch());
         result.setYaw(loc.getYaw());
         return result;
@@ -142,7 +142,7 @@ public class BlockSafety {
             }
         }
 
-        Location result = new Location(loc.getWorld(), loc.getX(), (double)(ny + 1), loc.getZ());
+        Location result = new Location(loc.getWorld(), loc.getX(), (double) (ny + 1), loc.getZ());
         result.setPitch(loc.getPitch());
         result.setYaw(loc.getYaw());
         return result;

@@ -39,7 +39,7 @@ public class OWPermissionsHandler implements PermissionsInterface {
 
         Plugin permissions = this.plugin.getServer().getPluginManager().getPlugin("Permissions");
         if (permissions != null) {
-            this.permissionHandler = ((Permissions)permissions).getHandler();
+            this.permissionHandler = ((Permissions) permissions).getHandler();
             this.plugin.getServer().getLogger().info(OpenWarp.LOG_PREFIX + "Hooked into Permissions " + permissions.getDescription().getVersion());
         }
 
@@ -50,7 +50,7 @@ public class OWPermissionsHandler implements PermissionsInterface {
         if (!(sender instanceof Player)) {
             return true;
         } else {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             if (this.permissionHandler != null) {
                 return this.permissionHandler.has(player, node);
             } else if (player.hasPermission(node)) {

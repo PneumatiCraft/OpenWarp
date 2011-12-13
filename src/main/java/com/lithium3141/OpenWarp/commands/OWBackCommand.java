@@ -40,7 +40,7 @@ public class OWBackCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
         Location loc = this.getPlugin().getLocationTracker().getPreviousLocation(player);
 
         if (loc == null) {

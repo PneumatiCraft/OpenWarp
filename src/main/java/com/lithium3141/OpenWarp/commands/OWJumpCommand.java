@@ -51,7 +51,7 @@ public class OWJumpCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         // Get target block and info
         List<Block> blocks = null;

@@ -42,7 +42,7 @@ public class OWQuotaUsageCommand extends OWCommand {
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
 
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
 
             int usedPublic = quotaManager.getPublicWarpCount(player);
             int quotaPublic = quotaManager.getPublicWarpQuota(player);

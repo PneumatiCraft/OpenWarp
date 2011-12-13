@@ -38,7 +38,7 @@ public class OWWarpCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         // Locate the warp
         String warpName = args.get(0);

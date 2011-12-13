@@ -41,7 +41,7 @@ public abstract class OWCommand extends Command {
      * @return The OpenWarp plugin instance handling this OWCommand.
      */
     public OpenWarp getPlugin() {
-        return (OpenWarp)this.plugin;
+        return (OpenWarp) this.plugin;
     }
 
     /**

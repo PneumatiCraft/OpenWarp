@@ -39,7 +39,7 @@ public class OWQuotaShowCommand extends OWCommand {
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
 
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             sender.sendMessage(ChatColor.AQUA + "Quotas: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getPublicWarpQuota(player), quotaManager.getPrivateWarpQuota(player)));
         } else {
             sender.sendMessage(ChatColor.GREEN + "Global: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getGlobalPublicWarpQuota(), quotaManager.getGlobalPrivateWarpQuota()));

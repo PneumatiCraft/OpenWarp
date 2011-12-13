@@ -439,7 +439,7 @@ public class OpenWarp extends JavaPlugin {
      */
     public Warp getWarp(CommandSender sender, String warpName) {
         if (sender instanceof Player) {
-            DEBUG_LOG.finer(((Player)sender).getName() + " requests warp '" + warpName + "'");
+            DEBUG_LOG.finer(((Player) sender).getName() + " requests warp '" + warpName + "'");
         }
 
         // First check public warps
@@ -452,7 +452,7 @@ public class OpenWarp extends JavaPlugin {
 
         // If no match, check private warps
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             for (Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
                 String name = entry.getKey();
                 if (name.equalsIgnoreCase(warpName)) {
@@ -463,7 +463,7 @@ public class OpenWarp extends JavaPlugin {
 
         // If still no match, check shared warps
         if (warpName.contains(":") && (sender instanceof Player)) {
-            String requester = ((Player)sender).getName();
+            String requester = ((Player) sender).getName();
             String[] parts = warpName.split(":");
             String recipient = parts[0];
             warpName = StringUtil.arrayJoin(Arrays.copyOfRange(parts, 1, parts.length), ":");
@@ -495,13 +495,13 @@ public class OpenWarp extends JavaPlugin {
 
                 World world;
                 if (worldName == null) {
-                    world = ((Player)sender).getWorld();
+                    world = ((Player) sender).getWorld();
                 } else {
                     world = this.getServer().getWorld(worldName);
                 }
                 System.out.println("DEBUG: warping exact to world " + world.getName());
                 if (world != null) {
-                    return new Warp(this, "_EXACT", new Location(world, (double)x, (double)y, (double)z), ((Player)sender).getName());
+                    return new Warp(this, "_EXACT", new Location(world, (double) x, (double) y, (double) z), ((Player) sender).getName());
                 }
             }
 
@@ -530,7 +530,7 @@ public class OpenWarp extends JavaPlugin {
 
         // If no match, check private warps
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             for (Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
                 Location warpLoc = entry.getValue().getLocation();
                 if (location.equals(warpLoc)) {
@@ -541,7 +541,7 @@ public class OpenWarp extends JavaPlugin {
 
         // If still no match, check shared warps
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             for (Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
                 String recipient = mapEntry.getKey();
                 if (recipient.equals(player.getName())) {
@@ -672,7 +672,7 @@ public class OpenWarp extends JavaPlugin {
      * @see #getHome(String, String)
      */
     public Location getDefaultHome(String playerName) {
-        return this.getHome(playerName, (String)null);
+        return this.getHome(playerName, (String) null);
     }
 
     /**

@@ -46,7 +46,7 @@ public class OWWarpSetCommand extends OWCommand {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         // Grab player info
-        Player player = (Player)sender;
+        Player player = (Player) sender;
         Location playerLoc = player.getLocation();
 
         // Find warp type

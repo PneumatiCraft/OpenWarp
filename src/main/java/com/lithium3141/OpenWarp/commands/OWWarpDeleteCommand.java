@@ -49,7 +49,7 @@ public class OWWarpDeleteCommand extends OWCommand {
             Warp warp = this.getPlugin().getPublicWarps().get(warpName);
             String owner = warp.getOwner();
             String permNode = "other";
-            if (sender instanceof Player && ((Player)sender).getName().equals(owner)) {
+            if (sender instanceof Player && ((Player) sender).getName().equals(owner)) {
                 permNode = "self";
             }
 
@@ -69,7 +69,7 @@ public class OWWarpDeleteCommand extends OWCommand {
         } else {
             if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             String playerName = player.getName();
 
             if (!permissionsHandler.hasPermission(player, "openwarp.warp.delete.private", false)) {

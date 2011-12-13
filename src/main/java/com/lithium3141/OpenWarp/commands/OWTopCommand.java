@@ -37,7 +37,7 @@ public class OWTopCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
         Location loc = player.getLocation();
 
         if (!player.teleport(BlockSafety.safeTopFrom(loc))) {

@@ -35,7 +35,7 @@ public class OWWarpUnshareCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         String warpName = args.get(0);
         String sharePlayerName = args.get(1);
