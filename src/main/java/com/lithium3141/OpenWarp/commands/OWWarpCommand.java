@@ -71,7 +71,8 @@ public class OWWarpCommand extends OWCommand {
 
         // Move to warp
         if(target.getLocation().getWorld() == null) {
-            sender.sendMessage(ChatColor.RED + "The target location's world is null - this is a bug!");
+            sender.sendMessage(ChatColor.RED + "Cowardly refusing to move you to a warp without a world");
+            return;
         }
 
         if(!player.teleport(target.getLocation())) {

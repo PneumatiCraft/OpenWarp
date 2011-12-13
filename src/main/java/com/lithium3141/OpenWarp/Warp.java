@@ -144,9 +144,7 @@ public class Warp {
     private void parseConfiguration(ConfigurationNode node) {
         String worldName = node.getString(WORLD_KEY);
         if(worldName == null) {
-            worldName = this.plugin.getServer().getWorlds().get(0).getName();
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
-            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Assuming world " + worldName + " and continuing...");
         }
 
         double x = node.getDouble(X_KEY, 0.0);
@@ -155,9 +153,12 @@ public class Warp {
         float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
         float yaw = (float) node.getDouble(YAW_KEY, 0.0);
 
-        World world = this.plugin.getServer().getWorld(worldName);
-        if(world == null) {
-            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Couldn't locate world named '" + worldName + "'; this is likely a problem");
+        World world = null;
+        if(worldName != null) {
+            world = this.plugin.getServer().getWorld(worldName);
+            if(world == null) {
+                OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Couldn't locate world named '" + worldName + "'; this is likely a problem");
+            }
         }
         this.location = new Location(world, x, y, z, yaw, pitch);
 
@@ -318,12 +319,12 @@ public class Warp {
         result.put(YAW_KEY, this.location.getYaw());
 
         if(this.location.getWorld() == null) {
-            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Target world is null; this is a bug!");
-            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "See https://github.com/PneumatiCraft/OpenWarp/issues/22");
-            return result;
+            OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Saving warp with no loaded target world! Please check your configuration.");
+            // Used to be marked as bug #22 (see https://github.com/PneumatiCraft/OpenWarp/issues/22)
+            // In fixes for #47, removing bug marker to handle null-world condition
+        } else {
+            result.put(WORLD_KEY, this.location.getWorld().getName());
         }
-
-        result.put(WORLD_KEY, this.location.getWorld().getName());
 
         result.put(OWNER_KEY, this.owner);
         result.put(INVITEES_KEY, this.invitees);
