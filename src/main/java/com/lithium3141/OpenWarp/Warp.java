@@ -145,7 +145,7 @@ public class Warp {
      */
     private void parseConfiguration(ConfigurationNode node) {
         String worldName = node.getString(WORLD_KEY);
-        if(worldName == null) {
+        if (worldName == null) {
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
         }
 
@@ -156,9 +156,9 @@ public class Warp {
         float yaw = (float) node.getDouble(YAW_KEY, 0.0);
 
         World world = null;
-        if(worldName != null) {
+        if (worldName != null) {
             world = this.plugin.getServer().getWorld(worldName);
-            if(world == null) {
+            if (world == null) {
                 OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Couldn't locate world named '" + worldName + "'; this is likely a problem");
             }
         }
@@ -278,7 +278,7 @@ public class Warp {
      * @param playerName The player to invite to this Warp.
      */
     public void addInvitee(String playerName) {
-        if(!this.invitees.contains(playerName)) {
+        if (!this.invitees.contains(playerName)) {
             this.invitees.add(playerName);
         }
     }
@@ -320,7 +320,7 @@ public class Warp {
         result.put(PITCH_KEY, this.location.getPitch());
         result.put(YAW_KEY, this.location.getYaw());
 
-        if(this.location.getWorld() == null) {
+        if (this.location.getWorld() == null) {
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Saving warp with no loaded target world! Please check your configuration.");
             // Used to be marked as bug #22 (see https://github.com/PneumatiCraft/OpenWarp/issues/22)
             // In fixes for #47, removing bug marker to handle null-world condition

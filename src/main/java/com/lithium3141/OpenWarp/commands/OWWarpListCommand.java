@@ -42,9 +42,9 @@ public class OWWarpListCommand extends OWCommand {
         boolean sendPrivate = (args.size() == 0 || args.contains("private"));
         boolean sendInvited = (args.size() == 0 || args.contains("invited"));
 
-        if(sendPublic) this.sendPublicWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
-        if(sendPrivate) this.sendPrivateWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
-        if(sendInvited) this.sendInvitedWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (sendPublic) this.sendPublicWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (sendPrivate) this.sendPrivateWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (sendInvited) this.sendInvitedWarpsList(sender); // SUPPRESS CHECKSTYLE NeedBracesCheck
     }
 
     /**
@@ -65,14 +65,14 @@ public class OWWarpListCommand extends OWCommand {
      *               private warp list.
      */
     private void sendPrivateWarpsList(CommandSender sender) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
             Map<String, Warp> privates = this.getPlugin().getPrivateWarps().get(player.getName());
             sender.sendMessage(ChatColor.AQUA + "Private:" + ChatColor.WHITE + this.formatWarpsList(privates));
         } else {
             sender.sendMessage(ChatColor.AQUA + "Private:");
 
-            for(Entry<String, Map<String, Warp>> entry : this.getPlugin().getPrivateWarps().entrySet()) {
+            for (Entry<String, Map<String, Warp>> entry : this.getPlugin().getPrivateWarps().entrySet()) {
                 sender.sendMessage("    " + ChatColor.LIGHT_PURPLE + entry.getKey() + ":" + ChatColor.WHITE + this.formatWarpsList(entry.getValue()));
             }
         }
@@ -85,19 +85,19 @@ public class OWWarpListCommand extends OWCommand {
      *               invited warp list.
      */
     private void sendInvitedWarpsList(CommandSender sender) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
             List<Warp> invitedWarps = new ArrayList<Warp>();
 
-            for(Entry<String, Map<String, Warp>> mapEntry : this.getPlugin().getPrivateWarps().entrySet()) {
+            for (Entry<String, Map<String, Warp>> mapEntry : this.getPlugin().getPrivateWarps().entrySet()) {
                 String targetName = mapEntry.getKey();
-                if(targetName.equals(player.getName())) {
+                if (targetName.equals(player.getName())) {
                     continue;
                 }
 
-                for(Entry<String, Warp> entry : mapEntry.getValue().entrySet()) {
+                for (Entry<String, Warp> entry : mapEntry.getValue().entrySet()) {
                     Warp warp = entry.getValue();
-                    if(warp.isInvited(player)) {
+                    if (warp.isInvited(player)) {
                         System.out.println(player.getName() + " is invited to " + warp.getName() + " by " + warp.getOwner());
                         invitedWarps.add(warp);
                     }
@@ -116,9 +116,9 @@ public class OWWarpListCommand extends OWCommand {
      */
     private String formatWarpsList(Map<String, Warp> list) {
         String result = "";
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             boolean even = false;
-            for(String key : list.keySet()) {
+            for (String key : list.keySet()) {
                 result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + key; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
                 even = !even;
             }
@@ -136,9 +136,9 @@ public class OWWarpListCommand extends OWCommand {
      */
     private String formatInvitedWarpsList(List<Warp> list) {
         String result = "";
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             boolean even = false;
-            for(Warp warp : list) {
+            for (Warp warp : list) {
                 result += " " + (even ? ChatColor.YELLOW : ChatColor.WHITE) + warp.getOwner() + ":" + warp.getName(); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
                 even = !even;
             }

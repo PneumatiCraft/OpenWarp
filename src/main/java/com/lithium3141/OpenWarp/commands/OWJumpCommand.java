@@ -49,7 +49,7 @@ public class OWJumpCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         Player player = (Player)sender;
 
@@ -62,7 +62,7 @@ public class OWJumpCommand extends OWCommand {
             return;
         }
 
-        if(blocks == null) {
+        if (blocks == null) {
             sender.sendMessage(ChatColor.RED + JUMP_ERROR);
             return;
         }
@@ -73,7 +73,7 @@ public class OWJumpCommand extends OWCommand {
         loc.setYaw(player.getLocation().getYaw());
 
         // Transport player
-        if(!player.teleport(loc)) {
+        if (!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error teleporting to target block!");
         }
     }

@@ -41,7 +41,7 @@ public class OWQuotaUsageCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
 
             int usedPublic = quotaManager.getPublicWarpCount(player);
@@ -58,7 +58,7 @@ public class OWQuotaUsageCommand extends OWCommand {
             quotadPlayers.addAll(quotaManager.getPlayerMaxPublicWarps().keySet());
             quotadPlayers.addAll(quotaManager.getPlayerMaxPrivateWarps().keySet());
 
-            for(String playerName : quotadPlayers) {
+            for (String playerName : quotadPlayers) {
                 int usedPublic = quotaManager.getPublicWarpCount(playerName);
                 int quotaPublic = quotaManager.getPublicWarpQuota(playerName);
                 int usedPrivate = quotaManager.getPrivateWarpCount(playerName);
@@ -83,7 +83,7 @@ public class OWQuotaUsageCommand extends OWCommand {
      * @return A human-readable String describing quota usage.
      */
     private String formatUsage(int used, int quota, String label) {
-        if(quota < 0) {
+        if (quota < 0) {
             return "unlimited " + label + " (" + used + " created)";
         } else {
             return used + " / " + quota + " " + label;

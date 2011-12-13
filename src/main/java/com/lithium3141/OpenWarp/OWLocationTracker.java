@@ -71,7 +71,7 @@ public class OWLocationTracker {
      */
     public Location getPreviousLocation(String playerName) {
         Location loc = this.previousLocations.get(playerName);
-        if(loc != null) {
+        if (loc != null) {
             return loc;
         } else {
             return null;
@@ -138,7 +138,7 @@ public class OWLocationTracker {
      * @return A stack of Location instances set by the player onto their stack.
      */
     public Stack<Location> getLocationStack(String playerName) {
-        if(this.locationStacks.get(playerName) == null) {
+        if (this.locationStacks.get(playerName) == null) {
             this.locationStacks.put(playerName, new Stack<Location>());
         }
         return this.locationStacks.get(playerName);

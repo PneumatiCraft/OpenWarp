@@ -38,7 +38,7 @@ public class OWQuotaShowCommand extends OWCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
             sender.sendMessage(ChatColor.AQUA + "Quotas: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getPublicWarpQuota(player), quotaManager.getPrivateWarpQuota(player)));
         } else {
@@ -49,7 +49,7 @@ public class OWQuotaShowCommand extends OWCommand {
             quotadPlayers.addAll(quotaManager.getPlayerMaxPublicWarps().keySet());
             quotadPlayers.addAll(quotaManager.getPlayerMaxPrivateWarps().keySet());
 
-            for(String playerName : quotadPlayers) {
+            for (String playerName : quotadPlayers) {
                 String quotas = this.formatQuotaPair(quotaManager.getPlayerMaxPublicWarps().get(playerName), quotaManager.getPlayerMaxPrivateWarps().get(playerName));
                 sender.sendMessage("    " + ChatColor.LIGHT_PURPLE + playerName + ": " + ChatColor.WHITE + quotas);
             }

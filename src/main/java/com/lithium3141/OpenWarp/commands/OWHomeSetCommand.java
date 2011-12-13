@@ -38,10 +38,10 @@ public class OWHomeSetCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
         Player player = (Player)sender;
 
-        if(args.size() == 0) {
+        if (args.size() == 0) {
             this.getPlugin().setHome(player, player.getLocation().getWorld(), player.getLocation());
         } else {
             this.getPlugin().setDefaultHome(player, player.getLocation());
@@ -54,7 +54,7 @@ public class OWHomeSetCommand extends OWCommand {
         String permString = "openwarp.home.access." + player.getName();
 
         PluginManager pm = this.getPlugin().getServer().getPluginManager();
-        if(pm.getPermission(permString) == null) {
+        if (pm.getPermission(permString) == null) {
             Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
             pm.addPermission(homeAccessPerm);
 

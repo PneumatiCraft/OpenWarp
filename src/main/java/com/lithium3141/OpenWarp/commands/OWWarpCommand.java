@@ -37,31 +37,31 @@ public class OWWarpCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
         Player player = (Player)sender;
 
         // Locate the warp
         String warpName = args.get(0);
         Warp target = this.getPlugin().getWarp(sender, warpName);
-        if(target == null) {
+        if (target == null) {
             sender.sendMessage(ChatColor.RED + "No warp found matching name: " + warpName);
             return;
         }
 
         // Verify actual permission to access the warp
-        if(target.getOwner().equalsIgnoreCase(player.getName()) || target.isPublic()) {
+        if (target.getOwner().equalsIgnoreCase(player.getName()) || target.isPublic()) {
             String permString = "openwarp.warp.access.*";
-            if(target.isPublic()) {
+            if (target.isPublic()) {
                 permString ="openwarp.warp.access.public." + warpName;
             } else {
                 permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
             }
-            if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
+            if (!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
                 return;
             }
         } else {
-            if(!target.isInvited(player)) {
+            if (!target.isInvited(player)) {
                 sender.sendMessage(ChatColor.RED + "You aren't invited to move to warp: " + warpName);
                 OpenWarp.DEBUG_LOG.warning("OpenWarp#getWarp() returned warp neither owned or invited. Possible bug.");
                 OpenWarp.DEBUG_LOG.warning("    Sender:" + player.getName() + " Warp:" + target.getName() + "Owner:" + target.getOwner());
@@ -70,12 +70,12 @@ public class OWWarpCommand extends OWCommand {
         }
 
         // Move to warp
-        if(target.getLocation().getWorld() == null) {
+        if (target.getLocation().getWorld() == null) {
             sender.sendMessage(ChatColor.RED + "Cowardly refusing to move you to a warp without a world");
             return;
         }
 
-        if(!player.teleport(target.getLocation())) {
+        if (!player.teleport(target.getLocation())) {
             player.sendMessage(ChatColor.RED + "Error teleporting to warp: " + warpName);
         }
     }

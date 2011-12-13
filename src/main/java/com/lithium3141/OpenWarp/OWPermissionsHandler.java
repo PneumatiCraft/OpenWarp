@@ -38,7 +38,7 @@ public class OWPermissionsHandler implements PermissionsInterface {
         this.plugin = ow;
 
         Plugin permissions = this.plugin.getServer().getPluginManager().getPlugin("Permissions");
-        if(permissions != null) {
+        if (permissions != null) {
             this.permissionHandler = ((Permissions)permissions).getHandler();
             this.plugin.getServer().getLogger().info(OpenWarp.LOG_PREFIX + "Hooked into Permissions " + permissions.getDescription().getVersion());
         }
@@ -47,15 +47,15 @@ public class OWPermissionsHandler implements PermissionsInterface {
 
     @Override
     public boolean hasPermission(CommandSender sender, String node, boolean isOpRequired) {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             return true;
         } else {
             Player player = (Player)sender;
-            if(this.permissionHandler != null) {
+            if (this.permissionHandler != null) {
                 return this.permissionHandler.has(player, node);
-            } else if(player.hasPermission(node)) {
+            } else if (player.hasPermission(node)) {
                 return true;
-            } else if(isOpRequired) {
+            } else if (isOpRequired) {
                 return player.isOp();
             } else {
                 return false;
@@ -65,8 +65,8 @@ public class OWPermissionsHandler implements PermissionsInterface {
 
     @Override
     public boolean hasAnyPermission(CommandSender sender, List<String> allPermissionStrings, boolean opRequired) {
-        for(String node : allPermissionStrings) {
-            if(this.hasPermission(sender, node, opRequired)) {
+        for (String node : allPermissionStrings) {
+            if (this.hasPermission(sender, node, opRequired)) {
                 return true;
             }
         }
@@ -75,8 +75,8 @@ public class OWPermissionsHandler implements PermissionsInterface {
 
     @Override
     public boolean hasAllPermission(CommandSender sender, List<String> allPermissionStrings, boolean opRequired) {
-        for(String node : allPermissionStrings) {
-            if(!this.hasPermission(sender, node, opRequired)) {
+        for (String node : allPermissionStrings) {
+            if (!this.hasPermission(sender, node, opRequired)) {
                 return false;
             }
         }

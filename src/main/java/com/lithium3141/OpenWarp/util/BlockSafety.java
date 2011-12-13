@@ -35,7 +35,7 @@ public class BlockSafety {
      * @return The next safe Location up from the given Block, inclusive.
      */
     public static Location safeNextUpFrom(Block block) {
-        if(block == null) return null; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (block == null) return null; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         Location loc = block.getLocation();
 
@@ -48,10 +48,10 @@ public class BlockSafety {
         Material last2 = (new Location(loc.getWorld(), x, y + 2, z)).getBlock().getType();
         int ny;
         World world = block.getWorld();
-        for(ny = y; ny < WORLD_HEIGHT; ny++) {
+        for (ny = y; ny < WORLD_HEIGHT; ny++) {
             Block b = world.getBlockAt(x, ny, z);
             Material m = b.getType();
-            if(!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
+            if (!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
                 break;
             } else {
                 last2 = last;
@@ -60,7 +60,7 @@ public class BlockSafety {
         }
 
         // If the found block is air, move down
-        if(world.getBlockAt(x, ny - 1, z).getType().equals(Material.AIR)) {
+        if (world.getBlockAt(x, ny - 1, z).getType().equals(Material.AIR)) {
             ny = safeNextDownFrom(world.getBlockAt(x, ny, z)).getBlockY();
         }
 
@@ -78,7 +78,7 @@ public class BlockSafety {
      * @return The next safe Location down from the given Block, inclusive.
      */
     public static Location safeNextDownFrom(Block block) {
-        if(block == null) return null; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (block == null) return null; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         Location loc = block.getLocation();
 
@@ -91,10 +91,10 @@ public class BlockSafety {
         Material last2 = (new Location(loc.getWorld(), x, y + 2, z)).getBlock().getType();
         int ny;
         World world = block.getWorld();
-        for(ny = y; ny > 0; ny--) {
+        for (ny = y; ny > 0; ny--) {
             Block b = world.getBlockAt(x, ny, z);
             Material m = b.getType();
-            if(!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
+            if (!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
                 break;
             } else {
                 last2 = last;
@@ -103,7 +103,7 @@ public class BlockSafety {
         }
 
         // If the found block doesn't have air, move up
-        if(!world.getBlockAt(x, ny + 1, z).getType().equals(Material.AIR)) {
+        if (!world.getBlockAt(x, ny + 1, z).getType().equals(Material.AIR)) {
             ny = safeNextUpFrom(world.getBlockAt(x, ny, z)).getBlockY();
         }
 
@@ -131,10 +131,10 @@ public class BlockSafety {
         Material last = Material.BEDROCK;
         int ny;
         World world = block.getWorld();
-        for(ny = WORLD_HEIGHT - 1; ny > y; ny--) {
+        for (ny = WORLD_HEIGHT - 1; ny > y; ny--) {
             Block b = world.getBlockAt(x, ny, z);
             Material m = b.getType();
-            if(!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
+            if (!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
                 break;
             } else {
                 last2 = last;

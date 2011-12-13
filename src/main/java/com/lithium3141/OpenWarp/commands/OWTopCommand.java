@@ -35,12 +35,12 @@ public class OWTopCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
         Player player = (Player)sender;
         Location loc = player.getLocation();
 
-        if(!player.teleport(BlockSafety.safeTopFrom(loc))) {
+        if (!player.teleport(BlockSafety.safeTopFrom(loc))) {
             player.sendMessage(ChatColor.RED + "Error teleporting to top block!");
         }
     }

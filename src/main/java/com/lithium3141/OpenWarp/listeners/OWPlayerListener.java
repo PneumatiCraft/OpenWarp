@@ -45,10 +45,10 @@ public class OWPlayerListener extends PlayerListener {
     @Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "' teleported ( " + prettyLocation(event.getFrom()) + " -> " + prettyLocation(event.getTo()) + " ).");
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             OpenWarp.DEBUG_LOG.fine("...cancelled!");
         }
-        if(!locationsWithin(event.getFrom(), event.getTo(), FUZZ_FACTOR)) {
+        if (!locationsWithin(event.getFrom(), event.getTo(), FUZZ_FACTOR)) {
             this.plugin.getLocationTracker().setPreviousLocation(event.getPlayer(), event.getFrom());
         }
     }

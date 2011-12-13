@@ -15,7 +15,7 @@ public class OWPluginListener extends ServerListener {
     @Override
     public void onPluginEnable(PluginEnableEvent event) {
         Plugin p = event.getPlugin();
-        if(p.getDescription().getName().equalsIgnoreCase("Multiverse-Core")) {
+        if (p.getDescription().getName().equalsIgnoreCase("Multiverse-Core")) {
             new MVConnector(p);
             System.out.println("[OpenWarp] Found Multiverse 2, Support Enabled.");
         }

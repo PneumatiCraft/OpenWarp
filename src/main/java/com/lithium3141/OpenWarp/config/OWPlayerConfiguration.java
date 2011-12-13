@@ -136,35 +136,35 @@ public class OWPlayerConfiguration {
         this.quotaConfig.load();
 
         // Warps
-        if(this.plugin.getPrivateWarps().get(this.playerName) == null) {
+        if (this.plugin.getPrivateWarps().get(this.playerName) == null) {
             this.plugin.getPrivateWarps().put(this.playerName, new HashMap<String, Warp>());
         }
         this.plugin.getConfigurationManager().loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 
         // Homes
         ConfigurationNode homeNode = this.generalConfig.getNode(OWConfigurationManager.HOME_KEY);
-        if(homeNode != null) {
+        if (homeNode != null) {
             this.plugin.setDefaultHome(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
         }
 
         Map<String, ConfigurationNode> multiworldHomesMap = this.generalConfig.getNodes(OWConfigurationManager.MULTIWORLD_HOMES_KEY);
-        if(multiworldHomesMap != null) {
-            for(String worldName : multiworldHomesMap.keySet()) {
+        if (multiworldHomesMap != null) {
+            for (String worldName : multiworldHomesMap.keySet()) {
                 this.plugin.setHome(this.playerName, worldName, new Warp(this.plugin, TEMP_HOME_NAME, multiworldHomesMap.get(worldName)).getLocation());
             }
         }
 
         // Back
         ConfigurationNode backNode = this.generalConfig.getNode(OWConfigurationManager.BACK_KEY);
-        if(backNode != null) {
+        if (backNode != null) {
             this.plugin.getLocationTracker().setPreviousLocation(this.playerName, new Warp(this.plugin, TEMP_BACK_NAME, backNode).getLocation());
         }
 
         // Stack
         List<ConfigurationNode> warpStackNodes = this.generalConfig.getNodeList(OWConfigurationManager.STACK_KEY, new ArrayList<ConfigurationNode>());
-        if(warpStackNodes != null) {
+        if (warpStackNodes != null) {
             Stack<Location> warpStack = new Stack<Location>();
-            for(ConfigurationNode node : warpStackNodes) {
+            for (ConfigurationNode node : warpStackNodes) {
                 warpStack.push(new Warp(this.plugin, TEMP_STACK_NAME, node).getLocation());
             }
             this.plugin.getLocationTracker().setLocationStack(this.playerName, warpStack);
@@ -186,15 +186,15 @@ public class OWPlayerConfiguration {
         Map<String, Warp> playerWarps = this.plugin.getPrivateWarps(this.playerName);
 
         Map<String, Object> configWarps = new HashMap<String, Object>();
-        for(Entry<String, Warp> entry : playerWarps.entrySet()) {
+        for (Entry<String, Warp> entry : playerWarps.entrySet()) {
             configWarps.put(entry.getKey(), entry.getValue().getConfigurationMap());
         }
         this.warpConfig.setProperty(OWConfigurationManager.WARPS_LIST_KEY, configWarps);
 
         // Home
-        if(this.plugin.getDefaultHome(this.playerName) != null) {
+        if (this.plugin.getDefaultHome(this.playerName) != null) {
             Map<String, Object> homeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, this.plugin.getDefaultHome(this.playerName), this.playerName).getConfigurationMap();
-            if(homeWarpConfig != null) {
+            if (homeWarpConfig != null) {
                 this.generalConfig.setProperty(OWConfigurationManager.HOME_KEY, homeWarpConfig);
             } else {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to missing warp world");
@@ -204,14 +204,14 @@ public class OWPlayerConfiguration {
         }
 
         Map<String, Location> worldHomes = this.plugin.getWorldHomes(this.playerName);
-        if(worldHomes != null) {
-            for(String worldName : worldHomes.keySet()) {
-                if(worldName != null) {
+        if (worldHomes != null) {
+            for (String worldName : worldHomes.keySet()) {
+                if (worldName != null) {
                     Location worldHome = worldHomes.get(worldName);
                     String yamlKey = OWConfigurationManager.MULTIWORLD_HOMES_KEY + "." + worldName;
 
                     Map<String, Object> worldHomeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, worldHome, this.playerName).getConfigurationMap();
-                    if(worldHomeWarpConfig != null) {
+                    if (worldHomeWarpConfig != null) {
                         this.generalConfig.setProperty(yamlKey, worldHomeWarpConfig);
                     } else {
                         OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to broken multiworld home");
@@ -223,21 +223,21 @@ public class OWPlayerConfiguration {
         }
 
         // Back
-        if(this.plugin.getLocationTracker().getPreviousLocation(this.playerName) != null) {
+        if (this.plugin.getLocationTracker().getPreviousLocation(this.playerName) != null) {
             Map<String, Object> backWarpConfig = new Warp(this.plugin, TEMP_BACK_NAME, this.plugin.getLocationTracker().getPreviousLocation(this.playerName), this.playerName).getConfigurationMap();
-            if(backWarpConfig != null) {
+            if (backWarpConfig != null) {
                 this.generalConfig.setProperty(OWConfigurationManager.BACK_KEY, backWarpConfig);
             }
         }
 
         // History stack
-        if(this.plugin.getLocationTracker().getLocationStack(this.playerName) != null) {
+        if (this.plugin.getLocationTracker().getLocationStack(this.playerName) != null) {
             Stack<Location> locationStack = this.plugin.getLocationTracker().getLocationStack(this.playerName);
             List<Map<String, Object>> locationStackConfig = new ArrayList<Map<String, Object>>();
-            for(Location location : locationStack) {
+            for (Location location : locationStack) {
                 locationStackConfig.add(new Warp(this.plugin, TEMP_STACK_NAME, location, this.playerName).getConfigurationMap());
             }
-            if(locationStackConfig.size() > 0) {
+            if (locationStackConfig.size() > 0) {
                 this.generalConfig.setProperty(OWConfigurationManager.STACK_KEY, locationStackConfig);
             } else {
                 this.generalConfig.setProperty(OWConfigurationManager.STACK_KEY, null);

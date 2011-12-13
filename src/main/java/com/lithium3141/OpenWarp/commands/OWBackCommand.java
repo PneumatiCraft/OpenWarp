@@ -38,17 +38,17 @@ public class OWBackCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         Player player = (Player)sender;
         Location loc = this.getPlugin().getLocationTracker().getPreviousLocation(player);
 
-        if(loc == null) {
+        if (loc == null) {
             player.sendMessage(ChatColor.RED + "You do not currently have a previous location!");
             return;
         }
 
-        if(!player.teleport(loc)) {
+        if (!player.teleport(loc)) {
             player.sendMessage(ChatColor.RED + "Error returning to previous location!");
         }
     }

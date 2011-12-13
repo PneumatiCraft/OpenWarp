@@ -46,24 +46,24 @@ public class OWTeleportCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.senderOK(sender, args)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.senderOK(sender, args)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
         Player player = (sender instanceof Player ? (Player)sender : null); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
         // Figure out who's going where
         Player sourcePlayer = this.getSourcePlayer(player, args);
         Player targetPlayer = this.getTargetPlayer(player, args);
 
-        if(sourcePlayer == null) {
+        if (sourcePlayer == null) {
             sender.sendMessage(ChatColor.RED + "Couldn't find player to move");
             return;
         }
-        if(targetPlayer == null) {
+        if (targetPlayer == null) {
             sender.sendMessage(ChatColor.RED + "Couldn't find target player");
             return;
         }
 
         // Move people
-        if(!sourcePlayer.teleport(targetPlayer.getLocation())) {
+        if (!sourcePlayer.teleport(targetPlayer.getLocation())) {
             sourcePlayer.sendMessage(ChatColor.RED + "Error teleporting to player: " + targetPlayer.getName());
         }
     }
@@ -83,7 +83,7 @@ public class OWTeleportCommand extends OWCommand {
      *         and arguments given; false otherwise.
      */
     protected boolean senderOK(CommandSender sender, List<String> args) {
-        if(!(sender instanceof Player) && args.size() == 1) {
+        if (!(sender instanceof Player) && args.size() == 1) {
             sender.sendMessage(ChatColor.RED + "You must specify both a source and target player.");
             return false;
         }
@@ -99,7 +99,7 @@ public class OWTeleportCommand extends OWCommand {
      * @return The Player that will move as a result of this command.
      */
     protected Player getSourcePlayer(Player sender, List<String> args) {
-        if(args.size() == 1) {
+        if (args.size() == 1) {
             return sender;
         } else {
             return this.getPlugin().getServer().getPlayer(args.get(0));

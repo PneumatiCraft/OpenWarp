@@ -48,12 +48,12 @@ public class OWStackPopCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
         Player player = (Player)sender;
 
         Location target = this.getLocation(player);
-        if(target != null) {
-            if(!player.teleport(target)) {
+        if (target != null) {
+            if (!player.teleport(target)) {
                 player.sendMessage(ChatColor.RED + "Error teleporting you to previous location.");
             }
         } else {

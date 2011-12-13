@@ -36,34 +36,34 @@ public class OWStackPushCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
         Player player = (Player)sender;
 
-        if(args.size() == 0) {
+        if (args.size() == 0) {
             this.getPlugin().getLocationTracker().getLocationStack(player).push(player.getLocation());
         } else {
             String warpName = args.get(0);
 
             Warp target = this.getPlugin().getWarp(player, warpName);
-            if(target == null) {
+            if (target == null) {
                 sender.sendMessage(ChatColor.RED + "No warp found matching name: " + warpName);
                 return;
             }
 
             String permString = "openwarp.warp.access.*";
-            if(target.isPublic()) {
+            if (target.isPublic()) {
                 permString ="openwarp.warp.access.public." + warpName;
             } else {
                 permString ="openwarp.warp.access.private." + target.getOwner() + "." + warpName;
             }
-            if(!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
+            if (!this.getPlugin().getPermissionsHandler().hasPermission(sender, permString, !target.isPublic())) {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to move to warp: " + warpName);
                 return;
             }
 
             this.getPlugin().getLocationTracker().getLocationStack(player).push(target.getLocation());
 
-            if(!player.teleport(target.getLocation())) {
+            if (!player.teleport(target.getLocation())) {
                 player.sendMessage(ChatColor.RED + "Error teleporting to warp '" + warpName + "'");
             }
         }

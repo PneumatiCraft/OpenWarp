@@ -52,10 +52,10 @@ public abstract class OWCommand extends Command {
      * @return true if the sender is a Player; false otherwise.
      */
     public boolean checkPlayerSender(CommandSender sender) {
-        if(sender instanceof ConsoleCommandSender) {
+        if (sender instanceof ConsoleCommandSender) {
             sender.sendMessage(ChatColor.RED + "Command must be run in-game!");
             return false;
-        } else if(!(sender instanceof Player)) {
+        } else if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Cannot verify command's sender!");
             return false;
         }

@@ -39,17 +39,17 @@ public class OWStackPrintCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
         Player player = (Player)sender;
 
         Stack<Location> locations = this.getPlugin().getLocationTracker().getLocationStack(player);
 
-        if(locations.size() == 0) {
+        if (locations.size() == 0) {
             sender.sendMessage(ChatColor.YELLOW + "Your warp stack is currently empty.");
             return;
         }
 
-        for(Location location : locations) {
+        for (Location location : locations) {
             sender.sendMessage(this.formatLocation(player, location));
         }
     }
@@ -67,7 +67,7 @@ public class OWStackPrintCommand extends OWCommand {
      */
     protected String formatLocation(Player player, Location location) {
         Warp matchingWarp = this.getPlugin().getWarp(player, location);
-        if(matchingWarp != null) {
+        if (matchingWarp != null) {
             return String.format("Warp '%s' in world '%s'", matchingWarp.getName(), matchingWarp.getLocation().getWorld().getName());
         } else {
             return LocationUtil.getHumanReadableString(location, 2);

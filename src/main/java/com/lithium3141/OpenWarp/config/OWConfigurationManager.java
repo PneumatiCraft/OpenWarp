@@ -136,11 +136,11 @@ public class OWConfigurationManager {
      */
     public void saveAllConfigurations() {
         OpenWarp.DEBUG_LOG.fine("Writing ALL OpenWarp configuration files");
-        if(this.configuration != null) {
+        if (this.configuration != null) {
             this.saveGlobalConfiguration();
 
             // Save player-specific data
-            for(String playerName : this.playerConfigs.keySet()) {
+            for (String playerName : this.playerConfigs.keySet()) {
                 this.savePlayerConfiguration(playerName);
             }
         }
@@ -155,22 +155,22 @@ public class OWConfigurationManager {
     public void saveGlobalConfiguration() {
         OpenWarp.DEBUG_LOG.fine("Writing OpenWarp global configuration file");
 
-        if(this.configuration != null) {
+        if (this.configuration != null) {
             // Save overall configuration
             OpenWarp.DEBUG_LOG.fine("Writing global player name list with " + this.playerConfigs.keySet().size() + " elements");
             this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
-            if(!this.configuration.save()) {
+            if (!this.configuration.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save player list; continuing...");
             }
 
             // Save public warps
             Map<String, Object> warps = new HashMap<String, Object>();
-            for(Entry<String, Warp> entry : this.plugin.getPublicWarps().entrySet()) {
+            for (Entry<String, Warp> entry : this.plugin.getPublicWarps().entrySet()) {
                 warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
             }
 
             this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
-            if(!this.publicWarpsConfig.save()) {
+            if (!this.publicWarpsConfig.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save public warp list; continuing...");
             }
 
@@ -206,10 +206,10 @@ public class OWConfigurationManager {
     public void savePlayerConfiguration(String playerName) {
         OpenWarp.DEBUG_LOG.fine("Writing OpenWarp player configuration file (" + playerName + ")");
 
-        if(this.configuration != null) {
+        if (this.configuration != null) {
             OWPlayerConfiguration config = this.playerConfigs.get(playerName);
 
-            if(config != null && !config.save()) {
+            if (config != null && !config.save()) {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
             }
         }
@@ -234,8 +234,8 @@ public class OWConfigurationManager {
      */
     public void loadWarps(Configuration config, Map<String, Warp> target) {
         List<String> keys = config.getKeys(WARPS_LIST_KEY);
-        if(keys != null) {
-            for(String key : keys) {
+        if (keys != null) {
+            for (String key : keys) {
                 ConfigurationNode node = config.getNode(WARPS_LIST_KEY + "." + key);
                 Warp warp = new Warp(this.plugin, key, node);
                 target.put(warp.getName(), warp);
@@ -252,7 +252,7 @@ public class OWConfigurationManager {
      * @see OWPlayerConfiguration
      */
     public void registerPlayerName(String playerName) {
-        if(this.playerConfigs.get(playerName) == null) {
+        if (this.playerConfigs.get(playerName) == null) {
             OWPlayerConfiguration playerConfig = new OWPlayerConfiguration(this.plugin, playerName);
             playerConfig.load();
             this.playerConfigs.put(playerName, playerConfig);
@@ -265,7 +265,7 @@ public class OWConfigurationManager {
      */
     public void loadPlayers() {
         List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
-        for(String playerName : playerNames) {
+        for (String playerName : playerNames) {
             this.registerPlayerName(playerName);
         }
     }

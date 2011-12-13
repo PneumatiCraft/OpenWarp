@@ -120,7 +120,7 @@ public class OpenWarp extends JavaPlugin {
         // Create overall permission
         this.getServer().getPluginManager().addPermission(new Permission("openwarp.*", PermissionDefault.OP));
         Permission wildcardPerm = this.getServer().getPluginManager().getPermission("*");
-        if(wildcardPerm != null) {
+        if (wildcardPerm != null) {
             wildcardPerm.getChildren().put("openwarp.*", true);
             wildcardPerm.recalculatePermissibles();
         }
@@ -204,7 +204,7 @@ public class OpenWarp extends JavaPlugin {
 
         // Finagle a new permission for public warps
         Map<String, Boolean> publicWarpChildren = new HashMap<String, Boolean>();
-        for(Warp publicWarp : this.getPublicWarps().values()) {
+        for (Warp publicWarp : this.getPublicWarps().values()) {
             String permString = "openwarp.warp.access.public." + publicWarp.getName();
             Permission publicWarpPermission = new Permission(permString, PermissionDefault.TRUE);
             publicWarpChildren.put(permString, true);
@@ -215,12 +215,12 @@ public class OpenWarp extends JavaPlugin {
 
         // The same, for private warps
         Map<String, Boolean> privateWarpChildren = new HashMap<String, Boolean>();
-        for(String playerName : this.getPrivateWarps().keySet()) {
+        for (String playerName : this.getPrivateWarps().keySet()) {
             String permPrefix = "openwarp.warp.access.private." + playerName;
             privateWarpChildren.put(permPrefix + ".*", true);
 
             Map<String, Boolean> privateWarpSubchildren = new HashMap<String, Boolean>();
-            for(Warp privateWarp : this.getPrivateWarps(playerName).values()) {
+            for (Warp privateWarp : this.getPrivateWarps(playerName).values()) {
                 String permString = permPrefix + "." + privateWarp.getName();
                 Permission privateWarpPermission = new Permission(permString, PermissionDefault.TRUE);
                 privateWarpSubchildren.put(permString, true);
@@ -247,7 +247,7 @@ public class OpenWarp extends JavaPlugin {
 
         // Add public & private children of delete perm (which should already exist)
         Permission deletePerm = pm.getPermission("openwarp.warp.delete.*");
-        if(deletePerm != null) {
+        if (deletePerm != null) {
             deletePerm.getChildren().put("openwarp.warp.delete.public.*", true);
             deletePerm.getChildren().put("openwarp.warp.delete.private.*", true);
             deletePerm.recalculatePermissibles();
@@ -255,7 +255,7 @@ public class OpenWarp extends JavaPlugin {
 
         // Make the primary access & delete perms a child of overall warp perms
         Permission warpPerm = pm.getPermission("openwarp.warp.*");
-        if(warpPerm != null) {
+        if (warpPerm != null) {
             warpPerm.getChildren().put("openwarp.warp.access.*", true);
             warpPerm.getChildren().put("openwarp.warp.delete.*", true);
             warpPerm.recalculatePermissibles();
@@ -271,7 +271,7 @@ public class OpenWarp extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
 
         Map<String, Boolean> homeAccessChildren = new HashMap<String, Boolean>();
-        for(String playerName : this.homes.keySet()) {
+        for (String playerName : this.homes.keySet()) {
             String permString = "openwarp.home.access." + playerName;
 
             Permission homeAccessPerm = new Permission(permString, PermissionDefault.OP);
@@ -285,7 +285,7 @@ public class OpenWarp extends JavaPlugin {
         homeAccessPerm.recalculatePermissibles();
 
         Permission homePerm = pm.getPermission("openwarp.home.*");
-        if(homePerm != null) {
+        if (homePerm != null) {
             homePerm.getChildren().put("openwarp.home.access.*", true);
             homePerm.recalculatePermissibles();
         } else {
@@ -351,7 +351,7 @@ public class OpenWarp extends JavaPlugin {
         // Construct a trie key path from the command label and args
         List<String> keyPath = new ArrayList<String>();
         keyPath.add(command.getLabel().toLowerCase());
-        for(int i = 0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             keyPath.add(args[i]);
         }
 
@@ -435,43 +435,43 @@ public class OpenWarp extends JavaPlugin {
      *          specified name, or (4) null.
      */
     public Warp getWarp(CommandSender sender, String warpName) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             DEBUG_LOG.finer(((Player)sender).getName() + " requests warp '" + warpName + "'");
         }
 
         // First check public warps
-        for(Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
+        for (Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
             String name = entry.getKey();
-            if(name.equalsIgnoreCase(warpName)) {
+            if (name.equalsIgnoreCase(warpName)) {
                 return entry.getValue();
             }
         }
 
         // If no match, check private warps
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
-            for(Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
+            for (Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
                 String name = entry.getKey();
-                if(name.equalsIgnoreCase(warpName)) {
+                if (name.equalsIgnoreCase(warpName)) {
                     return entry.getValue();
                 }
             }
         }
 
         // If still no match, check shared warps
-        if(warpName.contains(":") && (sender instanceof Player)) {
+        if (warpName.contains(":") && (sender instanceof Player)) {
             String requester = ((Player)sender).getName();
             String[] parts = warpName.split(":");
             String recipient = parts[0];
             warpName = StringUtil.arrayJoin(Arrays.copyOfRange(parts, 1, parts.length), ":");
             DEBUG_LOG.finest("Checking shared warps; want player '" + recipient + "' and warp '" + warpName + "'");
 
-            for(Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
-                if(mapEntry.getKey().equalsIgnoreCase(recipient)) {
-                    for(Entry<String, Warp> entry : mapEntry.getValue().entrySet()) {
-                        if(entry.getKey().equalsIgnoreCase(warpName)) {
+            for (Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
+                if (mapEntry.getKey().equalsIgnoreCase(recipient)) {
+                    for (Entry<String, Warp> entry : mapEntry.getValue().entrySet()) {
+                        if (entry.getKey().equalsIgnoreCase(warpName)) {
                             Warp warp = entry.getValue();
-                            if(warp.isInvited(requester)) {
+                            if (warp.isInvited(requester)) {
                                 return warp;
                             }
                         }
@@ -481,23 +481,23 @@ public class OpenWarp extends JavaPlugin {
         }
 
         // If still no match, try to cast to coords
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Pattern coordPattern = Pattern.compile("(?:([a-zA-Z0-9_]+):)?(-?[0-9]+),(-?[0-9]+),(-?[0-9]+)"); // it burns us
             Matcher coordMatcher = coordPattern.matcher(warpName);
-            if(coordMatcher.matches()) {
+            if (coordMatcher.matches()) {
                 String worldName = coordMatcher.group(1);
                 int x = Integer.parseInt(coordMatcher.group(2));
                 int y = Integer.parseInt(coordMatcher.group(3)); // SUPPRESS CHECKSTYLE MagicNumberCheck
                 int z = Integer.parseInt(coordMatcher.group(4)); // SUPPRESS CHECKSTYLE MagicNumberCheck
 
                 World world;
-                if(worldName == null) {
+                if (worldName == null) {
                     world = ((Player)sender).getWorld();
                 } else {
                     world = this.getServer().getWorld(worldName);
                 }
                 System.out.println("DEBUG: warping exact to world " + world.getName());
-                if(world != null) {
+                if (world != null) {
                     return new Warp(this, "_EXACT", new Location(world, (double)x, (double)y, (double)z), ((Player)sender).getName());
                 }
             }
@@ -518,35 +518,35 @@ public class OpenWarp extends JavaPlugin {
      */
     public Warp getWarp(CommandSender sender, Location location) {
         // First check public warps
-        for(Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
+        for (Entry<String, Warp> entry : this.getPublicWarps().entrySet()) {
             Location warpLoc = entry.getValue().getLocation();
-            if(location.equals(warpLoc)) {
+            if (location.equals(warpLoc)) {
                 return entry.getValue();
             }
         }
 
         // If no match, check private warps
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
-            for(Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
+            for (Entry<String, Warp> entry : this.getPrivateWarps().get(player.getName()).entrySet()) {
                 Location warpLoc = entry.getValue().getLocation();
-                if(location.equals(warpLoc)) {
+                if (location.equals(warpLoc)) {
                     return entry.getValue();
                 }
             }
         }
 
         // If still no match, check shared warps
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player)sender;
-            for(Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
+            for (Entry<String, Map<String, Warp>> mapEntry : this.getPrivateWarps().entrySet()) {
                 String recipient = mapEntry.getKey();
-                if(recipient.equals(player.getName())) {
+                if (recipient.equals(player.getName())) {
                     continue;
                 }
-                for(Entry<String, Warp> entry : this.getPrivateWarps().get(recipient).entrySet()) {
+                for (Entry<String, Warp> entry : this.getPrivateWarps().get(recipient).entrySet()) {
                     Warp warp = entry.getValue();
-                    if(location.equals(warp.getLocation()) && warp.isInvited(player)) {
+                    if (location.equals(warp.getLocation()) && warp.isInvited(player)) {
                         return warp;
                     }
                 }
@@ -567,7 +567,7 @@ public class OpenWarp extends JavaPlugin {
      * is not using multiworld homes.
      */
     public Map<String, Location> getWorldHomes(String playerName) {
-        if(!this.configurationManager.usingMultiworldHomes()) {
+        if (!this.configurationManager.usingMultiworldHomes()) {
             return null;
         }
 
@@ -588,22 +588,22 @@ public class OpenWarp extends JavaPlugin {
      * @return A Location for the located home or null if no such home exists.
      */
     public Location getHome(String playerName, String worldName) {
-        if(this.configurationManager.usingMultiworldHomes()) {
+        if (this.configurationManager.usingMultiworldHomes()) {
             // Multiworld homes - get home for given world name
             DEBUG_LOG.fine("Fetching home for player '" + playerName + "' in world '" + worldName + "'");
 
-            if(!this.homes.containsKey(playerName)) {
+            if (!this.homes.containsKey(playerName)) {
                 DEBUG_LOG.finer("    ...no such player");
                 return null;
             }
 
             Map<String, Location> playerHomes = this.homes.get(playerName);
-            if(playerHomes == null) {
+            if (playerHomes == null) {
                 DEBUG_LOG.finer("    ...player registered, but has no homes map");
                 return null;
             }
 
-            if(playerHomes.containsKey(worldName)) {
+            if (playerHomes.containsKey(worldName)) {
                 DEBUG_LOG.finer("    ...located specific warp in world");
                 return playerHomes.get(worldName);
             } else {
@@ -612,12 +612,12 @@ public class OpenWarp extends JavaPlugin {
             }
         } else {
             // No multiworld homes - fetch default home
-            if(!this.homes.containsKey(playerName)) {
+            if (!this.homes.containsKey(playerName)) {
                 return null;
             }
 
             Map<String, Location> playerHomes = this.homes.get(playerName);
-            if(playerHomes == null) {
+            if (playerHomes == null) {
                 return null;
             }
 
@@ -696,22 +696,22 @@ public class OpenWarp extends JavaPlugin {
      * @return The Location being replaced, if any; null otherwise.
      */
     public Location setHome(String playerName, String worldName, Location home) {
-        if(this.configurationManager.usingMultiworldHomes()) {
+        if (this.configurationManager.usingMultiworldHomes()) {
             // Multiworld homes - save home under world name key
             DEBUG_LOG.fine("Setting home for player '" + playerName + "' in world '" + worldName + "'");
 
-            if(!this.homes.containsKey(playerName)) {
+            if (!this.homes.containsKey(playerName)) {
                 DEBUG_LOG.finer("    ...adding new player map");
                 this.homes.put(playerName, new HashMap<String, Location>());
             }
 
-            if(this.homes.get(playerName).size() == 0) {
+            if (this.homes.get(playerName).size() == 0) {
                 this.homes.get(playerName).put(null, home);
             }
             return this.homes.get(playerName).put(worldName, home);
         } else {
             // No multiworld - place the home as the default (null key)
-            if(!this.homes.containsKey(playerName)) {
+            if (!this.homes.containsKey(playerName)) {
                 this.homes.put(playerName, new HashMap<String, Location>());
             }
             return this.homes.get(playerName).put(null, home);

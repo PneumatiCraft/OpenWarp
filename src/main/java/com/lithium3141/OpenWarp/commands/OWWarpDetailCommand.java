@@ -33,7 +33,7 @@ public class OWWarpDetailCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(args.size() == 0) {
+        if (args.size() == 0) {
             sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
@@ -41,7 +41,7 @@ public class OWWarpDetailCommand extends OWCommand {
         String warpName = args.get(0);
 
         Warp warp = this.getPlugin().getWarp(sender, warpName);
-        if(warp == null) {
+        if (warp == null) {
             sender.sendMessage(ChatColor.RED + warpName + ":" + ChatColor.WHITE + " No such warp");
         } else {
             ChatColor color = (warp.isPublic() ? ChatColor.GREEN : ChatColor.BLUE); // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck

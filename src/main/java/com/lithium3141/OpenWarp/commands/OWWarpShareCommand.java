@@ -34,14 +34,14 @@ public class OWWarpShareCommand extends OWCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
+        if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE NeedBracesCheck
         Player player = (Player)sender;
 
         String warpName = args.get(0);
         String sharePlayerName = args.get(1);
 
         Warp warp = this.getPlugin().getPrivateWarps().get(player.getName()).get(warpName);
-        if(warp == null) {
+        if (warp == null) {
             sender.sendMessage(ChatColor.RED + "Could not find private warp '" + warpName + "' - not sharing.");
             return;
         }
@@ -49,7 +49,7 @@ public class OWWarpShareCommand extends OWCommand {
         warp.addInvitee(sharePlayerName);
 
         Player sharePlayer = this.getPlugin().getServer().getPlayer(sharePlayerName);
-        if(sharePlayer != null) {
+        if (sharePlayer != null) {
             sharePlayer.sendMessage(ChatColor.GOLD + player.getName() + " has shared warp '" + warpName + "' with you!");
             sharePlayer.sendMessage(ChatColor.GOLD + "Access via: /warp " + player.getName() + ":" + warpName);
         }

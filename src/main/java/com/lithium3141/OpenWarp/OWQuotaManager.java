@@ -70,7 +70,7 @@ public class OWQuotaManager {
     public int getPublicWarpQuota(String playerName) {
         int quota = this.globalMaxPublicWarps;
 
-        if(this.playerMaxPublicWarps.containsKey(playerName) && this.playerMaxPublicWarps.get(playerName) != QUOTA_UNDEFINED) {
+        if (this.playerMaxPublicWarps.containsKey(playerName) && this.playerMaxPublicWarps.get(playerName) != QUOTA_UNDEFINED) {
             quota = this.playerMaxPublicWarps.get(playerName);
         }
 
@@ -101,7 +101,7 @@ public class OWQuotaManager {
     public int getPrivateWarpQuota(String playerName) {
         int quota = this.globalMaxPrivateWarps;
 
-        if(this.playerMaxPrivateWarps.containsKey(playerName) && this.playerMaxPrivateWarps.get(playerName) != QUOTA_UNDEFINED) {
+        if (this.playerMaxPrivateWarps.containsKey(playerName) && this.playerMaxPrivateWarps.get(playerName) != QUOTA_UNDEFINED) {
             quota = this.playerMaxPrivateWarps.get(playerName);
         }
 
@@ -134,13 +134,13 @@ public class OWQuotaManager {
     public Map<String, Object> getPlayerQuotaMap(String playerName) {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        if(this.playerMaxPublicWarps.containsKey(playerName)) {
+        if (this.playerMaxPublicWarps.containsKey(playerName)) {
             result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, this.playerMaxPublicWarps.get(playerName));
         } else {
             result.put(OWConfigurationManager.QUOTA_PUBLIC_KEY, QUOTA_UNDEFINED);
         }
 
-        if(this.playerMaxPrivateWarps.containsKey(playerName)) {
+        if (this.playerMaxPrivateWarps.containsKey(playerName)) {
             result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, this.playerMaxPrivateWarps.get(playerName));
         } else {
             result.put(OWConfigurationManager.QUOTA_PRIVATE_KEY, QUOTA_UNDEFINED);
@@ -240,8 +240,8 @@ public class OWQuotaManager {
      */
     public int getPublicWarpCount(String playerName) {
         int count = 0;
-        for(Warp warp : this.plugin.getPublicWarps().values()) {
-            if(warp.getOwner().equals(playerName)) {
+        for (Warp warp : this.plugin.getPublicWarps().values()) {
+            if (warp.getOwner().equals(playerName)) {
                 count++;
             }
         }
@@ -269,8 +269,8 @@ public class OWQuotaManager {
      */
     public int getPrivateWarpCount(String playerName) {
         int count = 0;
-        for(Warp warp : this.plugin.getPrivateWarps().get(playerName).values()) {
-            if(warp.getOwner().equals(playerName)) {
+        for (Warp warp : this.plugin.getPrivateWarps().get(playerName).values()) {
+            if (warp.getOwner().equals(playerName)) {
                 count++;
             }
         }

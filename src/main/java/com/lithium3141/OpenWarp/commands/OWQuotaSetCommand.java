@@ -38,34 +38,34 @@ public class OWQuotaSetCommand extends OWCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         String type = args.get(0);
-        if(!type.equals("public") && !type.equals("private")) {
+        if (!type.equals("public") && !type.equals("private")) {
             sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
         }
 
         String value = args.get(1);
         int quota = OWQuotaManager.QUOTA_UNDEFINED;
-        if(!value.equals("unlimited") && !(Integer.parseInt(value) + "").equals(value)) {
+        if (!value.equals("unlimited") && !(Integer.parseInt(value) + "").equals(value)) {
             sender.sendMessage(ChatColor.YELLOW + this.getCommandUsage());
             return;
-        } else if(value.equals("unlimited")) {
+        } else if (value.equals("unlimited")) {
             quota = OWQuotaManager.QUOTA_UNLIMITED;
         } else {
             quota = Integer.parseInt(value);
         }
 
         String playerName = null;
-        if(args.size() > 2) {
+        if (args.size() > 2) {
             playerName = args.get(2);
         }
 
         OWQuotaManager quotaManager = this.getPlugin().getQuotaManager();
 
-        if(playerName == null) {
+        if (playerName == null) {
             // Setting global quota
-            if(type.equals("public")) {
+            if (type.equals("public")) {
                 quotaManager.setGlobalPublicWarpQuota(quota);
-            } else if(type.equals("private")) {
+            } else if (type.equals("private")) {
                 quotaManager.setGlobalPrivateWarpQuota(quota);
             }
             sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "set global " + type + " quota to " + quota);
@@ -73,14 +73,14 @@ public class OWQuotaSetCommand extends OWCommand {
         } else {
             // Setting a player's quota
             Map<String, Integer> quotaMap = null;
-            if(type.equals("public")) {
+            if (type.equals("public")) {
                 quotaMap = quotaManager.getPlayerMaxPublicWarps();
-            } else if(type.equals("private")) {
+            } else if (type.equals("private")) {
                 quotaMap = quotaManager.getPlayerMaxPrivateWarps();
             }
 
             OpenWarp.DEBUG_LOG.fine("Setting warp quota for " + playerName + " to " + quota);
-            if(quotaMap != null) {
+            if (quotaMap != null) {
                 quotaMap.put(playerName, quota);
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "set " + type + " warp quota for " + playerName + " to " + quota);
             } else {

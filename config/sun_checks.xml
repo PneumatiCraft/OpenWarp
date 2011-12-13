@@ -67,9 +67,7 @@
         <module name="WhitespaceAfter">
             <property name="severity" value="warning"/>
         </module>
-        <module name="WhitespaceAround">
-            <property name="severity" value="warning"/>
-        </module>
+        <module name="WhitespaceAround"/>
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
         <module name="AvoidNestedBlocks"/>

@@ -21,7 +21,7 @@ public class MVConnector {
      * @param plugin The Plugin instance for which this connector is operating.
      */
     public MVConnector(Plugin plugin) {
-        if(plugin != null) {
+        if (plugin != null) {
             this.core = (MultiverseCore) plugin;
             this.core.getDestFactory().registerDestinationType(OpenWarpDestination.class, "ow");
         }

@@ -34,7 +34,7 @@ public class OWSummonCommand extends OWTeleportCommand {
 
     @Override
     protected boolean senderOK(CommandSender sender, List<String> args) {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Command must be sent from in-game!");
             return false;
         }

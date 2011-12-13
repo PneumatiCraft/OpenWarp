@@ -44,22 +44,22 @@ public class OWWarpDeleteCommand extends OWCommand {
         OWPermissionsHandler permissionsHandler = this.getPlugin().getPermissionsHandler();
 
         // Remove warp
-        if(this.getPlugin().getPublicWarps().containsKey(warpName)) {
+        if (this.getPlugin().getPublicWarps().containsKey(warpName)) {
             // Get the delete permission in question
             Warp warp = this.getPlugin().getPublicWarps().get(warpName);
             String owner = warp.getOwner();
             String permNode = "other";
-            if(sender instanceof Player && ((Player)sender).getName().equals(owner)) {
+            if (sender instanceof Player && ((Player)sender).getName().equals(owner)) {
                 permNode = "self";
             }
 
-            if(!permissionsHandler.hasPermission(sender, "openwarp.warp.delete.public." + permNode, false)) {
+            if (!permissionsHandler.hasPermission(sender, "openwarp.warp.delete.public." + permNode, false)) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to delete that public warp");
                 return;
             }
 
             // Do the delete
-            if(this.getPlugin().getPublicWarps().remove(warpName) != null) {
+            if (this.getPlugin().getPublicWarps().remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed public warp '" + warpName + "'");
                 permString = "openwarp.warp.access.public." + warpName;
                 this.getPlugin().getConfigurationManager().saveGlobalConfiguration();
@@ -67,17 +67,17 @@ public class OWWarpDeleteCommand extends OWCommand {
                 sender.sendMessage(ChatColor.RED + "No such public warp: " + warpName);
             }
         } else {
-            if(!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
+            if (!this.checkPlayerSender(sender)) return; // SUPPRESS CHECKSTYLE AvoidInlineConditionalsCheck
 
             Player player = (Player)sender;
             String playerName = player.getName();
 
-            if(!permissionsHandler.hasPermission(player, "openwarp.warp.delete.private", false)) {
+            if (!permissionsHandler.hasPermission(player, "openwarp.warp.delete.private", false)) {
                 player.sendMessage(ChatColor.RED + "You do not have permission to delete that private warp");
                 return;
             }
 
-            if(this.getPlugin().getPrivateWarps(playerName).remove(warpName) != null) {
+            if (this.getPlugin().getPrivateWarps(playerName).remove(warpName) != null) {
                 sender.sendMessage(ChatColor.AQUA + "Success: " + ChatColor.WHITE + "removed private warp '" + warpName + "'");
                 permString = "openwarp.warp.access.private." + playerName + "." + warpName;
                 this.getPlugin().getConfigurationManager().savePlayerConfiguration(playerName);
@@ -88,10 +88,10 @@ public class OWWarpDeleteCommand extends OWCommand {
         }
 
         // Remove permission
-        if(permString != null) {
+        if (permString != null) {
             PluginManager pm = this.getPlugin().getServer().getPluginManager();
             pm.removePermission(permString);
-            for(Player p : this.getPlugin().getServer().getOnlinePlayers()) {
+            for (Player p : this.getPlugin().getServer().getOnlinePlayers()) {
                 p.recalculatePermissions();
             }
         }
