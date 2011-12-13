@@ -10,6 +10,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
+import com.lithium3141.OpenWarp.util.LocationUtil;
+
 /**
  * Representation of a single warp, either public or private. Maintains an
  * internal record of its name, player owner name, and target location.
@@ -214,7 +216,7 @@ public class Warp {
      * @return A String detailing this Warp's information.
      */
     public String getDetailString() {
-        return "(" + this.location.getX() + ", " + this.location.getY() + ", " + this.location.getZ() + ") in world " + this.location.getWorld().getName();
+        return LocationUtil.getHumanReadableString(this.location, 2);
     }
 
     /**

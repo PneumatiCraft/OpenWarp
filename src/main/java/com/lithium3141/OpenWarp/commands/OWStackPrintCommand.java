@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
+import com.lithium3141.OpenWarp.util.LocationUtil;
 
 /**
  * Print the locations on a player's location stack. Locations are printed
@@ -67,9 +68,9 @@ public class OWStackPrintCommand extends OWCommand {
     protected String formatLocation(Player player, Location location) {
         Warp matchingWarp = this.getPlugin().getWarp(player, location);
         if(matchingWarp != null) {
-            return matchingWarp.getDetailString();
+            return String.format("Warp '%s' in world '%s'", matchingWarp.getName(), matchingWarp.getLocation().getWorld().getName());
         } else {
-            return "(" + location.getX() + "," + location.getY() + "," + location.getZ() + ") in world '" + location.getWorld() + "'";
+            return LocationUtil.getHumanReadableString(location, 2);
         }
     }
 
