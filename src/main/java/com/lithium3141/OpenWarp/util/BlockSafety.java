@@ -14,6 +14,12 @@ import org.bukkit.block.Block;
  * air blocks. Note that this is a far cry from Multiverse's definition of "safe."
  */
 public class BlockSafety {
+
+    /**
+     * The height of a typical Minecraft map.
+     */
+    public static final int WORLD_HEIGHT = 127;
+
     /**
      * Find the next safe block up from the given block. Searches in the positive
      * Y-direction up to Y=127.
@@ -22,7 +28,7 @@ public class BlockSafety {
      * @return The next safe Location up from the given Block, inclusive.
      */
     public static Location safeNextUpFrom(Block block) {
-        if(block == null) return null;
+        if(block == null) return null; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         Location loc = block.getLocation();
 
@@ -35,7 +41,7 @@ public class BlockSafety {
         Material last2 = (new Location(loc.getWorld(), x, y + 2, z)).getBlock().getType();
         int ny;
         World world = block.getWorld();
-        for(ny = y; ny < 127; ny++) {
+        for(ny = y; ny < WORLD_HEIGHT; ny++) {
             Block b = world.getBlockAt(x, ny, z);
             Material m = b.getType();
             if(!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
@@ -65,7 +71,7 @@ public class BlockSafety {
      * @return The next safe Location down from the given Block, inclusive.
      */
     public static Location safeNextDownFrom(Block block) {
-        if(block == null) return null;
+        if(block == null) return null; // SUPPRESS CHECKSTYLE NeedBracesCheck
 
         Location loc = block.getLocation();
 
@@ -118,7 +124,7 @@ public class BlockSafety {
         Material last = Material.BEDROCK;
         int ny;
         World world = block.getWorld();
-        for(ny = 126; ny > y; ny--) {
+        for(ny = WORLD_HEIGHT - 1; ny > y; ny--) {
             Block b = world.getBlockAt(x, ny, z);
             Material m = b.getType();
             if(!m.equals(Material.AIR) && last.equals(Material.AIR) && last2.equals(Material.AIR)) {
