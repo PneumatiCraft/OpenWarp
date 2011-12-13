@@ -25,7 +25,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.lithium3141.OpenWarp.commands.*;
+import com.lithium3141.OpenWarp.commands.*; // SUPPRESS CHECKSTYLE AvoidStarImportCheck
 import com.lithium3141.OpenWarp.config.OWConfigurationManager;
 import com.lithium3141.OpenWarp.listeners.OWEntityListener;
 import com.lithium3141.OpenWarp.listeners.OWPlayerListener;
