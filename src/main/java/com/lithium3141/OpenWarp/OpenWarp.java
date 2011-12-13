@@ -190,7 +190,7 @@ public class OpenWarp extends JavaPlugin {
         try {
             new MVConnector(this.getServer().getPluginManager().getPlugin("Multiverse-Core"));
             LOG.info(LOG_PREFIX + "Found Multiverse 2; `ow:` destination type support enabled.");
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOG.warning(LOG_PREFIX + "Failed to enable Multiverse support!");
             LOG.warning(LOG_PREFIX + "You will be unable to use the Multiverse `ow:` destination type!");
         }

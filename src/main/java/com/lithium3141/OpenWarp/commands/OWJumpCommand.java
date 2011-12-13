@@ -57,7 +57,7 @@ public class OWJumpCommand extends OWCommand {
         List<Block> blocks = null;
         try {
             blocks = player.getLastTwoTargetBlocks(null, MAX_VIEW_DISTANCE);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             sender.sendMessage(ChatColor.RED + JUMP_ERROR);
             return;
         }

@@ -79,7 +79,7 @@ public class OWPlayerListener extends PlayerListener {
     private boolean locationsWithin(Location l1, Location l2, double fuzz) {
         try {
             return l1.distance(l2) < fuzz;
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }

@@ -38,7 +38,7 @@ public class OWDebugHandler extends Handler {
 
         try {
             this.out = new PrintWriter(new FileWriter(file));
-        } catch(IOException e) {
+        } catch (IOException e) {
             OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't open debug log at " + file.getPath() + "; OpenWarp may not print debug messages.");
         }
     }

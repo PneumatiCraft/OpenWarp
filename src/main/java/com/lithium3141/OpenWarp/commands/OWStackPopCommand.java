@@ -71,7 +71,7 @@ public class OWStackPopCommand extends OWCommand {
     protected Location getLocation(Player player) {
         try {
             return this.getPlugin().getLocationTracker().getLocationStack(player).pop();
-        } catch(EmptyStackException e) {
+        } catch (EmptyStackException e) {
             return null;
         }
     }

@@ -36,7 +36,7 @@ public class OWStackPeekCommand extends OWStackPopCommand {
     protected Location getLocation(Player player) {
         try {
             return this.getPlugin().getLocationTracker().getLocationStack(player).peek();
-        } catch(EmptyStackException e) {
+        } catch (EmptyStackException e) {
             return null;
         }
     }
