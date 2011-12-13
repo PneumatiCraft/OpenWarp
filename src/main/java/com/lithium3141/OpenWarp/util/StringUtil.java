@@ -8,6 +8,14 @@ import java.util.List;
  * String arrays.
  */
 public class StringUtil {
+
+    /**
+     * Protected constructor so that utility classes may not be instantiated.
+     */
+    protected StringUtil() {
+        super();
+    }
+
     /**
      * Check whether an array of String objects contains another String.
      *

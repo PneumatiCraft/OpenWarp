@@ -16,6 +16,13 @@ import org.bukkit.block.Block;
 public class BlockSafety {
 
     /**
+     * Protected constructor to avoid utility class instantiation.
+     */
+    protected BlockSafety() {
+        super();
+    }
+
+    /**
      * The height of a typical Minecraft map.
      */
     public static final int WORLD_HEIGHT = 127;
