@@ -14,6 +14,18 @@ public class LocationUtil {
     }
 
     /**
+     * Format a location into a human-readable string. Uses two decimals
+     * precision by default.
+     *
+     * @param loc The Location instance to format.
+     * @return A human-readable String containing information about the given Location.
+     * @see getHumanReadableString(Location,String)
+     */
+    public static String getHumanReadableString(Location loc) {
+        return LocationUtil.getHumanReadableString(loc, 2);
+    }
+
+    /**
      * Format a location into a human-readable, precision-limited string.
      *
      * @param loc The Location instance to format.

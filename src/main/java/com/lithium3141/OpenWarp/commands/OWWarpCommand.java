@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.OWCommand;
 import com.lithium3141.OpenWarp.Warp;
+import com.lithium3141.OpenWarp.util.LocationUtil;
 
 /**
  * Move to a particular warp. This command searches public warps, then
@@ -75,6 +76,8 @@ public class OWWarpCommand extends OWCommand {
             return;
         }
 
+        OpenWarp.DEBUG_LOG.fine("Executing warp for " + player.getName() + " to " + LocationUtil.getHumanReadableString(target.getLocation()));
+        OpenWarp.DEBUG_LOG.finest("    ...chunk is loaded: " + target.getLocation().getChunk().isLoaded());
         if (!player.teleport(target.getLocation())) {
             player.sendMessage(ChatColor.RED + "Error teleporting to warp: " + warpName);
         }
