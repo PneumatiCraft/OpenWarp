@@ -214,8 +214,8 @@ public class OWPlayerConfiguration {
                     if (worldHomeWarpConfig != null) {
                         this.generalConfig.setProperty(yamlKey, worldHomeWarpConfig);
                     } else {
-                        OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to broken multiworld home");
-                        OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in some data loss! Check the warp configuration for " + this.playerName);
+                        OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for " + this.playerName + " due to broken multiworld home");
+                        OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in data loss! Check the warp configuration for " + this.playerName);
                         return true;
                     }
                 }

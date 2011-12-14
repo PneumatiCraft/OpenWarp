@@ -40,9 +40,11 @@ public class OWQuotaShowCommand extends OWCommand {
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            sender.sendMessage(ChatColor.AQUA + "Quotas: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getPublicWarpQuota(player), quotaManager.getPrivateWarpQuota(player)));
+            String formattedQuotas = this.formatQuotaPair(quotaManager.getPublicWarpQuota(player), quotaManager.getPrivateWarpQuota(player));
+            sender.sendMessage(ChatColor.AQUA + "Quotas: " + ChatColor.WHITE + formattedQuotas);
         } else {
-            sender.sendMessage(ChatColor.GREEN + "Global: " + ChatColor.WHITE + this.formatQuotaPair(quotaManager.getGlobalPublicWarpQuota(), quotaManager.getGlobalPrivateWarpQuota()));
+            String formattedQuotas = this.formatQuotaPair(quotaManager.getGlobalPublicWarpQuota(), quotaManager.getGlobalPrivateWarpQuota());
+            sender.sendMessage(ChatColor.GREEN + "Global: " + ChatColor.WHITE + formattedQuotas);
             sender.sendMessage(ChatColor.AQUA + "Players:");
 
             Set<String> quotadPlayers = new HashSet<String>();
@@ -50,7 +52,9 @@ public class OWQuotaShowCommand extends OWCommand {
             quotadPlayers.addAll(quotaManager.getPlayerMaxPrivateWarps().keySet());
 
             for (String playerName : quotadPlayers) {
-                String quotas = this.formatQuotaPair(quotaManager.getPlayerMaxPublicWarps().get(playerName), quotaManager.getPlayerMaxPrivateWarps().get(playerName));
+                int playerPublicQuota = quotaManager.getPlayerMaxPublicWarps().get(playerName);
+                int playerPrivateQuota = quotaManager.getPlayerMaxPrivateWarps().get(playerName);
+                String quotas = this.formatQuotaPair(playerPublicQuota, playerPrivateQuota);
                 sender.sendMessage("    " + ChatColor.LIGHT_PURPLE + playerName + ": " + ChatColor.WHITE + quotas);
             }
         }

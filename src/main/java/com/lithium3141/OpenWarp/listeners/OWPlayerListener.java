@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.lithium3141.OpenWarp.OpenWarp;
+import com.lithium3141.OpenWarp.util.LocationUtil;
 
 /**
  * Player listener for OpenWarp. Watches for player join, teleport, and respawn
@@ -44,7 +45,9 @@ public class OWPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "' teleported ( " + prettyLocation(event.getFrom()) + " -> " + prettyLocation(event.getTo()) + " ).");
+        String fromLocation = LocationUtil.getHumanReadableString(event.getFrom(), 1);
+        String toLocation = LocationUtil.getHumanReadableString(event.getTo(), 1);
+        OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "' teleported ( " + fromLocation + " -> " + toLocation + " ).");
         if (event.isCancelled()) {
             OpenWarp.DEBUG_LOG.fine("...cancelled!");
         }
@@ -56,16 +59,6 @@ public class OWPlayerListener extends PlayerListener {
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "'respawned.");
-    }
-
-    /**
-     * Format a Location instance into a human-readable String.
-     *
-     * @param loc The Location to format.
-     * @return A String containing a readable representation of the given Location.
-     */
-    private String prettyLocation(Location loc) {
-        return loc.getWorld().getName() + "(" + loc.getX() + "," + loc.getY() + "," + loc.getZ() + ")";
     }
 
     /**
