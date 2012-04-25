@@ -8,7 +8,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.ConfigurationNode;
+import org.bukkit.configuration.ConfigurationSection;
 
 import com.lithium3141.OpenWarp.util.LocationUtil;
 
@@ -18,7 +18,7 @@ import com.lithium3141.OpenWarp.util.LocationUtil;
  * <p>
  * Warps can be instantiated directly using one of two methods: either by
  * specifying all relevant information in the constructor or by providing
- * a warp name and ConfigurationNode object from which to pull location and
+ * a warp name and ConfigurationSection object from which to pull location and
  * owner data.
  * <p>
  * Warps receive a designation as public or private by inclusion in the
@@ -101,19 +101,19 @@ public class Warp {
 
     /**
      * Create a new Warp with the given name, deriving Location data from the given
-     * ConfigurationNode. Will read configuration information using the static keys
-     * defined in this class from the node; expects to find a complete Location as
+     * ConfigurationSection. Will read configuration information using the static keys
+     * defined in this class from the section; expects to find a complete Location as
      * well as an owner string.
      *
      * @param ow The OpenWarp instance to use in public/private queries.
      * @param warpName The name of this Warp.
-     * @param node The ConfigurationNode from which to pull Location information.
+     * @param section The ConfigurationSection from which to pull Location information.
      */
-    public Warp(OpenWarp ow, String warpName, ConfigurationNode node) {
+    public Warp(OpenWarp ow, String warpName, ConfigurationSection section) {
         this.plugin = ow;
         this.name = warpName;
 
-        this.parseConfiguration(node);
+        this.parseConfiguration(section);
     }
 
     /**
@@ -134,26 +134,26 @@ public class Warp {
     }
 
     /**
-     * Read Location and owner information from the given ConfigurationNode. Does basic
-     * validation on the World named in the node. Uses the static keys defined in this
-     * class for information retrieval from the node.
+     * Read Location and owner information from the given ConfigurationSection. Does basic
+     * validation on the World named in the section. Uses the static keys defined in this
+     * class for information retrieval from the section.
      *
      * On completion, this Warp will be populated with the information retrieved from
-     * the node, if that information is valid.
+     * the section, if that information is valid.
      *
-     * @param node The ConfigurationNode from which to read information.
+     * @param section The ConfigurationSection from which to read information.
      */
-    private void parseConfiguration(ConfigurationNode node) {
-        String worldName = node.getString(WORLD_KEY);
+    private void parseConfiguration(ConfigurationSection section) {
+        String worldName = section.getString(WORLD_KEY);
         if (worldName == null) {
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
         }
 
-        double x = node.getDouble(X_KEY, 0.0);
-        double y = node.getDouble(Y_KEY, 0.0);
-        double z = node.getDouble(Z_KEY, 0.0);
-        float pitch = (float) node.getDouble(PITCH_KEY, 0.0);
-        float yaw = (float) node.getDouble(YAW_KEY, 0.0);
+        double x = section.getDouble(X_KEY, 0.0);
+        double y = section.getDouble(Y_KEY, 0.0);
+        double z = section.getDouble(Z_KEY, 0.0);
+        float pitch = (float) section.getDouble(PITCH_KEY, 0.0);
+        float yaw = (float) section.getDouble(YAW_KEY, 0.0);
 
         World world = null;
         if (worldName != null) {
@@ -164,8 +164,8 @@ public class Warp {
         }
         this.location = new Location(world, x, y, z, yaw, pitch);
 
-        this.owner = node.getString(OWNER_KEY, "");
-        this.invitees = node.getStringList(INVITEES_KEY, new ArrayList<String>());
+        this.owner = section.getString(OWNER_KEY, "");
+        this.invitees = section.getStringList(INVITEES_KEY);
     }
 
     /**

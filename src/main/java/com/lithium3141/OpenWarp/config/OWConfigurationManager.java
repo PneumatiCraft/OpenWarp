@@ -1,15 +1,19 @@
 package com.lithium3141.OpenWarp.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.OWQuotaManager;
@@ -92,7 +96,7 @@ public class OWConfigurationManager {
     /**
      * The Configuration object representing global plugin configuration.
      */
-    private Configuration configuration;
+    private FileConfiguration configuration;
 
     /**
      * The set of player configuration objects, mapped to by player names.
@@ -102,7 +106,7 @@ public class OWConfigurationManager {
     /**
      * The Configuration object representing public warp information.
      */
-    private Configuration publicWarpsConfig;
+    private FileConfiguration publicWarpsConfig;
 
     /**
      * Create a new OWConfigurationManager backed by the given OpenWarp instance.
@@ -118,11 +122,8 @@ public class OWConfigurationManager {
         this.plugin.getDataFolder().mkdirs();
 
         // Get configuration file (even if nonexistent)
-        this.configuration = new Configuration(new File(this.plugin.getDataFolder(), MASTER_CONFIG_FILENAME));
-        this.configuration.load();
-
-        this.publicWarpsConfig = new Configuration(new File(this.plugin.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
-        this.publicWarpsConfig.load();
+        this.configuration = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), MASTER_CONFIG_FILENAME));
+        this.publicWarpsConfig = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
     }
 
     /**
@@ -158,9 +159,11 @@ public class OWConfigurationManager {
         if (this.configuration != null) {
             // Save overall configuration
             OpenWarp.DEBUG_LOG.fine("Writing global player name list with " + this.playerConfigs.keySet().size() + " elements");
-            this.configuration.setProperty(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
-            if (!this.configuration.save()) {
-                OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save player list; continuing...");
+            this.configuration.set(PLAYER_NAMES_LIST_KEY, new ArrayList<String>(this.playerConfigs.keySet()));
+            try {
+                this.configuration.save(new File(this.plugin.getDataFolder(), MASTER_CONFIG_FILENAME));
+            } catch (IOException e) {
+                OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Could not save global configuration!");
             }
 
             // Save public warps
@@ -169,17 +172,19 @@ public class OWConfigurationManager {
                 warps.put(entry.getKey(), entry.getValue().getConfigurationMap());
             }
 
-            this.publicWarpsConfig.setProperty(WARPS_LIST_KEY, warps);
-            if (!this.publicWarpsConfig.save()) {
-                OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Couldn't save public warp list; continuing...");
+            this.publicWarpsConfig.set(WARPS_LIST_KEY, warps);
+            try {
+                this.publicWarpsConfig.save(new File(this.plugin.getDataFolder(), PUBLIC_WARP_CONFIG_FILENAME));
+            } catch (IOException e) {
+                OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Could not save public warp configuration!");
             }
 
             // Save global quotas
-            this.configuration.setProperty(QUOTAS_KEY, this.plugin.getQuotaManager().getGlobalQuotaMap());
+            this.configuration.set(QUOTAS_KEY, this.plugin.getQuotaManager().getGlobalQuotaMap());
 
             // Save flags
-            this.configuration.setProperty(MULTIWORLD_HOMES_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
-            this.configuration.setProperty(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
+            this.configuration.set(MULTIWORLD_HOMES_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
+            this.configuration.set(DEBUG_KEY, this.configuration.getBoolean(DEBUG_KEY, false));
         }
     }
 
@@ -209,8 +214,8 @@ public class OWConfigurationManager {
         if (this.configuration != null) {
             OWPlayerConfiguration config = this.playerConfigs.get(playerName);
 
-            if (config != null && !config.save()) {
-                OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + " - Couldn't save configuration for player " + config.getPlayerName() + "; continuing...");
+            if (config != null) {
+                config.save();
             }
         }
     }
@@ -233,11 +238,12 @@ public class OWConfigurationManager {
      * @param target The Map into which to place Warp instances
      */
     public void loadWarps(Configuration config, Map<String, Warp> target) {
-        List<String> keys = config.getKeys(WARPS_LIST_KEY);
+        ConfigurationSection warpSection = config.getConfigurationSection(WARPS_LIST_KEY);
+        Set<String> keys = warpSection.getKeys(false);
         if (keys != null) {
             for (String key : keys) {
-                ConfigurationNode node = config.getNode(WARPS_LIST_KEY + "." + key);
-                Warp warp = new Warp(this.plugin, key, node);
+                ConfigurationSection section = config.getConfigurationSection(WARPS_LIST_KEY + "." + key);
+                Warp warp = new Warp(this.plugin, key, section);
                 target.put(warp.getName(), warp);
             }
         }
@@ -264,7 +270,7 @@ public class OWConfigurationManager {
      * for each.
      */
     public void loadPlayers() {
-        List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY, new ArrayList<String>());
+        List<String> playerNames = this.configuration.getStringList(PLAYER_NAMES_LIST_KEY);
         for (String playerName : playerNames) {
             this.registerPlayerName(playerName);
         }

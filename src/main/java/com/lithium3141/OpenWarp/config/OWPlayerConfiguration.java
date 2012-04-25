@@ -1,6 +1,7 @@
 package com.lithium3141.OpenWarp.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.Stack;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 import com.lithium3141.OpenWarp.OWQuotaManager;
@@ -74,17 +77,17 @@ public class OWPlayerConfiguration {
     /**
      * The Configuration object containing general player info.
      */
-    private Configuration generalConfig;
+    private FileConfiguration generalConfig;
 
     /**
      * The Configuration object containing player-specific warp info.
      */
-    private Configuration warpConfig;
+    private FileConfiguration warpConfig;
 
     /**
      * The Configuration object containing player-specific quota info.
      */
-    private Configuration quotaConfig;
+    private FileConfiguration quotaConfig;
 
     /**
      * Construct a new player configuration for the given player name.
@@ -126,14 +129,9 @@ public class OWPlayerConfiguration {
         this.configFolder.mkdirs();
 
         // Build config objects from files
-        this.generalConfig = new Configuration(new File(this.configFolder, GENERAL_CONFIG_FILENAME));
-        this.warpConfig = new Configuration(new File(this.configFolder, WARP_CONFIG_FILENAME));
-        this.quotaConfig = new Configuration(new File(this.configFolder, QUOTA_CONFIG_FILENAME));
-
-        // Load configs
-        this.generalConfig.load();
-        this.warpConfig.load();
-        this.quotaConfig.load();
+        this.generalConfig = YamlConfiguration.loadConfiguration(new File(this.configFolder, GENERAL_CONFIG_FILENAME));
+        this.warpConfig = YamlConfiguration.loadConfiguration(new File(this.configFolder, WARP_CONFIG_FILENAME));
+        this.quotaConfig = YamlConfiguration.loadConfiguration(new File(this.configFolder, QUOTA_CONFIG_FILENAME));
 
         // Warps
         if (this.plugin.getPrivateWarps().get(this.playerName) == null) {
@@ -142,30 +140,31 @@ public class OWPlayerConfiguration {
         this.plugin.getConfigurationManager().loadWarps(this.warpConfig, this.plugin.getPrivateWarps().get(this.playerName));
 
         // Homes
-        ConfigurationNode homeNode = this.generalConfig.getNode(OWConfigurationManager.HOME_KEY);
-        if (homeNode != null) {
-            this.plugin.setDefaultHome(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeNode).getLocation());
+        ConfigurationSection homeSection = this.generalConfig.getConfigurationSection(OWConfigurationManager.HOME_KEY);
+        if (homeSection != null) {
+            this.plugin.setDefaultHome(this.playerName, new Warp(this.plugin, TEMP_HOME_NAME, homeSection).getLocation());
         }
 
-        Map<String, ConfigurationNode> multiworldHomesMap = this.generalConfig.getNodes(OWConfigurationManager.MULTIWORLD_HOMES_KEY);
-        if (multiworldHomesMap != null) {
-            for (String worldName : multiworldHomesMap.keySet()) {
-                this.plugin.setHome(this.playerName, worldName, new Warp(this.plugin, TEMP_HOME_NAME, multiworldHomesMap.get(worldName)).getLocation());
+        ConfigurationSection multiworldHomesSection = this.generalConfig.getConfigurationSection(OWConfigurationManager.MULTIWORLD_HOMES_KEY);
+        if (multiworldHomesSection != null) {
+            for (String worldName : multiworldHomesSection.getKeys(false)) {
+                this.plugin.setHome(this.playerName, worldName, new Warp(this.plugin, TEMP_HOME_NAME, multiworldHomesSection.getConfigurationSection(worldName)).getLocation());
             }
         }
 
         // Back
-        ConfigurationNode backNode = this.generalConfig.getNode(OWConfigurationManager.BACK_KEY);
-        if (backNode != null) {
-            this.plugin.getLocationTracker().setPreviousLocation(this.playerName, new Warp(this.plugin, TEMP_BACK_NAME, backNode).getLocation());
+        ConfigurationSection backSection = this.generalConfig.getConfigurationSection(OWConfigurationManager.BACK_KEY);
+        if (backSection != null) {
+            this.plugin.getLocationTracker().setPreviousLocation(this.playerName, new Warp(this.plugin, TEMP_BACK_NAME, backSection).getLocation());
         }
 
         // Stack
-        List<ConfigurationNode> warpStackNodes = this.generalConfig.getNodeList(OWConfigurationManager.STACK_KEY, new ArrayList<ConfigurationNode>());
-        if (warpStackNodes != null) {
+        List<?> warpStackSections = this.generalConfig.getList(OWConfigurationManager.STACK_KEY);
+        if (warpStackSections != null) {
             Stack<Location> warpStack = new Stack<Location>();
-            for (ConfigurationNode node : warpStackNodes) {
-                warpStack.push(new Warp(this.plugin, TEMP_STACK_NAME, node).getLocation());
+            for (Object section : warpStackSections) {
+                System.out.println("SUPER DEBUG: type of iterated object is " + section.getClass());
+                warpStack.push(new Warp(this.plugin, TEMP_STACK_NAME, (ConfigurationSection)section).getLocation());
             }
             this.plugin.getLocationTracker().setLocationStack(this.playerName, warpStack);
         }
@@ -177,11 +176,8 @@ public class OWPlayerConfiguration {
 
     /**
      * Save this player configuration to disk.
-     *
-     * @return true if this player configuration was saved successfully
-     *         or skipped; false on error.
      */
-    public boolean save() {
+    public void save() {
         // Warps
         Map<String, Warp> playerWarps = this.plugin.getPrivateWarps(this.playerName);
 
@@ -189,17 +185,17 @@ public class OWPlayerConfiguration {
         for (Entry<String, Warp> entry : playerWarps.entrySet()) {
             configWarps.put(entry.getKey(), entry.getValue().getConfigurationMap());
         }
-        this.warpConfig.setProperty(OWConfigurationManager.WARPS_LIST_KEY, configWarps);
+        this.warpConfig.set(OWConfigurationManager.WARPS_LIST_KEY, configWarps);
 
         // Home
         if (this.plugin.getDefaultHome(this.playerName) != null) {
             Map<String, Object> homeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, this.plugin.getDefaultHome(this.playerName), this.playerName).getConfigurationMap();
             if (homeWarpConfig != null) {
-                this.generalConfig.setProperty(OWConfigurationManager.HOME_KEY, homeWarpConfig);
+                this.generalConfig.set(OWConfigurationManager.HOME_KEY, homeWarpConfig);
             } else {
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for player " + this.playerName + " due to missing warp world");
                 OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in some data loss! Check the warp configuration for " + this.playerName);
-                return true;
+                return;
             }
         }
 
@@ -212,11 +208,11 @@ public class OWPlayerConfiguration {
 
                     Map<String, Object> worldHomeWarpConfig = new Warp(this.plugin, TEMP_HOME_NAME, worldHome, this.playerName).getConfigurationMap();
                     if (worldHomeWarpConfig != null) {
-                        this.generalConfig.setProperty(yamlKey, worldHomeWarpConfig);
+                        this.generalConfig.set(yamlKey, worldHomeWarpConfig);
                     } else {
                         OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Not writing configuration for " + this.playerName + " due to broken multiworld home");
                         OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "This may result in data loss! Check the warp configuration for " + this.playerName);
-                        return true;
+                        return;
                     }
                 }
             }
@@ -226,7 +222,7 @@ public class OWPlayerConfiguration {
         if (this.plugin.getLocationTracker().getPreviousLocation(this.playerName) != null) {
             Map<String, Object> backWarpConfig = new Warp(this.plugin, TEMP_BACK_NAME, this.plugin.getLocationTracker().getPreviousLocation(this.playerName), this.playerName).getConfigurationMap();
             if (backWarpConfig != null) {
-                this.generalConfig.setProperty(OWConfigurationManager.BACK_KEY, backWarpConfig);
+                this.generalConfig.set(OWConfigurationManager.BACK_KEY, backWarpConfig);
             }
         }
 
@@ -238,15 +234,22 @@ public class OWPlayerConfiguration {
                 locationStackConfig.add(new Warp(this.plugin, TEMP_STACK_NAME, location, this.playerName).getConfigurationMap());
             }
             if (locationStackConfig.size() > 0) {
-                this.generalConfig.setProperty(OWConfigurationManager.STACK_KEY, locationStackConfig);
+                this.generalConfig.set(OWConfigurationManager.STACK_KEY, locationStackConfig);
             } else {
-                this.generalConfig.setProperty(OWConfigurationManager.STACK_KEY, null);
+                this.generalConfig.set(OWConfigurationManager.STACK_KEY, null);
             }
         }
 
         // Quotas
-        this.quotaConfig.setProperty(OWConfigurationManager.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));
+        this.quotaConfig.set(OWConfigurationManager.QUOTAS_KEY, this.plugin.getQuotaManager().getPlayerQuotaMap(this.playerName));
 
-        return this.generalConfig.save() && this.warpConfig.save() && this.quotaConfig.save();
+        // Save everything
+        try {
+            this.generalConfig.save(new File(this.configFolder, GENERAL_CONFIG_FILENAME));
+            this.warpConfig.save(new File(this.configFolder, WARP_CONFIG_FILENAME));
+            this.quotaConfig.save(new File(this.configFolder, QUOTA_CONFIG_FILENAME));
+        } catch (IOException e) {
+            OpenWarp.LOG.warning(OpenWarp.LOG_PREFIX + "Could not save player configuration for " + this.playerName);
+        }
     }
 }
