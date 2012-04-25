@@ -19,7 +19,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
@@ -343,12 +342,11 @@ public class OpenWarp extends JavaPlugin {
      */
     private void loadListeners() {
         OWPlayerListener playerListener = new OWPlayerListener(this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Low, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
-
         OWEntityListener entityListener = new OWEntityListener(this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
+
+        PluginManager pm = this.getServer().getPluginManager();
+        pm.registerEvents(playerListener, this);
+        pm.registerEvents(entityListener, this);
     }
 
     @Override

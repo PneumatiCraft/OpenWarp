@@ -1,8 +1,9 @@
 package com.lithium3141.OpenWarp.listeners;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 
 import com.lithium3141.OpenWarp.OpenWarp;
 
@@ -12,7 +13,7 @@ import com.lithium3141.OpenWarp.OpenWarp;
  * OpenWarp to support players returning to death points with the <code>/back</code>
  * command.
  */
-public class OWEntityListener extends EntityListener {
+public class OWEntityListener implements Listener {
 
     /**
      * The OpenWarp instance backing this entity listener.
@@ -28,8 +29,8 @@ public class OWEntityListener extends EntityListener {
         this.plugin = ow;
     }
 
-    @Override
-    public void onEntityDeath(EntityDeathEvent event) {
+    @EventHandler()
+    public void entityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
             OpenWarp.DEBUG_LOG.fine("Player died.");
             Player player = (Player) (event.getEntity());

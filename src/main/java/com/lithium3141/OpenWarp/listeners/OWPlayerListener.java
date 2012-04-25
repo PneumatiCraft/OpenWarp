@@ -2,8 +2,10 @@ package com.lithium3141.OpenWarp.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -15,7 +17,7 @@ import com.lithium3141.OpenWarp.util.LocationUtil;
  * for various player location history updates. Allows use of the <code>/back</code>
  * command.
  */
-public class OWPlayerListener extends PlayerListener {
+public class OWPlayerListener implements Listener {
 
     /**
      * The OpenWarp instance backing this player listener.
@@ -36,15 +38,15 @@ public class OWPlayerListener extends PlayerListener {
      */
     public static final double FUZZ_FACTOR = 1.0;
 
-    @Override
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    @EventHandler(priority = EventPriority.LOW)
+    public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         OpenWarp.DEBUG_LOG.fine("Player '" + player.getName() + "'joined.");
         this.plugin.getConfigurationManager().registerPlayerName(player.getName());
     }
 
-    @Override
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
+    @EventHandler()
+    public void playerTeleport(PlayerTeleportEvent event) {
         String fromLocation = LocationUtil.getHumanReadableString(event.getFrom(), 1);
         String toLocation = LocationUtil.getHumanReadableString(event.getTo(), 1);
         OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "' teleported ( " + fromLocation + " -> " + toLocation + " ).");
@@ -56,8 +58,8 @@ public class OWPlayerListener extends PlayerListener {
         }
     }
 
-    @Override
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
+    @EventHandler()
+    public void playerRespawn(PlayerRespawnEvent event) {
         OpenWarp.DEBUG_LOG.fine("Player '" + event.getPlayer().getName() + "'respawned.");
     }
 
