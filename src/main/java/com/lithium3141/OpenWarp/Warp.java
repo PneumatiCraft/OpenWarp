@@ -102,18 +102,22 @@ public class Warp {
     /**
      * Create a new Warp with the given name, deriving Location data from the given
      * ConfigurationSection. Will read configuration information using the static keys
-     * defined in this class from the section; expects to find a complete Location as
+     * defined in this class from the map; expects to find a complete Location as
      * well as an owner string.
      *
      * @param ow The OpenWarp instance to use in public/private queries.
      * @param warpName The name of this Warp.
-     * @param section The ConfigurationSection from which to pull Location information.
+     * @param values The Map of values from which to pull Location information.
      */
-    public Warp(OpenWarp ow, String warpName, ConfigurationSection section) {
+    public Warp(OpenWarp ow, String warpName, Map<String, Object> values) {
         this.plugin = ow;
         this.name = warpName;
 
-        this.parseConfiguration(section);
+        this.parseConfiguration(values);
+    }
+
+    public Warp(OpenWarp ow, String warpName, ConfigurationSection section) {
+        this(ow, warpName, section.getValues(true));
     }
 
     /**
@@ -134,26 +138,26 @@ public class Warp {
     }
 
     /**
-     * Read Location and owner information from the given ConfigurationSection. Does basic
-     * validation on the World named in the section. Uses the static keys defined in this
-     * class for information retrieval from the section.
+     * Read Location and owner information from the given value Map. Does basic
+     * validation on the World named in the map. Uses the static keys defined in this
+     * class for information retrieval from the map.
      *
      * On completion, this Warp will be populated with the information retrieved from
-     * the section, if that information is valid.
+     * the map, if that information is valid.
      *
-     * @param section The ConfigurationSection from which to read information.
+     * @param values The Map of values from which to read information.
      */
-    private void parseConfiguration(ConfigurationSection section) {
-        String worldName = section.getString(WORLD_KEY);
+    private void parseConfiguration(Map<String, Object> values) {
+        String worldName = (String) values.get(WORLD_KEY);
         if (worldName == null) {
             OpenWarp.LOG.severe(OpenWarp.LOG_PREFIX + "Malformed warp in configuration: no world for warp " + this.name);
         }
 
-        double x = section.getDouble(X_KEY, 0.0);
-        double y = section.getDouble(Y_KEY, 0.0);
-        double z = section.getDouble(Z_KEY, 0.0);
-        float pitch = (float) section.getDouble(PITCH_KEY, 0.0);
-        float yaw = (float) section.getDouble(YAW_KEY, 0.0);
+        double x = values.containsKey(X_KEY) ? (Double) values.get(X_KEY) : 0.0;
+        double y = values.containsKey(Y_KEY) ? (Double) values.get(Y_KEY) : 0.0;
+        double z = values.containsKey(Z_KEY) ? (Double) values.get(Z_KEY) : 0.0;
+        float pitch = values.containsKey(PITCH_KEY) ? (float) ((double) (Double) values.get(PITCH_KEY)) : 0.0f;
+        float yaw = values.containsKey(YAW_KEY) ? (float) ((double) (Double) values.get(YAW_KEY)) : 0.0f;
 
         World world = null;
         if (worldName != null) {
@@ -164,8 +168,8 @@ public class Warp {
         }
         this.location = new Location(world, x, y, z, yaw, pitch);
 
-        this.owner = section.getString(OWNER_KEY, "");
-        this.invitees = section.getStringList(INVITEES_KEY);
+        this.owner = values.containsKey(OWNER_KEY) ? (String) values.get(OWNER_KEY) : "";
+        this.invitees = values.containsKey(INVITEES_KEY) ? (List<String>) values.get(INVITEES_KEY) : new ArrayList<String>();
     }
 
     /**

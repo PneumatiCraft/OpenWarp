@@ -162,9 +162,8 @@ public class OWPlayerConfiguration {
         List<?> warpStackSections = this.generalConfig.getList(OWConfigurationManager.STACK_KEY);
         if (warpStackSections != null) {
             Stack<Location> warpStack = new Stack<Location>();
-            for (Object section : warpStackSections) {
-                System.out.println("SUPER DEBUG: type of iterated object is " + section.getClass());
-                warpStack.push(new Warp(this.plugin, TEMP_STACK_NAME, (ConfigurationSection)section).getLocation());
+            for (Object o : warpStackSections) {
+                warpStack.push(new Warp(this.plugin, TEMP_STACK_NAME, (Map)o).getLocation());
             }
             this.plugin.getLocationTracker().setLocationStack(this.playerName, warpStack);
         }

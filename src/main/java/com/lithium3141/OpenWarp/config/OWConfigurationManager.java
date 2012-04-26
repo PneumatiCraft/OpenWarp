@@ -239,12 +239,14 @@ public class OWConfigurationManager {
      */
     public void loadWarps(Configuration config, Map<String, Warp> target) {
         ConfigurationSection warpSection = config.getConfigurationSection(WARPS_LIST_KEY);
-        Set<String> keys = warpSection.getKeys(false);
-        if (keys != null) {
-            for (String key : keys) {
-                ConfigurationSection section = config.getConfigurationSection(WARPS_LIST_KEY + "." + key);
-                Warp warp = new Warp(this.plugin, key, section);
-                target.put(warp.getName(), warp);
+        if(warpSection != null) {
+            Set<String> keys = warpSection.getKeys(false);
+            if (keys != null) {
+                for (String key : keys) {
+                    ConfigurationSection section = config.getConfigurationSection(WARPS_LIST_KEY + "." + key);
+                    Warp warp = new Warp(this.plugin, key, section);
+                    target.put(warp.getName(), warp);
+                }
             }
         }
     }
