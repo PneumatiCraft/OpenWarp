@@ -1,9 +1,11 @@
 package com.lithium3141.OpenWarp.commands;
 
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,7 +58,7 @@ public class OWJumpCommand extends OWCommand {
         // Get target block and info
         List<Block> blocks = null;
         try {
-            blocks = player.getLastTwoTargetBlocks(null, MAX_VIEW_DISTANCE);
+            blocks = player.getLastTwoTargetBlocks((Set<Material>) null, MAX_VIEW_DISTANCE);
         } catch (IllegalStateException e) {
             sender.sendMessage(ChatColor.RED + JUMP_ERROR);
             return;
