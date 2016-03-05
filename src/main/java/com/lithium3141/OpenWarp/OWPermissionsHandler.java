@@ -4,10 +4,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
 import com.pneumaticraft.commandhandler.PermissionsInterface;
 
 /**
@@ -18,42 +15,13 @@ import com.pneumaticraft.commandhandler.PermissionsInterface;
  */
 public class OWPermissionsHandler implements PermissionsInterface {
 
-    /**
-     * OpenWarp instance backing this permissions handler.
-     */
-    private OpenWarp plugin;
-
-    /**
-     * Yeti Permissions 2.x or 3.x permissions handler object. Used when available,
-     * replacing Bukkit SuperPerms-style plugins.
-     */
-    private PermissionHandler permissionHandler;
-
-    /**
-     * Create a new permissions handler for the given OpenWarp instance.
-     *
-     * @param ow The OpenWarp instance for which to handle permissions.
-     */
-    public OWPermissionsHandler(OpenWarp ow) {
-        this.plugin = ow;
-
-        Plugin permissions = this.plugin.getServer().getPluginManager().getPlugin("Permissions");
-        if (permissions != null) {
-            this.permissionHandler = ((Permissions) permissions).getHandler();
-            this.plugin.getServer().getLogger().info(OpenWarp.LOG_PREFIX + "Hooked into Permissions " + permissions.getDescription().getVersion());
-        }
-
-    }
-
     @Override
     public boolean hasPermission(CommandSender sender, String node, boolean isOpRequired) {
         if (!(sender instanceof Player)) {
             return true;
         } else {
             Player player = (Player) sender;
-            if (this.permissionHandler != null) {
-                return this.permissionHandler.has(player, node);
-            } else if (player.hasPermission(node)) {
+            if (player.hasPermission(node)) {
                 return true;
             } else if (isOpRequired) {
                 return player.isOp();

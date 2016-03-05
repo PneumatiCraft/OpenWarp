@@ -138,7 +138,7 @@ public class OpenWarp extends JavaPlugin {
 
         // Instantiate quota manager, permissions - need them for player configs
         this.quotaManager = new OWQuotaManager(this);
-        this.permissionsHandler = new OWPermissionsHandler(this);
+        this.permissionsHandler = new OWPermissionsHandler();
 
         // Read quotas
         this.quotaManager.setGlobalPublicWarpQuota(this.configurationManager.readGlobalPublicWarpQuota());
