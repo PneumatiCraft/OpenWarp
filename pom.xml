@@ -3,22 +3,54 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lithium3141.OpenWarp</groupId>
     <artifactId>OpenWarp</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <name>OpenWarp</name>
     <description>Open source warping goodness.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.number>UNKNOWN</project.build.number>
     </properties>
     <repositories>
+        <!-- Spigot -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>spigot-public</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
         <repository>
             <id>OnARandomBox</id>
             <url>http://repo.onarandombox.com/artifactory/repo</url>
         </repository>
         <repository>
-            <id>GetSpout</id>
-            <url>http://repo.getspout.org/</url>
+            <id>vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
     </repositories>
+
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://ci.onarandombox.com</url>
+    </ciManagement>
+
+    <!-- Profiles are used to detect whether this is a local or Jenkins build
+     and adjust the build number accordingly -->
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
@@ -105,54 +137,72 @@
                     <configLocation>${project.basedir}/config/sun_checks.xml</configLocation>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.pneumaticraft.commandhandler:CommandHandler</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.pneumaticraft.commandhandler</pattern>
+                                    <shadedPattern>com.pneumaticraft.commandhandler.openwarp</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
-        <!-- Bukkit Dependency -->
+        <!-- Spigot Dependency -->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.2.5-R1.0</version>
-            <type>jar</type>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.9-R0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
-        <!-- Bukkit Dependency -->
         <!-- Multiverse 2 Dependency -->
         <dependency>
             <groupId>com.onarandombox.multiversecore</groupId>
             <artifactId>Multiverse-Core</artifactId>
-            <version>2.2</version>
+            <version>2.5</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <!-- Multiverse 2 Dependency -->
-        <!-- Start of Economy Dependencies -->
-        <!-- AllPay Dependencies -->
-        <!-- <dependency> <groupId>cosine.boseconomy</groupId> <artifactId>BOSEconomy</artifactId> 
-            <version>0.6.2</version> <type>jar</type> <scope>compile</scope> </dependency> 
-            <dependency> <groupId>fr.crafter.tickleman.RealShop</groupId> <artifactId>RealShop</artifactId> 
-            <version>0.63</version> <type>jar</type> <scope>compile</scope> </dependency> 
-            <dependency> <groupId>com.iCo6</groupId> <artifactId>iConomy</artifactId> 
-            <version>6.0</version> <type>jar</type> <scope>compile</scope> </dependency> 
-            <dependency> <groupId>com.iConomy</groupId> <artifactId>iConomy</artifactId> 
-            <version>5.0</version> <type>jar</type> <scope>compile</scope> </dependency> 
-            <dependency> <groupId>com.nijiko.coelho.iConomy</groupId> <artifactId>iConomy</artifactId> 
-            <version>4.65</version> <type>jar</type> <scope>compile</scope> </dependency> 
-            <dependency> <groupId>com.earth2me.essentials</groupId> <artifactId>Essentials</artifactId> 
-            <version>2.4.2</version> <type>jar</type> <scope>compile</scope> </dependency> 
-            <dependency> <groupId>me.ashtheking.currency</groupId> <artifactId>MultiCurrency</artifactId> 
-            <version>0.09</version> <type>jar</type> <scope>compile</scope> </dependency> -->
-        <!-- End of Economy Dependencies -->
 
-        <!-- Start of Permissions Dependencies -->
+        <!-- Start of Economy Dependency -->
         <dependency>
-            <groupId>com.nijikokun.bukkit</groupId>
-            <artifactId>Permissions</artifactId>
-            <version>3.1.6</version>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.5</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <!-- End of Economy Dependency -->
+
+        <!-- Start of CommandHandler Dependency -->
+        <dependency>
+            <groupId>com.pneumaticraft.commandhandler</groupId>
+            <artifactId>CommandHandler</artifactId>
+            <version>8</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <!-- End of CommandHandler Dependency -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -160,10 +210,4 @@
         </dependency>
         <!-- End of Permissions Dependencies -->
     </dependencies>
-    <distributionManagement>
-        <repository>
-            <id>opencraft</id>
-            <url>http://pneumaticsystem.com:25578/nexus/content/repositories/opencraft</url>
-        </repository>
-    </distributionManagement>
 </project>
